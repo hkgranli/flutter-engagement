@@ -144,6 +144,10 @@ class _InteractivePageState extends State<InteractivePage>
     return page;
   }
 
+  Widget _buildConfig() {
+    return Text("Config");
+  }
+
   Widget _buildEco() {
     return Text("Eco");
   }

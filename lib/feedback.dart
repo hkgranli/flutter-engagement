@@ -12,7 +12,7 @@ class FeedbackPage extends StatelessWidget {
     return Scaffold(
       appBar: CreateAppBar(theme, "Home"),
       body: Center(child: const Text("You are in the feedback")),
-      bottomNavigationBar: CreateNavBar(theme, 0, context),
+      bottomNavigationBar: CreateNavBar(theme, 3, context),
     );
   }
 }

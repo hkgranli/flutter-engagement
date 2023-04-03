@@ -20,13 +20,13 @@ class AppInit extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme:
-              ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 234, 5)),
+              ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 234, 0)),
           brightness: Brightness.light,
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromARGB(255, 19, 132, 253),
+              seedColor: Color.fromARGB(255, 255, 234, 0),
               brightness: Brightness.dark),
         ),
         themeMode: ThemeMode.system,

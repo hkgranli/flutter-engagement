@@ -9,24 +9,24 @@ class ReadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: CreateAppBar(theme, "Interactive"),
+      appBar: CreateAppBar(theme, "Readable"),
       body: SafeArea(
           child: Center(
               child: Column(
         children: [
-          ReadButton(0, Icons.sim_card, "test"),
-          ReadButton(0, Icons.sim_card, "test"),
-          ReadButton(0, Icons.sim_card, "test"),
-          ReadButton(0, Icons.sim_card, "test"),
-          ReadButton(0, Icons.sim_card, "test"),
-          ReadButton(0, Icons.sim_card, "test"),
+          ReadButton(0, Icons.sunny, "Solar Potential"),
+          ReadButton(0, Icons.storage, "Energy Storage"),
+          ReadButton(0, Icons.account_balance, "Regulations"),
+          ReadButton(0, Icons.people, "Social Sustainability"),
+          ReadButton(0, Icons.money, "Economic Sustainability"),
+          ReadButton(0, Icons.eco, "Environmental Sustainability"),
         ],
       ))),
-      bottomNavigationBar: CreateNavBar(theme, 1, context),
+      bottomNavigationBar: CreateNavBar(theme, 2, context),
     );
   }
 
-  ButtonTheme ReadButton(int i, icon, text) {
+  ButtonTheme ReadButton(int i, IconData icon, String text) {
     return ButtonTheme(
       minWidth: 300.0,
       height: 100.0,
@@ -36,7 +36,7 @@ class ReadPage extends StatelessWidget {
           },
           child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: [Icon(Icons.sim_card_alert), Text("test")])),
+              children: [Icon(icon), Text(text)])),
     );
   }
 }
