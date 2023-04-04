@@ -60,12 +60,14 @@ void changeSelectedPage(BuildContext context, int index) {
 }
 
 AppBar CreateAppBar(ThemeData theme, String title,
-    [IconButton? leadingButton, TabBar? tabs]) {
+    [IconButton? leadingButton, TabBar? tabs, List<Widget>? actions]) {
   return AppBar(
-      title: Text(title),
-      backgroundColor: theme.secondaryHeaderColor,
-      titleTextStyle: theme.appBarTheme.titleTextStyle,
-      leading: leadingButton,
-      automaticallyImplyLeading: false,
-      bottom: tabs);
+    title: Text(title),
+    backgroundColor: theme.secondaryHeaderColor,
+    titleTextStyle: theme.appBarTheme.titleTextStyle,
+    leading: leadingButton,
+    automaticallyImplyLeading: false,
+    bottom: tabs,
+    actions: actions,
+  );
 }
