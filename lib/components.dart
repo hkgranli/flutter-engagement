@@ -2,32 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
 
-BottomNavigationBar createNavBar(int index, BuildContext context) {
+NavigationBar createNavBar(int index, BuildContext context) {
   var theme = Theme.of(context);
-  return BottomNavigationBar(
-    items: const <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
+  return NavigationBar(
+    destinations: const <NavigationDestination>[
+      NavigationDestination(
         icon: Icon(Icons.home),
         label: 'Home',
       ),
-      BottomNavigationBarItem(
+      NavigationDestination(
         icon: Icon(Icons.touch_app),
         label: 'Interactive',
       ),
-      BottomNavigationBarItem(
+      NavigationDestination(
         icon: Icon(Icons.book_online),
         label: 'Readable',
       ),
-      BottomNavigationBarItem(
+      NavigationDestination(
         icon: Icon(Icons.feedback),
         label: 'Feedback',
       ),
     ],
-    currentIndex: index,
-    selectedItemColor: theme.colorScheme.primary,
-    unselectedItemColor: theme.colorScheme.secondary,
-    showUnselectedLabels: true,
-    onTap: (int index) => changeSelectedPage(context, index),
+    selectedIndex: index,
+    onDestinationSelected: (int index) => changeSelectedPage(context, index),
   );
 }
 
@@ -86,8 +83,6 @@ AppBar createAppBar(BuildContext context, String title,
   var theme = Theme.of(context);
   return AppBar(
     title: Text(title),
-    backgroundColor: theme.secondaryHeaderColor,
-    titleTextStyle: theme.appBarTheme.titleTextStyle,
     leading: leadingButton,
     automaticallyImplyLeading: false,
     bottom: tabs,

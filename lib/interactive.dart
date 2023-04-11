@@ -5,6 +5,7 @@ import 'package:engagement/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:draw_graph/draw_graph.dart';
 import 'package:draw_graph/models/feature.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InteractivePage extends StatefulWidget {
   const InteractivePage({super.key});
@@ -26,6 +27,8 @@ class _InteractivePageState extends State<InteractivePage>
   bool _showcase = true;
   var activePage = InteractivePages.home;
 
+  bool _dropdownSideSelectorActive = false;
+
   var _solarSides = [1, 1, 1, 1];
   // north south east west
   // 0 = false; 1 = true
@@ -33,6 +36,12 @@ class _InteractivePageState extends State<InteractivePage>
   SolarType _solarType = SolarType.panel;
   Panel _activePanel = Panel.PanL;
   Tile _activeTile = Tile.none;
+
+  void toggleDropdown() {
+    setState(() {
+      _dropdownSideSelectorActive = !_dropdownSideSelectorActive;
+    });
+  }
 
   void setSolarType(SolarType? s) {
     setState(() {
@@ -137,21 +146,26 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   Widget _buildHome() {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        OutlinedButton(
-            onPressed: () => setPage(1), child: Text("Visualization")),
-        SizedBox(height: 10),
-        OutlinedButton(
-            onPressed: () => setPage(2), child: Text("Efficiency Estimation")),
-        SizedBox(height: 10),
-        OutlinedButton(
-            onPressed: () => setPage(3), child: Text("Economic Models"))
-      ],
-    ));
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+          child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.interactive_info),
+          OutlinedButton(
+              onPressed: () => setPage(1),
+              child: Text(AppLocalizations.of(context)!.visualization)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(2),
+              child: Text(AppLocalizations.of(context)!.eff_est)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(3),
+              child: Text(AppLocalizations.of(context)!.eco_model))
+        ],
+      )),
+    );
   }
 
   AppBar _buildPvBar(BuildContext context) {
@@ -167,15 +181,19 @@ class _InteractivePageState extends State<InteractivePage>
 
     return createAppBar(
         context,
-        "Interactive",
+        AppLocalizations.of(context)!.interactive,
         IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => setPage(0),
         ),
         TabBar(
           tabs: [
-            Tab(icon: Icon(Icons.camera)),
-            Tab(icon: Icon(Icons.solar_power)),
+            Tab(
+                icon: Icon(Icons.roofing),
+                text: AppLocalizations.of(context)!.visualization),
+            Tab(
+                icon: Icon(Icons.calculate),
+                text: AppLocalizations.of(context)!.eff_est),
           ],
           controller: tabController,
         ));
@@ -194,7 +212,6 @@ class _InteractivePageState extends State<InteractivePage>
       child: Column(
         children: [
           _buildConfig(),
-          const Divider(),
           page,
         ],
       ),
@@ -203,16 +220,24 @@ class _InteractivePageState extends State<InteractivePage>
 
   Widget _buildConfig() {
     List<DropdownMenuItem<SolarType>> menuItems = [
-      DropdownMenuItem(value: SolarType.none, child: Text("Select Solar Type")),
-      DropdownMenuItem(value: SolarType.panel, child: Text("Panel")),
-      DropdownMenuItem(value: SolarType.tile, child: Text("Tile")),
+      DropdownMenuItem(
+          value: SolarType.none,
+          child: Text(AppLocalizations.of(context)!.select_type)),
+      DropdownMenuItem(
+          value: SolarType.panel,
+          child: Text(AppLocalizations.of(context)!.s_panel)),
+      DropdownMenuItem(
+          value: SolarType.tile,
+          child: Text(AppLocalizations.of(context)!.s_tile)),
     ];
 
     DropdownButton b = DropdownButton(items: null, onChanged: null);
 
     if (_solarType == SolarType.panel) {
       List<DropdownMenuItem<Panel>> panelItems = [
-        DropdownMenuItem(value: Panel.none, child: Text("Select Product")),
+        DropdownMenuItem(
+            value: Panel.none,
+            child: Text(AppLocalizations.of(context)!.select_product)),
         DropdownMenuItem(value: Panel.Dodge, child: Text("Dodge")),
         DropdownMenuItem(value: Panel.PanL, child: Text("PanL")),
       ];
@@ -221,7 +246,9 @@ class _InteractivePageState extends State<InteractivePage>
           value: _activePanel, items: panelItems, onChanged: setSelectedPanel);
     } else if (_solarType == SolarType.tile) {
       List<DropdownMenuItem<Tile>> tileItems = [
-        DropdownMenuItem(value: Tile.none, child: Text("Select Product")),
+        DropdownMenuItem(
+            value: Tile.none,
+            child: Text(AppLocalizations.of(context)!.select_product)),
         DropdownMenuItem(value: Tile.Emp, child: Text("Emp")),
         DropdownMenuItem(value: Tile.Molly, child: Text("Molly")),
       ];
@@ -235,7 +262,7 @@ class _InteractivePageState extends State<InteractivePage>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text("Select solar type: "),
+            Text("${AppLocalizations.of(context)!.select_type}: "),
             DropdownButton(
                 value: _solarType, items: menuItems, onChanged: setSolarType),
           ],
@@ -243,60 +270,54 @@ class _InteractivePageState extends State<InteractivePage>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text("Select product: "),
+            Text("${AppLocalizations.of(context)!.select_product}: "),
             b,
           ],
         ),
-        Text("Roof sides:", style: TextStyle(fontWeight: FontWeight.bold)),
-        ..._sideSelector()
+        ExpansionPanelList(
+          expansionCallback: (panelIndex, isExpanded) => toggleDropdown(),
+          children: [
+            ExpansionPanel(
+                headerBuilder: (context, isExpanded) => ListTile(
+                      title: Text(
+                        "${AppLocalizations.of(context)!.roof_sides}",
+                      ),
+                    ),
+                body: Column(children: _sideSelector(context)),
+                isExpanded: _dropdownSideSelectorActive),
+          ],
+        ),
       ],
     );
   }
 
-  List<Widget> _sideSelector() {
+  List<Widget> _sideSelector(BuildContext context) {
     return [
       CheckboxListTile(
           visualDensity: VisualDensity.compact,
           value: _solarSides[0] == 1,
           onChanged: (p) => toggleSide(0, _solarSides[0] == 1 ? 0 : 1),
-          title: const Text("North"),
+          title: Text(AppLocalizations.of(context)!.north),
           dense: true),
       CheckboxListTile(
           dense: true,
           visualDensity: VisualDensity.compact,
           value: _solarSides[2] == 1,
           onChanged: (p) => toggleSide(2, _solarSides[2] == 1 ? 0 : 1),
-          title: const Text("East")),
+          title: Text(AppLocalizations.of(context)!.east)),
       CheckboxListTile(
           dense: true,
           visualDensity: VisualDensity.compact,
           value: _solarSides[3] == 1,
           onChanged: (p) => toggleSide(3, _solarSides[3] == 1 ? 0 : 1),
-          title: const Text("West")),
+          title: Text(AppLocalizations.of(context)!.west)),
       CheckboxListTile(
           dense: true,
           visualDensity: VisualDensity.compact,
           value: _solarSides[1] == 1,
           onChanged: (p) => toggleSide(1, _solarSides[1] == 1 ? 0 : 1),
-          title: const Text("South")),
+          title: Text(AppLocalizations.of(context)!.south)),
     ];
-  }
-
-  Widget check_test() {
-    return InkWell(
-      onTap: () {
-        toggleSide(1, _solarSides[1] == 1 ? 0 : 1);
-      },
-      child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Checkbox(
-          value: _solarSides[1] == 1,
-          onChanged: (bool? newValue) {
-            toggleSide(1, _solarSides[1] == 1 ? 0 : 1);
-          },
-        ),
-        Text("Test"),
-      ]),
-    );
   }
 
   Widget _buildEco() {

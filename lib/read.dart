@@ -1,6 +1,9 @@
 import 'package:engagement/components.dart';
+import 'package:engagement/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ReadablePages {
   overview,
@@ -23,37 +26,24 @@ class ReadPage extends StatefulWidget {
 class _ReadPageState extends State<ReadPage> {
   ReadablePages _activePage = ReadablePages.overview;
 
-  var _titles = [
-    "Readable",
-    "Solar Potential",
-    "Energy Storage",
-    "Regulations",
-    "Social Sustainability",
-    "Environmental Sustainability",
-    "Economic Sustainability",
-    "External Resources"
-  ];
-
-  String getPageTitle() {
+  String getPageTitle(BuildContext context) {
     switch (_activePage) {
       case ReadablePages.potential:
-        return _titles[1];
+        return AppLocalizations.of(context)!.solar_potential;
       case ReadablePages.storage:
-        return _titles[2];
+        return AppLocalizations.of(context)!.energy_storage;
       case ReadablePages.regulations:
-        return _titles[3];
+        return AppLocalizations.of(context)!.regulations;
       case ReadablePages.social:
-        return _titles[4];
+        return AppLocalizations.of(context)!.sus_social;
       case ReadablePages.environmental:
-        return _titles[5];
+        return AppLocalizations.of(context)!.sus_env;
       case ReadablePages.economic:
-        return _titles[6];
+        return AppLocalizations.of(context)!.sus_eco;
       case ReadablePages.external:
-        return _titles[7];
-      case ReadablePages.overview:
-        return _titles[8];
+        return AppLocalizations.of(context)!.external_resources;
       default:
-        return _titles[0];
+        return AppLocalizations.of(context)!.read;
     }
   }
 
@@ -74,11 +64,11 @@ class _ReadPageState extends State<ReadPage> {
 
   AppBar _CreateAppBar(BuildContext context) {
     if (_activePage == ReadablePages.overview) {
-      return createAppBar(context, "Readable");
+      return createAppBar(context, AppLocalizations.of(context)!.read);
     }
     return createAppBar(
         context,
-        getPageTitle(),
+        getPageTitle(context),
         IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => setPage(ReadablePages.overview),
@@ -113,22 +103,26 @@ class _ReadPageState extends State<ReadPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        readButton(ReadablePages.potential, Icons.sunny, "Solar Potential"),
+        readButton(ReadablePages.potential, Icons.sunny,
+            AppLocalizations.of(context)!.solar_potential),
         SizedBox(height: 10),
-        readButton(ReadablePages.storage, Icons.storage, "Energy Storage"),
+        readButton(ReadablePages.storage, Icons.storage,
+            AppLocalizations.of(context)!.energy_storage),
         SizedBox(height: 10),
-        readButton(
-            ReadablePages.regulations, Icons.account_balance, "Regulations"),
+        readButton(ReadablePages.regulations, Icons.account_balance,
+            AppLocalizations.of(context)!.regulations),
         SizedBox(height: 10),
-        readButton(ReadablePages.social, Icons.people, "Social Sustainability"),
+        readButton(ReadablePages.social, Icons.people,
+            AppLocalizations.of(context)!.sus_social),
         SizedBox(height: 10),
         readButton(ReadablePages.environmental, Icons.eco,
-            "Environmental Sustainability"),
+            AppLocalizations.of(context)!.sus_env),
         SizedBox(height: 10),
-        readButton(
-            ReadablePages.economic, Icons.money, "Economic Sustainability"),
+        readButton(ReadablePages.economic, Icons.money,
+            AppLocalizations.of(context)!.sus_eco),
         SizedBox(height: 10),
-        readButton(ReadablePages.external, Icons.money, "External Resources"),
+        readButton(ReadablePages.external, Icons.money,
+            AppLocalizations.of(context)!.external_resources),
       ],
     );
   }
