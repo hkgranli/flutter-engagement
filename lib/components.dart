@@ -1,13 +1,9 @@
-import 'package:engagement/feedback.dart';
-import 'package:engagement/interactive.dart';
-import 'package:engagement/read.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:engagement/main.dart';
+import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
 
-BottomNavigationBar CreateNavBar(
-    ThemeData theme, int index, BuildContext context) {
+BottomNavigationBar createNavBar(int index, BuildContext context) {
+  var theme = Theme.of(context);
   return BottomNavigationBar(
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -59,8 +55,35 @@ void changeSelectedPage(BuildContext context, int index) {
   Navigator.pushNamed(context, path);
 }
 
-AppBar CreateAppBar(ThemeData theme, String title,
-    [IconButton? leadingButton, TabBar? tabs, List<Widget>? actions]) {
+AppBar createAppBar(BuildContext context, String title,
+    [IconButton? leadingButton, TabBar? tabs]) {
+  Widget flag;
+
+  //print(Localizations.localeOf(context).toLanguageTag());
+
+  if (Localizations.localeOf(context).toString() == 'no') {
+    flag = IconButton(
+      icon: CircleFlag(
+        'gb',
+        size: 30,
+      ),
+      onPressed: () {
+        AppInit.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+      },
+    );
+  } else {
+    flag = IconButton(
+      icon: CircleFlag(
+        'no',
+        size: 30,
+      ),
+      onPressed: () {
+        AppInit.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'no'));
+      },
+    );
+  }
+
+  var theme = Theme.of(context);
   return AppBar(
     title: Text(title),
     backgroundColor: theme.secondaryHeaderColor,
@@ -68,6 +91,7 @@ AppBar CreateAppBar(ThemeData theme, String title,
     leading: leadingButton,
     automaticallyImplyLeading: false,
     bottom: tabs,
-    actions: actions,
+    actions: <Widget>[flag],
+    key: UniqueKey(),
   );
 }

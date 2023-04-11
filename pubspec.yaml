@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,11 +40,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   english_words: ^4.0.0
   provider: ^6.0.5
+  flutter_circle_flags_svg: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  model_viewer_plus: 
+  model_viewer_plus:
+  draw_graph: ^1.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -60,13 +65,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true # localization
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/03TVRj79RL.jpg
     - assets/overview_crop.jpg
-    - assets/house.gltf
-    - assets/house.glb
+    - assets/models/house.glb
+    - assets/models/house_panel_panL_1111.glb
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

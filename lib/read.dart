@@ -1,16 +1,16 @@
 import 'package:engagement/components.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 enum ReadablePages {
   overview,
   potential,
-  energy,
+  storage,
   regulations,
   social,
   environmental,
-  economic
+  economic,
+  external
 }
 
 class ReadPage extends StatefulWidget {
@@ -21,88 +21,125 @@ class ReadPage extends StatefulWidget {
 }
 
 class _ReadPageState extends State<ReadPage> {
-  var _activePage = 0;
+  ReadablePages _activePage = ReadablePages.overview;
 
-  var Titles = [
+  var _titles = [
     "Readable",
     "Solar Potential",
     "Energy Storage",
     "Regulations",
     "Social Sustainability",
     "Environmental Sustainability",
-    "Economic Sustainability"
+    "Economic Sustainability",
+    "External Resources"
   ];
 
-  void setPage(int page) {
+  String getPageTitle() {
+    switch (_activePage) {
+      case ReadablePages.potential:
+        return _titles[1];
+      case ReadablePages.storage:
+        return _titles[2];
+      case ReadablePages.regulations:
+        return _titles[3];
+      case ReadablePages.social:
+        return _titles[4];
+      case ReadablePages.environmental:
+        return _titles[5];
+      case ReadablePages.economic:
+        return _titles[6];
+      case ReadablePages.external:
+        return _titles[7];
+      case ReadablePages.overview:
+        return _titles[8];
+      default:
+        return _titles[0];
+    }
+  }
+
+  void setPage(ReadablePages r) {
     setState(() {
-      _activePage = page;
+      _activePage = r;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     return Scaffold(
-      appBar: _CreateAppBar(theme),
-      body: _BuildPage(),
-      bottomNavigationBar: CreateNavBar(theme, 2, context),
+      appBar: _CreateAppBar(context),
+      body: Center(child: _BuildPage()),
+      bottomNavigationBar: createNavBar(2, context),
     );
   }
 
-  AppBar _CreateAppBar(ThemeData theme) {
-    if (_activePage == 0) return CreateAppBar(theme, "Readable");
-    return CreateAppBar(
-        theme,
-        Titles[_activePage],
+  AppBar _CreateAppBar(BuildContext context) {
+    if (_activePage == ReadablePages.overview) {
+      return createAppBar(context, "Readable");
+    }
+    return createAppBar(
+        context,
+        getPageTitle(),
         IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => setPage(0),
+          onPressed: () => setPage(ReadablePages.overview),
         ));
   }
 
   Widget _BuildPage() {
     switch (_activePage) {
-      case 0:
-        return _OverviewPage();
-      case 1:
-        return _SolarPotential();
-      case 2:
-        return _EnergyStoragePage();
-      case 3:
-        return _RegulationsPage();
-      case 4:
-        return _SocialSusPage();
-      case 5:
-        return _EnvSusPage();
-      case 6:
-        return _EcoSusPage();
+      case ReadablePages.overview:
+        return _overviewPage();
+      case ReadablePages.potential:
+        return _solarPotential();
+      case ReadablePages.storage:
+        return _energyStoragePage();
+      case ReadablePages.regulations:
+        return _regulationsPage();
+      case ReadablePages.social:
+        return _socialSusPage();
+      case ReadablePages.environmental:
+        return _envSusPage();
+      case ReadablePages.economic:
+        return _ecoSusPage();
+      case ReadablePages.external:
+        return _externalPage();
       default:
-        return _OverviewPage();
+        return _overviewPage();
     }
   }
 
-  Widget _OverviewPage() {
-    return SafeArea(
-        child: Center(
-            child: Column(
+  Widget _overviewPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ReadButton(1, Icons.sunny, "Solar Potential"),
-        ReadButton(2, Icons.storage, "Energy Storage"),
-        ReadButton(3, Icons.account_balance, "Regulations"),
-        ReadButton(4, Icons.people, "Social Sustainability"),
-        ReadButton(5, Icons.eco, "Environmental Sustainability"),
-        ReadButton(6, Icons.money, "Economic Sustainability"),
+        readButton(ReadablePages.potential, Icons.sunny, "Solar Potential"),
+        SizedBox(height: 10),
+        readButton(ReadablePages.storage, Icons.storage, "Energy Storage"),
+        SizedBox(height: 10),
+        readButton(
+            ReadablePages.regulations, Icons.account_balance, "Regulations"),
+        SizedBox(height: 10),
+        readButton(ReadablePages.social, Icons.people, "Social Sustainability"),
+        SizedBox(height: 10),
+        readButton(ReadablePages.environmental, Icons.eco,
+            "Environmental Sustainability"),
+        SizedBox(height: 10),
+        readButton(
+            ReadablePages.economic, Icons.money, "Economic Sustainability"),
+        SizedBox(height: 10),
+        readButton(ReadablePages.external, Icons.money, "External Resources"),
       ],
-    )));
+    );
   }
 
-  ButtonTheme ReadButton(int i, IconData icon, String text) {
+  ButtonTheme readButton(ReadablePages r, IconData icon, String text) {
     return ButtonTheme(
       minWidth: 300.0,
       height: 100.0,
       child: OutlinedButton(
           onPressed: () {
-            setPage(i);
+            setPage(r);
           },
           child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -110,27 +147,31 @@ class _ReadPageState extends State<ReadPage> {
     );
   }
 
-  Widget _EnergyStoragePage() {
-    return Text("Abd");
+  Widget _energyStoragePage() {
+    return Text("EnergyStorage is good");
   }
 
-  Widget _RegulationsPage() {
-    return Text("Abd");
+  Widget _regulationsPage() {
+    return Text("Regulations are sometimes good but sometimes bad");
   }
 
-  Widget _SocialSusPage() {
-    return Text("Abd");
+  Widget _socialSusPage() {
+    return Text("Socially this is sustainabile");
   }
 
-  Widget _EnvSusPage() {
-    return Text("Abd");
+  Widget _envSusPage() {
+    return Text("The environmental sustainability is dubious");
   }
 
-  Widget _EcoSusPage() {
-    return Text("Abd");
+  Widget _ecoSusPage() {
+    return Text("The economic sustainability is economic");
   }
 
-  Widget _SolarPotential() {
-    return Text("Abd");
+  Widget _solarPotential() {
+    return Text("The solar is potentially");
+  }
+
+  Widget _externalPage() {
+    return Text("External");
   }
 }

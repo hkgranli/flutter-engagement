@@ -1,0 +1,11 @@
+Model Information:
+* title:	Solar Panel | 60 Cell | Standard | 300 Watt
+* source:	https://sketchfab.com/3d-models/solar-panel-60-cell-standard-300-watt-71f959c15448419e98be183871b7ed19
+* author:	3DJeff (https://sketchfab.com/3DJeff)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Solar Panel | 60 Cell | Standard | 300 Watt" (https://sketchfab.com/3d-models/solar-panel-60-cell-standard-300-watt-71f959c15448419e98be183871b7ed19) by 3DJeff (https://sketchfab.com/3DJeff) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

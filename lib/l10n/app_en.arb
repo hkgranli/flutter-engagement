@@ -1,0 +1,12 @@
+{
+  "@helloWorld": {
+    "description": "The world"
+  },
+  "@language": {
+    "description": "The current language"
+  },
+  "helloWorld": "Hello world in enlgish",
+  "homeTitle": "Photovoltaic Systems at Møllenberg",
+  "interactive": "Interactive",
+  "language": "English"
+}
