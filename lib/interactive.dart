@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart' show ModelViewer;
 import 'package:engagement/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:draw_graph/draw_graph.dart';
-import 'package:draw_graph/models/feature.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InteractivePage extends StatefulWidget {
@@ -205,7 +204,7 @@ class _InteractivePageState extends State<InteractivePage>
     if (_showcase) {
       page = _modelViewer();
     } else {
-      page = _energyEst();
+      page = _energyEst(context);
     }
 
     return Center(
@@ -337,6 +336,10 @@ class _InteractivePageState extends State<InteractivePage>
           autoRotate: false,
           cameraControls: true,
           maxCameraOrbit: "auto 90deg auto",
+          backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
+          exposure: 0.35,
+          shadowIntensity: 0.5,
+          shadowSoftness: 0,
           key: UniqueKey(), // key ensures the widget is updated
         ),
       ),
@@ -348,8 +351,8 @@ class _InteractivePageState extends State<InteractivePage>
   String _getModelUrl() {
     var base = "assets/models/house";
 
-    //var c = "_${_solarSides.join()}";
-    var c = "_1111";
+    var c = "_${_solarSides.join()}";
+    //var c = "_1111";
 
     const extension = ".glb";
 
@@ -364,7 +367,7 @@ class _InteractivePageState extends State<InteractivePage>
     String t;
 
     if (_solarType == SolarType.panel) {
-      t = _activePanel == Panel.PanL ? "_panel_panL" : "_panel_dodge";
+      t = _activePanel == Panel.PanL ? "_panel_1" : "_panel_dodge";
     } else {
       t = _activeTile == Tile.Emp ? "_tile_Emp" : "_tile_Molly";
     }
@@ -374,8 +377,153 @@ class _InteractivePageState extends State<InteractivePage>
     return url;
   }
 
-  Widget _energyEst() {
-    return Text("Est");
+  Widget _energyEst(BuildContext context) {
+    List<double> monthCoeff = [
+      250,
+      300,
+      400,
+      600,
+      700,
+      1000,
+      1200,
+      1100,
+      900,
+      500,
+      200,
+      220
+    ];
+
+    double total = 0;
+
+    List<FlSpot> estProd = [];
+
+    double panelEff = 0.75;
+
+    List<double> sideEff = [0.5, 1, 0.25, 0.3];
+
+    for (int x = 0; x < monthCoeff.length; x++) {
+      var e = monthCoeff[x];
+      double t = 0;
+
+      for (int i = 0; i < sideEff.length; i++) {
+        t += sideEff[i] * panelEff * _solarSides[i];
+      }
+
+      total += e * t;
+
+      estProd.add(FlSpot(x.toDouble(), e * t));
+    }
+
+    return Column(
+      children: [
+        Text("Total estimated electricity generation: $total kwT"),
+        AspectRatio(
+          aspectRatio: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: LineChart(LineChartData(
+              lineBarsData: [
+                LineChartBarData(
+                  spots: estProd,
+                  isCurved: true,
+                  barWidth: 2,
+                )
+              ],
+              minY: 0,
+              titlesData: FlTitlesData(
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 1,
+                    getTitlesWidget: bottomTitleWidgets,
+                  ),
+                ),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+              ),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                horizontalInterval: 1,
+                checkToShowHorizontalLine: (double value) {
+                  return value == 1 || value == 6 || value == 4 || value == 5;
+                },
+              ),
+            )),
+          ),
+        ),
+        Text("With $total you can:")
+      ],
+    );
+  }
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.bold,
+    );
+    String text;
+    switch (value.toInt()) {
+      case 0:
+        text = 'Jan';
+        break;
+      case 1:
+        text = 'Feb';
+        break;
+      case 2:
+        text = 'Mar';
+        break;
+      case 3:
+        text = 'Apr';
+        break;
+      case 4:
+        text = 'May';
+        break;
+      case 5:
+        text = 'Jun';
+        break;
+      case 6:
+        text = 'Jul';
+        break;
+      case 7:
+        text = 'Aug';
+        break;
+      case 8:
+        text = 'Sep';
+        break;
+      case 9:
+        text = 'Oct';
+        break;
+      case 10:
+        text = 'Nov';
+        break;
+      case 11:
+        text = 'Dec';
+        break;
+      default:
+        return Container();
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: style),
+    );
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(fontSize: 10);
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        '\$ ${value + 0.5}',
+        style: style,
+      ),
+    );
   }
 }
 
@@ -443,75 +591,7 @@ class _EconomicModelsState extends State<EconomicModels> {
   }
 
   Widget PPPPModel() {
-    List<Feature> features = [
-      Feature(
-        title: "Drink Water",
-        color: Colors.blue,
-        data: [
-          0.2,
-          0.8,
-          1,
-          0.7,
-          0.6,
-          0.2,
-          0.8,
-          1,
-          0.7,
-          0.6,
-          0.2,
-          0.6,
-          0.2,
-        ],
-      )
-    ];
-
-    return _createGraph([
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mai',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des'
-    ], [
-      '20%',
-      '40%',
-      '60%',
-      '80%',
-      '100%'
-    ], features);
-  }
-
-  Widget _createGraph(
-      List<String> labelX, List<String> labelY, List<Feature> features) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 50,
-        ),
-        LineGraph(
-          features: features,
-          size: Size(MediaQuery.of(context).size.width - 20, 400),
-          labelX: labelX,
-          labelY: labelY,
-          showDescription: true,
-          graphColor: Color.fromARGB(77, 0, 0, 0),
-          graphOpacity: 0.2,
-          verticalFeatureDirection: true,
-          descriptionHeight: 130,
-        ),
-        SizedBox(
-          height: 50,
-        )
-      ],
-    );
+    return Text("ppp");
   }
 
   Widget LeasingModel() => Text("Leasing");

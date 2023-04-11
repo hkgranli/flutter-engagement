@@ -46,7 +46,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   model_viewer_plus:
-  draw_graph: ^1.0.0
+  fl_chart: ^0.61.0
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -72,7 +73,20 @@ flutter:
     - assets/03TVRj79RL.jpg
     - assets/overview_crop.jpg
     - assets/models/house.glb
-    - assets/models/house_panel_panL_1111.glb
+    - assets/models/house_panel_1_1000.glb
+    - assets/models/house_panel_1_1100.glb
+    - assets/models/house_panel_1_1110.glb
+    - assets/models/house_panel_1_1111.glb
+    - assets/models/house_panel_1_1101.glb
+    - assets/models/house_panel_1_1011.glb
+    - assets/models/house_panel_1_1010.glb
+    - assets/models/house_panel_1_0100.glb
+    - assets/models/house_panel_1_0111.glb
+    - assets/models/house_panel_1_0110.glb
+    - assets/models/house_panel_1_0101.glb
+    - assets/models/house_panel_1_0011.glb
+    - assets/models/house_panel_1_0010.glb
+    - assets/models/house_panel_1_0001.glb
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
