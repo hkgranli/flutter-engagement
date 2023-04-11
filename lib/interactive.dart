@@ -13,14 +13,18 @@ class InteractivePage extends StatefulWidget {
   State<InteractivePage> createState() => _InteractivePageState();
 }
 
-enum Pages { home, pvView, ecoView,
-potential,
+enum Pages {
+  home,
+  pvView,
+  ecoView,
+  potential,
   storage,
   regulations,
   social,
   environmental,
   economic,
-  external }
+  external
+}
 
 enum SolarType { none, panel, tile }
 
@@ -31,7 +35,7 @@ enum Tile { none, Molly, Emp }
 class _InteractivePageState extends State<InteractivePage>
     with TickerProviderStateMixin {
   bool _showcase = true;
-  var activePage = InteractivePages.home;
+  var activePage = Pages.home;
 
   bool _dropdownSideSelectorActive = false;
 
@@ -78,10 +82,10 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   String getPageTitle(BuildContext context) {
-    switch (_activePage) {
+    switch (activePage) {
       case Pages.pvView:
         return AppLocalizations.of(context)!.interactive;
-        case Pages.ecoView:
+      case Pages.ecoView:
         return AppLocalizations.of(context)!.interactive;
       case Pages.potential:
         return AppLocalizations.of(context)!.solar_potential;
@@ -100,33 +104,12 @@ class _InteractivePageState extends State<InteractivePage>
       default:
         return AppLocalizations.of(context)!.read;
     }
+  }
 
-  void setPage(int index) {
-    var newPage = activePage;
-    var show = _showcase;
-
-    switch (index) {
-      case 0:
-        newPage = InteractivePages.home;
-        break;
-      case 1:
-        newPage = InteractivePages.pvView;
-        show = true;
-        break;
-      case 2:
-        newPage = InteractivePages.pvView;
-        show = false;
-        break;
-      case 3:
-        newPage = InteractivePages.ecoView;
-        break;
-      default:
-        return;
-    }
-
+  void setPage(Pages p, [bool? show]) {
     setState(() {
-      activePage = newPage;
-      _showcase = show;
+      activePage = p;
+      _showcase = show!;
     });
   }
 
@@ -151,46 +134,34 @@ class _InteractivePageState extends State<InteractivePage>
         page = _buildPvView();
         appBar = _buildPvBar(context);
         break;
-      case Pages.overview:
-        page = _overviewPage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
       case Pages.potential:
         page = _solarPotential();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.storage:
         page = _energyStoragePage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.regulations:
         page = _regulationsPage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.social:
         page = _socialSusPage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.environmental:
         page = _envSusPage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.economic:
         page = _ecoSusPage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.external:
         page = _externalPage();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.read);
-            break;
+        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        break;
       case Pages.ecoView:
         page = _buildEco();
         appBar = createAppBar(
@@ -198,7 +169,7 @@ class _InteractivePageState extends State<InteractivePage>
             AppLocalizations.of(context)!.interactive,
             IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(0),
+              onPressed: () => setPage(Pages.ecoView),
             ));
         break;
       default:
@@ -223,42 +194,50 @@ class _InteractivePageState extends State<InteractivePage>
         children: [
           Text(AppLocalizations.of(context)!.interactive_info),
           OutlinedButton(
-              onPressed: () => setPage(1),
+              onPressed: () => setPage(Pages.pvView, true),
               child: Text(AppLocalizations.of(context)!.visualization)),
           SizedBox(height: 10),
           OutlinedButton(
-              onPressed: () => setPage(2),
+              onPressed: () => setPage(Pages.pvView, false),
               child: Text(AppLocalizations.of(context)!.eff_est)),
           SizedBox(height: 10),
           OutlinedButton(
-              onPressed: () => setPage(3),
+              onPressed: () => setPage(Pages.ecoView),
               child: Text(AppLocalizations.of(context)!.eco_model)),
-          readButton(Pages.potential, Icons.sunny,
-            AppLocalizations.of(context)!.solar_potential),
-        SizedBox(height: 10),
-        readButton(Pages.storage, Icons.storage,
-            AppLocalizations.of(context)!.energy_storage),
-        SizedBox(height: 10),
-        readButton(Pages.regulations, Icons.account_balance,
-            AppLocalizations.of(context)!.regulations),
-        SizedBox(height: 10),
-        readButton(Pages.social, Icons.people,
-            AppLocalizations.of(context)!.sus_social),
-        SizedBox(height: 10),
-        readButton(Pages.environmental, Icons.eco,
-            AppLocalizations.of(context)!.sus_env),
-        SizedBox(height: 10),
-        readButton(Pages.economic, Icons.money,
-            AppLocalizations.of(context)!.sus_eco),
-        SizedBox(height: 10),
-        readButton(Pages.external, Icons.money,
-            AppLocalizations.of(context)!.external_resources),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.potential),
+              child: Text(AppLocalizations.of(context)!.solar_potential)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.storage),
+              child: Text(AppLocalizations.of(context)!.energy_storage)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.regulations),
+              child: Text(AppLocalizations.of(context)!.regulations)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.social),
+              child: Text(AppLocalizations.of(context)!.sus_social)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.environmental),
+              child: Text(AppLocalizations.of(context)!.sus_env)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.economic),
+              child: Text(AppLocalizations.of(context)!.sus_eco)),
+          SizedBox(height: 10),
+          OutlinedButton(
+              onPressed: () => setPage(Pages.external),
+              child: Text(AppLocalizations.of(context)!.external_resources)),
         ],
       )),
     );
   }
-  
-    Widget _energyStoragePage() {
+
+  Widget _energyStoragePage() {
     return Text("EnergyStorage is good");
   }
 
@@ -286,19 +265,6 @@ class _InteractivePageState extends State<InteractivePage>
     return Text("External");
   }
 
-  ButtonTheme readButton(ReadablePages r, IconData icon, String text) {
-    return ButtonTheme(
-      minWidth: 300.0,
-      height: 100.0,
-      child: OutlinedButton(
-          onPressed: () {
-            setPage(r);
-          },
-          child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [Icon(icon), Text(text)])),
-    );
-
   AppBar _buildPvBar(BuildContext context) {
     final TabController tabController =
         TabController(length: 2, initialIndex: _showcase ? 0 : 1, vsync: this);
@@ -315,7 +281,7 @@ class _InteractivePageState extends State<InteractivePage>
         AppLocalizations.of(context)!.interactive,
         IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => setPage(0),
+          onPressed: () => setPage(Pages.home),
         ),
         TabBar(
           tabs: [
@@ -731,5 +697,4 @@ class _EconomicModelsState extends State<EconomicModels> {
   Widget PrivateModel() => Text("Private");
 
   Widget Landing() => Text("Select a model");
-
 }

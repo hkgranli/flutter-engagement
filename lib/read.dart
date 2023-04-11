@@ -102,28 +102,7 @@ class _ReadPageState extends State<ReadPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        readButton(Pages.potential, Icons.sunny,
-            AppLocalizations.of(context)!.solar_potential),
-        SizedBox(height: 10),
-        readButton(Pages.storage, Icons.storage,
-            AppLocalizations.of(context)!.energy_storage),
-        SizedBox(height: 10),
-        readButton(Pages.regulations, Icons.account_balance,
-            AppLocalizations.of(context)!.regulations),
-        SizedBox(height: 10),
-        readButton(Pages.social, Icons.people,
-            AppLocalizations.of(context)!.sus_social),
-        SizedBox(height: 10),
-        readButton(Pages.environmental, Icons.eco,
-            AppLocalizations.of(context)!.sus_env),
-        SizedBox(height: 10),
-        readButton(Pages.economic, Icons.money,
-            AppLocalizations.of(context)!.sus_eco),
-        SizedBox(height: 10),
-        readButton(Pages.external, Icons.money,
-            AppLocalizations.of(context)!.external_resources),
-      ],
+      children: [],
     );
   }
 

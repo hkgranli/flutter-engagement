@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 NavigationBar createNavBar(int index, BuildContext context) {
   var theme = Theme.of(context);
   return NavigationBar(
-    destinations: const <NavigationDestination>[
+    destinations: <NavigationDestination>[
       NavigationDestination(
         icon: Icon(Icons.home),
-        label: 'Home',
+        label: AppLocalizations.of(context)!.home,
       ),
       NavigationDestination(
         icon: Icon(Icons.touch_app),
-        label: 'Interactive',
-      ),
-      NavigationDestination(
-        icon: Icon(Icons.book_online),
-        label: 'Readable',
+        label: AppLocalizations.of(context)!.information,
       ),
       NavigationDestination(
         icon: Icon(Icons.feedback),
-        label: 'Feedback',
+        label: AppLocalizations.of(context)!.feedback,
       ),
     ],
     selectedIndex: index,
@@ -38,9 +35,6 @@ void changeSelectedPage(BuildContext context, int index) {
       path = "/interactive";
       break;
     case 2:
-      path = "/read";
-      break;
-    case 3:
       path = "/feedback";
       break;
     default:
