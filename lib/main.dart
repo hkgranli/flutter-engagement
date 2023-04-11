@@ -63,7 +63,6 @@ class _AppInitState extends State<AppInit> {
         routes: {
           "/": (contex) => const HomePage(),
           "/interactive": (contex) => const InteractivePage(),
-          "/read": (contex) => const ReadPage(),
           "/feedback": (contex) => const FeedbackPage(),
         },
       ),
