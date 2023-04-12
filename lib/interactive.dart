@@ -43,8 +43,8 @@ class _InteractivePageState extends State<InteractivePage>
   // north south east west
   // 0 = false; 1 = true
 
-  SolarType _solarType = SolarType.panel;
-  Panel _activePanel = Panel.PanL;
+  SolarType _solarType = SolarType.none;
+  Panel _activePanel = Panel.none;
   Tile _activeTile = Tile.none;
 
   void toggleDropdown() {
@@ -106,7 +106,7 @@ class _InteractivePageState extends State<InteractivePage>
     }
   }
 
-  void setPage(Pages p, [bool? show]) {
+  void setPage(Pages p, [bool? show = false]) {
     setState(() {
       activePage = p;
       _showcase = show!;
@@ -136,31 +136,73 @@ class _InteractivePageState extends State<InteractivePage>
         break;
       case Pages.potential:
         page = _solarPotential();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.storage:
         page = _energyStoragePage();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.regulations:
         page = _regulationsPage();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.social:
         page = _socialSusPage();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.environmental:
         page = _envSusPage();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.economic:
         page = _ecoSusPage();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.external:
         page = _externalPage();
-        appBar = createAppBar(context, AppLocalizations.of(context)!.read);
+        appBar = createAppBar(
+            context,
+            AppLocalizations.of(context)!.interactive,
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setPage(Pages.home),
+            ));
         break;
       case Pages.ecoView:
         page = _buildEco();
@@ -169,7 +211,7 @@ class _InteractivePageState extends State<InteractivePage>
             AppLocalizations.of(context)!.interactive,
             IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.ecoView),
+              onPressed: () => setPage(Pages.home),
             ));
         break;
       default:
@@ -187,53 +229,55 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   Widget _buildHome() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-          child: Column(
-        children: [
-          Text(AppLocalizations.of(context)!.interactive_info),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.pvView, true),
-              child: Text(AppLocalizations.of(context)!.visualization)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.pvView, false),
-              child: Text(AppLocalizations.of(context)!.eff_est)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.ecoView),
-              child: Text(AppLocalizations.of(context)!.eco_model)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.potential),
-              child: Text(AppLocalizations.of(context)!.solar_potential)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.storage),
-              child: Text(AppLocalizations.of(context)!.energy_storage)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.regulations),
-              child: Text(AppLocalizations.of(context)!.regulations)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.social),
-              child: Text(AppLocalizations.of(context)!.sus_social)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.environmental),
-              child: Text(AppLocalizations.of(context)!.sus_env)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.economic),
-              child: Text(AppLocalizations.of(context)!.sus_eco)),
-          SizedBox(height: 10),
-          OutlinedButton(
-              onPressed: () => setPage(Pages.external),
-              child: Text(AppLocalizations.of(context)!.external_resources)),
-        ],
-      )),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+            child: Column(
+          children: [
+            Text(AppLocalizations.of(context)!.interactive_info),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.pvView, true),
+                child: Text(AppLocalizations.of(context)!.visualization)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.pvView, false),
+                child: Text(AppLocalizations.of(context)!.eff_est)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.ecoView),
+                child: Text(AppLocalizations.of(context)!.eco_model)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.potential),
+                child: Text(AppLocalizations.of(context)!.solar_potential)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.storage),
+                child: Text(AppLocalizations.of(context)!.energy_storage)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.regulations),
+                child: Text(AppLocalizations.of(context)!.regulations)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.social),
+                child: Text(AppLocalizations.of(context)!.sus_social)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.environmental),
+                child: Text(AppLocalizations.of(context)!.sus_env)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.economic),
+                child: Text(AppLocalizations.of(context)!.sus_eco)),
+            SizedBox(height: 10),
+            OutlinedButton(
+                onPressed: () => setPage(Pages.external),
+                child: Text(AppLocalizations.of(context)!.external_resources)),
+          ],
+        )),
+      ),
     );
   }
 
