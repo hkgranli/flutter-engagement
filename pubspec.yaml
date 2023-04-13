@@ -45,8 +45,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  model_viewer_plus:
+  model_viewer_plus: 
   fl_chart: ^0.61.0
+  video_player:
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -70,8 +71,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/03TVRj79RL.jpg
-    - assets/overview_crop.jpg
+    - assets/images/03TVRj79RL.jpg
+    - assets/images/overview_crop.jpg
+    - assets/images/leasing.png
+    - assets/images/community.png
+    - assets/images/4p.png
+    - assets/images/ntnu_logo.png
+    - assets/images/helios_logo.png
     - assets/models/house.glb
     - assets/models/house_panel_1_1000.glb
     - assets/models/house_panel_1_1100.glb
@@ -87,6 +93,25 @@ flutter:
     - assets/models/house_panel_1_0011.glb
     - assets/models/house_panel_1_0010.glb
     - assets/models/house_panel_1_0001.glb
+
+    - assets/models/house_panel_2_1000.glb
+    - assets/models/house_panel_2_1100.glb
+    - assets/models/house_panel_2_1110.glb 
+    - assets/models/house_panel_2_1111.glb
+    - assets/models/house_panel_2_1101.glb
+    - assets/models/house_panel_2_1011.glb 
+    - assets/models/house_panel_2_1010.glb
+    - assets/models/house_panel_2_0100.glb
+    - assets/models/house_panel_2_0111.glb
+    - assets/models/house_panel_2_0110.glb
+    - assets/models/house_panel_2_0101.glb
+    - assets/models/house_panel_2_0011.glb
+    - assets/models/house_panel_2_0010.glb
+    - assets/models/house_panel_2_0001.glb
+
+    - assets/models/house_tile_1_1111.glb
+    - assets/models/house_tile_2_1111.glb
+    - assets/helios_video.mp4
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -34,8 +34,6 @@ class _ReadPageState extends State<ReadPage> {
         return AppLocalizations.of(context)!.energy_storage;
       case ReadablePages.regulations:
         return AppLocalizations.of(context)!.regulations;
-      case ReadablePages.social:
-        return AppLocalizations.of(context)!.sus_social;
       case ReadablePages.environmental:
         return AppLocalizations.of(context)!.sus_env;
       case ReadablePages.economic:

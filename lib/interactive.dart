@@ -20,17 +20,35 @@ enum Pages {
   potential,
   storage,
   regulations,
-  social,
-  environmental,
-  economic,
+  sustainability,
   external
 }
 
 enum SolarType { none, panel, tile }
 
-enum Panel { none, PanL, Dodge }
+enum Panel {
+  none(efficiency: 0, id: -1, name: "None"),
+  prodOne(efficiency: 0.22, id: 1, name: "Darksun"),
+  prodTwo(efficiency: 0.35, id: 2, name: "Bluepan");
 
-enum Tile { none, Molly, Emp }
+  const Panel({required this.efficiency, required this.id, required this.name});
+
+  final double efficiency;
+  final int id;
+  final String name;
+}
+
+enum Tile {
+  none(efficiency: 0, id: -1, name: "None"),
+  prodOne(efficiency: 0.12, id: 1, name: "Maxitile"),
+  prodTwo(efficiency: 0.15, id: 2, name: "Sunking");
+
+  const Tile({required this.efficiency, required this.id, required this.name});
+
+  final double efficiency;
+  final int id;
+  final String name;
+}
 
 class _InteractivePageState extends State<InteractivePage>
     with TickerProviderStateMixin {
@@ -93,12 +111,8 @@ class _InteractivePageState extends State<InteractivePage>
         return AppLocalizations.of(context)!.energy_storage;
       case Pages.regulations:
         return AppLocalizations.of(context)!.regulations;
-      case Pages.social:
-        return AppLocalizations.of(context)!.sus_social;
-      case Pages.environmental:
-        return AppLocalizations.of(context)!.sus_env;
-      case Pages.economic:
-        return AppLocalizations.of(context)!.sus_eco;
+      case Pages.sustainability:
+        return AppLocalizations.of(context)!.sustainability;
       case Pages.external:
         return AppLocalizations.of(context)!.external_resources;
       default:
@@ -122,110 +136,69 @@ class _InteractivePageState extends State<InteractivePage>
   @override
   Widget build(BuildContext context) {
     Widget page;
-    AppBar appBar;
+
+    AppBar? appBar;
+    String? title;
 
     switch (activePage) {
       case Pages.home:
         page = _buildHome();
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.interactive);
+        title = AppLocalizations.of(context)!.information;
         break;
       case Pages.pvView:
         page = _buildPvView();
         appBar = _buildPvBar(context);
         break;
       case Pages.potential:
-        page = _solarPotential();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
+        page = _solarPotential(context);
+        title = AppLocalizations.of(context)!.solar_potential;
         break;
       case Pages.storage:
         page = _energyStoragePage();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
+        title = AppLocalizations.of(context)!.energy_storage;
         break;
       case Pages.regulations:
         page = _regulationsPage();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
+        title = AppLocalizations.of(context)!.regulations;
         break;
-      case Pages.social:
-        page = _socialSusPage();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
-        break;
-      case Pages.environmental:
-        page = _envSusPage();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
-        break;
-      case Pages.economic:
-        page = _ecoSusPage();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
+      case Pages.sustainability:
+        page = _sustainability();
+        title = AppLocalizations.of(context)!.sustainability;
         break;
       case Pages.external:
         page = _externalPage();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
+        title = AppLocalizations.of(context)!.external_resources;
         break;
       case Pages.ecoView:
         page = _buildEco();
-        appBar = createAppBar(
-            context,
-            AppLocalizations.of(context)!.interactive,
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => setPage(Pages.home),
-            ));
+        title = AppLocalizations.of(context)!.eco_model;
         break;
       default:
-        page = Text("wtf");
-        appBar =
-            createAppBar(context, AppLocalizations.of(context)!.interactive);
+        page = _buildHome();
+        title = AppLocalizations.of(context)!.information;
         break;
     }
+
+    // this checks if appbar is null, if yes then eval to set correct appbar
+    appBar ??= activePage == Pages.home
+        ? createAppBar(context, title!)
+        : _appBarWithBack(context, title!);
 
     return Scaffold(
       appBar: appBar,
       body: SafeArea(child: page),
       bottomNavigationBar: createNavBar(1, context),
     );
+  }
+
+  AppBar _appBarWithBack(BuildContext context, String title) {
+    return createAppBar(
+        context,
+        title,
+        IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => setPage(Pages.home),
+        ));
   }
 
   Widget _buildHome() {
@@ -235,79 +208,138 @@ class _InteractivePageState extends State<InteractivePage>
         child: Center(
             child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.interactive_info),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.pvView, true),
-                child: Text(AppLocalizations.of(context)!.visualization)),
+            Text(AppLocalizations.of(context)!.information_context),
+            Divider(),
+            Text(
+              AppLocalizations.of(context)!.interactive,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.pvView, false),
-                child: Text(AppLocalizations.of(context)!.eff_est)),
-            SizedBox(height: 10),
-            OutlinedButton(
+            Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  OutlinedButton.icon(
+                      onPressed: () => setPage(Pages.pvView, true),
+                      icon: Icon(Icons.roofing),
+                      label: Text(AppLocalizations.of(context)!.visualization)),
+                  OutlinedButton.icon(
+                      onPressed: () => setPage(Pages.pvView, false),
+                      icon: Icon(Icons.calculate),
+                      label: Text(AppLocalizations.of(context)!.eff_est)),
+                ],
+              ),
+            ),
+            OutlinedButton.icon(
                 onPressed: () => setPage(Pages.ecoView),
-                child: Text(AppLocalizations.of(context)!.eco_model)),
+                icon: Icon(Icons.people),
+                label: Text(AppLocalizations.of(context)!.eco_model)),
             SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.potential),
-                child: Text(AppLocalizations.of(context)!.solar_potential)),
+            Divider(),
+            Text(
+              AppLocalizations.of(context)!.knowledge_base,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.storage),
-                child: Text(AppLocalizations.of(context)!.energy_storage)),
+            Center(
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    OutlinedButton.icon(
+                        onPressed: () => setPage(Pages.potential),
+                        icon: Icon(Icons.sunny),
+                        label: Text(
+                            AppLocalizations.of(context)!.solar_potential)),
+                    OutlinedButton.icon(
+                        onPressed: () => setPage(Pages.storage),
+                        icon: Icon(Icons.battery_4_bar),
+                        label:
+                            Text(AppLocalizations.of(context)!.energy_storage)),
+                  ]),
+            ),
             SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.regulations),
-                child: Text(AppLocalizations.of(context)!.regulations)),
+            Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  OutlinedButton.icon(
+                      icon: Icon(Icons.rule),
+                      onPressed: () => setPage(Pages.regulations),
+                      label: Text(AppLocalizations.of(context)!.regulations)),
+                  SizedBox(height: 10),
+                  OutlinedButton.icon(
+                      icon: Icon(Icons.energy_savings_leaf),
+                      onPressed: () => setPage(Pages.sustainability),
+                      label:
+                          Text(AppLocalizations.of(context)!.sustainability)),
+                ],
+              ),
+            ),
             SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.social),
-                child: Text(AppLocalizations.of(context)!.sus_social)),
-            SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.environmental),
-                child: Text(AppLocalizations.of(context)!.sus_env)),
-            SizedBox(height: 10),
-            OutlinedButton(
-                onPressed: () => setPage(Pages.economic),
-                child: Text(AppLocalizations.of(context)!.sus_eco)),
-            SizedBox(height: 10),
-            OutlinedButton(
+            OutlinedButton.icon(
                 onPressed: () => setPage(Pages.external),
-                child: Text(AppLocalizations.of(context)!.external_resources)),
+                icon: Icon(Icons.more),
+                label: Text(AppLocalizations.of(context)!.external_resources)),
           ],
         )),
       ),
     );
   }
 
-  Widget _energyStoragePage() {
-    return Text("EnergyStorage is good");
-  }
+  Widget _energyStoragePage() => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(children: [
+              Text(AppLocalizations.of(context)!.energy_storage_content_intro),
+              UnorderedList([
+                AppLocalizations.of(context)!
+                    .energy_storage_content_intro_battery,
+                AppLocalizations.of(context)!
+                    .energy_storage_content_intro_thermal,
+                AppLocalizations.of(context)!
+                    .energy_storage_content_intro_mechanical
+              ]),
+              Divider(),
+              Text(
+                  AppLocalizations.of(context)!.energy_storage_content_battery),
+              Divider(),
+              Text(
+                  AppLocalizations.of(context)!.energy_storage_content_thermal),
+              Divider(),
+              Text(AppLocalizations.of(context)!
+                  .energy_storage_content_mechanical)
+            ]),
+          ),
+        ),
+      );
 
-  Widget _regulationsPage() {
-    return Text("Regulations are sometimes good but sometimes bad");
-  }
+  Widget _regulationsPage() => SingleChildScrollView(
+        child: Center(
+          child: Column(children: []),
+        ),
+      );
 
-  Widget _socialSusPage() {
-    return Text("Socially this is sustainabile");
-  }
+  Widget _sustainability() => SingleChildScrollView(
+        child: Center(
+          child: Column(children: []),
+        ),
+      );
 
-  Widget _envSusPage() {
-    return Text("The environmental sustainability is dubious");
-  }
+  Widget _solarPotential(BuildContext context) => SingleChildScrollView(
+        child: Center(
+          child: Column(children: []),
+        ),
+      );
 
-  Widget _ecoSusPage() {
-    return Text("The economic sustainability is economic");
-  }
-
-  Widget _solarPotential() {
-    return Text("The solar is potentially");
-  }
-
-  Widget _externalPage() {
-    return Text("External");
-  }
+  Widget _externalPage() => SingleChildScrollView(
+        child: Center(
+          child: Column(children: []),
+        ),
+      );
 
   AppBar _buildPvBar(BuildContext context) {
     final TabController tabController =
@@ -379,8 +411,8 @@ class _InteractivePageState extends State<InteractivePage>
         DropdownMenuItem(
             value: Panel.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Panel.Dodge, child: Text("Dodge")),
-        DropdownMenuItem(value: Panel.PanL, child: Text("PanL")),
+        DropdownMenuItem(value: Panel.prodTwo, child: Text(Panel.prodTwo.name)),
+        DropdownMenuItem(value: Panel.prodOne, child: Text(Panel.prodOne.name)),
       ];
 
       b = DropdownButton(
@@ -390,8 +422,8 @@ class _InteractivePageState extends State<InteractivePage>
         DropdownMenuItem(
             value: Tile.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Tile.Emp, child: Text("Emp")),
-        DropdownMenuItem(value: Tile.Molly, child: Text("Molly")),
+        DropdownMenuItem(value: Tile.prodTwo, child: Text(Tile.prodTwo.name)),
+        DropdownMenuItem(value: Tile.prodOne, child: Text(Tile.prodOne.name)),
       ];
 
       b = DropdownButton(
@@ -502,16 +534,18 @@ class _InteractivePageState extends State<InteractivePage>
 
     if (_solarType == SolarType.none ||
         (_solarType == SolarType.panel && _activePanel == Panel.none) ||
-        (_solarType == SolarType.tile && _activeTile == Tile.none)) {
+        (_solarType == SolarType.tile && _activeTile == Tile.none) ||
+        c == "_0000") {
       return "$base$extension";
     }
 
     String t;
 
     if (_solarType == SolarType.panel) {
-      t = _activePanel == Panel.PanL ? "_panel_1" : "_panel_dodge";
+      t = "_panel_${_activePanel.id}";
     } else {
-      t = _activeTile == Tile.Emp ? "_tile_Emp" : "_tile_Molly";
+      t = "_tile_${_activeTile.id}";
+      c = "_1111";
     }
     var url = "$base$t$c$extension";
 
@@ -519,87 +553,133 @@ class _InteractivePageState extends State<InteractivePage>
     return url;
   }
 
-  Widget _energyEst(BuildContext context) {
-    List<double> monthCoeff = [
-      250,
-      300,
-      400,
-      600,
-      700,
-      1000,
-      1200,
-      1100,
-      900,
-      500,
-      200,
-      220
+  List<FlSpot> _estimateEnergy() {
+    List<List<double>> monthCoeff = [
+      [5.63, 5.2, 4.54], // jan
+      [16.7, 15.36, 13.26], // feb
+      [54.8, 51.3, 45.59], // mar
+      [105.5, 97.09, 84.41], // apr
+      [153.4, 140, 119.81], // mai
+      [157, 139.77, 113.82], // jun
+      [160, 143.4, 117.94], // jul
+      [116, 104.94, 88.10], // aug
+      [66, 61, 52.98], // sep
+      [32.1, 30.32, 27.59], // oct
+      [8.17, 7.56, 6.63], // nov
+      [2.9, 2.64, 2.25], // des
     ];
-
-    double total = 0;
 
     List<FlSpot> estProd = [];
 
-    double panelEff = 0.75;
+    double panelEff;
 
-    List<double> sideEff = [0.5, 1, 0.25, 0.3];
-
-    for (int x = 0; x < monthCoeff.length; x++) {
-      var e = monthCoeff[x];
-      double t = 0;
-
-      for (int i = 0; i < sideEff.length; i++) {
-        t += sideEff[i] * panelEff * _solarSides[i];
-      }
-
-      total += e * t;
-
-      estProd.add(FlSpot(x.toDouble(), e * t));
+    switch (_solarType) {
+      case SolarType.panel:
+        panelEff = _activePanel.efficiency;
+        break;
+      case SolarType.tile:
+        panelEff = _activeTile.efficiency;
+        break;
+      default:
+        panelEff = 0;
     }
 
-    return Column(
-      children: [
-        Text("Total estimated electricity generation: $total kwT"),
-        AspectRatio(
-          aspectRatio: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: LineChart(LineChartData(
-              lineBarsData: [
-                LineChartBarData(
-                  spots: estProd,
-                  isCurved: true,
-                  barWidth: 2,
-                )
-              ],
-              minY: 0,
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: 1,
-                    getTitlesWidget: bottomTitleWidgets,
+    // north, south, east, west
+    // which table coeff should be used per side
+    List<int> sideEff = [2, 1, 2, 0];
+    // in m^2
+    List<double> sideSize = [99, 99, 27, 27];
+
+    // loop all months of the year
+
+    for (int x = 0; x < monthCoeff.length; x++) {
+      double t = 0;
+
+      // loop for every side of the house
+
+      for (int i = 0; i < sideEff.length; i++) {
+        // total estimated production per side is
+        // estimated incident radiation times size of the side
+        // lastly _solarSides is 1 if the panel is selected and 0 if it is inactive
+        t += monthCoeff[x][sideEff[i]] * sideSize[i] * _solarSides[i];
+      }
+
+      estProd.add(FlSpot(x.toDouble(), (panelEff * t).round().toDouble()));
+    }
+
+    return estProd;
+  }
+
+  double _f1total(List<FlSpot> list) {
+    double total = 0;
+
+    for (var f in list) {
+      total += f.y;
+    }
+
+    return total;
+  }
+
+  Widget _energyEst(BuildContext context) {
+    List<FlSpot> estProd = _estimateEnergy();
+    double total = _f1total(estProd);
+
+    const double showerHourCost = 8.5;
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!
+              .est_gen(AppLocalizations.of(context)!.kwt, total.toInt())),
+          SizedBox(),
+          AspectRatio(
+            aspectRatio: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LineChart(LineChartData(
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: estProd,
+                    isCurved: true,
+                    barWidth: 2,
+                  )
+                ],
+                minY: 0,
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: bottomTitleWidgets,
+                    ),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
                   ),
                 ),
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  horizontalInterval: 1,
+                  checkToShowHorizontalLine: (double value) {
+                    return value == 1 || value == 6 || value == 4 || value == 5;
+                  },
                 ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-              ),
-              gridData: FlGridData(
-                show: true,
-                drawVerticalLine: false,
-                horizontalInterval: 1,
-                checkToShowHorizontalLine: (double value) {
-                  return value == 1 || value == 6 || value == 4 || value == 5;
-                },
-              ),
-            )),
+              )),
+            ),
           ),
-        ),
-        Text("With $total you can:")
-      ],
+          Text(AppLocalizations.of(context)!.average_consumption),
+          Text(AppLocalizations.of(context)!.energy_perspective(
+              total.toInt(), AppLocalizations.of(context)!.kwt)),
+          Text(
+              "${(total / showerHourCost).toInt()} hours of showering. ${(total / showerHourCost).toInt() * 4} - 15 minute showers"),
+          Text("I snitt brukes 14 560 kwt til oppvarming i året")
+        ],
+      ),
     );
   }
 
@@ -669,7 +749,7 @@ class _InteractivePageState extends State<InteractivePage>
   }
 }
 
-enum EcoModelSelections { None, Private, Leasing, PPPP }
+enum EcoModelSelections { none, community, leasing, PPPP }
 
 class EconomicModels extends StatefulWidget {
   const EconomicModels({super.key});
@@ -679,7 +759,7 @@ class EconomicModels extends StatefulWidget {
 }
 
 class _EconomicModelsState extends State<EconomicModels> {
-  var _selectedModel = EcoModelSelections.None;
+  var _selectedModel = EcoModelSelections.none;
 
   void changeModel(EcoModelSelections? e) {
     setState(() {
@@ -691,17 +771,17 @@ class _EconomicModelsState extends State<EconomicModels> {
   Widget build(BuildContext context) {
     Widget content = Text("Joe");
     switch (_selectedModel) {
-      case EcoModelSelections.None:
-        content = Landing();
+      case EcoModelSelections.none:
+        content = _landing(context);
         break;
-      case EcoModelSelections.Private:
-        content = PrivateModel();
+      case EcoModelSelections.community:
+        content = _communityShared(context);
         break;
-      case EcoModelSelections.Leasing:
-        content = LeasingModel();
+      case EcoModelSelections.leasing:
+        content = _leasingModel(context);
         break;
       case EcoModelSelections.PPPP:
-        content = PPPPModel();
+        content = _p4Model(context);
         break;
       default:
         break;
@@ -720,25 +800,79 @@ class _EconomicModelsState extends State<EconomicModels> {
   Widget createConfig() {
     List<DropdownMenuItem<EcoModelSelections>> menuItems = [
       DropdownMenuItem(
-          value: EcoModelSelections.None, child: Text("Select Economic Model")),
+          value: EcoModelSelections.none,
+          child: Text(AppLocalizations.of(context)!.select_own_model)),
       DropdownMenuItem(
-          value: EcoModelSelections.Leasing, child: Text("Leasing")),
+          value: EcoModelSelections.leasing,
+          child: Text(AppLocalizations.of(context)!.leasing)),
       DropdownMenuItem(
-          value: EcoModelSelections.Private, child: Text("Private")),
-      DropdownMenuItem(value: EcoModelSelections.PPPP, child: Text("PPPP")),
+          value: EcoModelSelections.community,
+          child: Text(AppLocalizations.of(context)!.community_share)),
+      DropdownMenuItem(
+          value: EcoModelSelections.PPPP,
+          child: Text(AppLocalizations.of(context)!.pPPP_short)),
     ];
 
     return DropdownButton(
         value: _selectedModel, items: menuItems, onChanged: changeModel);
   }
 
-  Widget PPPPModel() {
-    return Text("ppp");
+  Widget _p4Model(BuildContext context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            _img('assets/images/4p.png', context),
+            Text(AppLocalizations.of(context)!.owner_4p)
+          ]),
+        ),
+      );
+
+  Widget _leasingModel(BuildContext context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            _img('assets/images/leasing.png', context),
+            Text(AppLocalizations.of(context)!.owner_leasing)
+          ]),
+        ),
+      );
+
+  Widget _communityShared(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(children: [
+          _img('assets/images/community.png', context, "Label"),
+          Text(AppLocalizations.of(context)!.owner_community)
+        ]),
+      ),
+    );
   }
 
-  Widget LeasingModel() => Text("Leasing");
+  Widget _landing(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+            children: [Text(AppLocalizations.of(context)!.ownership_context)]),
+      ),
+    );
+  }
 
-  Widget PrivateModel() => Text("Private");
-
-  Widget Landing() => Text("Select a model");
+  Column _img(String path, BuildContext context, [String? label]) => Column(
+        children: [
+          InteractiveViewer(
+            panEnabled: false,
+            boundaryMargin: EdgeInsets.all(100),
+            maxScale: 3,
+            minScale: 0.75,
+            child: Image.asset(
+              path,
+            ),
+          ),
+          label is String
+              ? Text(label, style: Theme.of(context).textTheme.labelSmall)
+              : SizedBox.shrink()
+        ],
+      );
 }

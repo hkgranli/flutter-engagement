@@ -12,7 +12,7 @@ NavigationBar createNavBar(int index, BuildContext context) {
         label: AppLocalizations.of(context)!.home,
       ),
       NavigationDestination(
-        icon: Icon(Icons.touch_app),
+        icon: Icon(Icons.school),
         label: AppLocalizations.of(context)!.information,
       ),
       NavigationDestination(
@@ -48,33 +48,25 @@ void changeSelectedPage(BuildContext context, int index) {
 
 AppBar createAppBar(BuildContext context, String title,
     [IconButton? leadingButton, TabBar? tabs]) {
-  Widget flag;
-
-  //print(Localizations.localeOf(context).toLanguageTag());
+  String langCode;
 
   if (Localizations.localeOf(context).toString() == 'no') {
-    flag = IconButton(
-      icon: CircleFlag(
-        'gb',
-        size: 30,
-      ),
-      onPressed: () {
-        AppInit.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-      },
-    );
+    langCode = 'gb';
   } else {
-    flag = IconButton(
-      icon: CircleFlag(
-        'no',
-        size: 30,
-      ),
-      onPressed: () {
-        AppInit.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'no'));
-      },
-    );
+    langCode = 'no';
   }
 
-  var theme = Theme.of(context);
+  Widget flag = IconButton(
+    icon: CircleFlag(
+      langCode,
+      size: 25,
+    ),
+    onPressed: () {
+      AppInit.of(context)
+          ?.setLocale(Locale.fromSubtags(languageCode: langCode));
+    },
+  );
+
   return AppBar(
     title: Text(title),
     leading: leadingButton,
@@ -83,4 +75,42 @@ AppBar createAppBar(BuildContext context, String title,
     actions: <Widget>[flag],
     key: UniqueKey(),
   );
+}
+
+//  https://stackoverflow.com/questions/51690067/how-can-i-write-a-paragraph-with-bullet-points-using-flutter
+
+class UnorderedList extends StatelessWidget {
+  UnorderedList(this.texts);
+  final List<String> texts;
+
+  @override
+  Widget build(BuildContext context) {
+    var widgetList = <Widget>[];
+    for (var text in texts) {
+      // Add list item
+      widgetList.add(UnorderedListItem(text));
+      // Add space between items
+      widgetList.add(SizedBox(height: 5.0));
+    }
+
+    return Column(children: widgetList);
+  }
+}
+
+class UnorderedListItem extends StatelessWidget {
+  UnorderedListItem(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("• "),
+        Expanded(
+          child: Text(text),
+        ),
+      ],
+    );
+  }
 }

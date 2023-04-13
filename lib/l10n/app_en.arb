@@ -1,40 +1,88 @@
 {
+  "@energy_perspective": {
+    "description": "Put electricity estimate into perspective",
+    "placeholders": {
+      "energy": {
+        "example": "25",
+        "type": "int"
+      },
+      "kwt": {
+        "example": "kw/t",
+        "type": "String"
+      }
+    }
+  },
+  "@est_gen": {
+    "placeholders": {
+      "kwt": {
+        "example": "kw/t",
+        "type": "String"
+      },
+      "total": {
+        "example": "25",
+        "type": "int"
+      }
+    }
+  },
   "@helloWorld": {
     "description": "The world"
   },
   "@language": {
     "description": "The current language"
   },
-  "about_project_blockp1": "Project purpose is to research the effectiveness of ICT and interactive education such as augmented reality (AR) to engage citizens in local urban planning projects. This is known as citizen engagement: a process in which knowledge is shared by project owners with the citizens and where the citizens respond with their concerns and feedback both positive and negative. This project uses the knowledge created by the Helios project on Photovoltaic (PV) technology in the historic Møllenberg area.",
-  "about_project_blockp2": "Helios is a project ran by the faculty of engineering at NTNU with the aim of enhancing optimal exploitation of solar systems in the Nordic built environment. One of the focus areas of Helios has been Møllenberg, and there has been done extensive research related to economy, ",
+  "about_contact": "If you have further questions please contact:",
+  "about_project_blockp1": "This application is developed as a part of a master thesis at NTNU. The aim of the thesis is to research the effects of digital technology in a citizen engagement process. Citizen engagement is a democratic process where governments or project owners share information related to a project or technologies, with the aim of educating the public and gather feedback with the citizen's unique perspective. This project uses information produced by Helios on solar technology and aims for citizens of Møllenberg.",
+  "about_project_blockp2": "Helios is a project ran by NTNU's Faculty of Engineering. The aim of the project is enhancing optimal exploitation of solar energy in Nordic cities through the digitalization of the built environment. The historic area of Møllenberg is a special focus of research. This is because the heritage buildings introduces unique challenges related to sustainable conservation and development of historical areas.",
   "about_project_blockp3": "Historic buildings represent a masterpiece of human creativity and hold a significant value in giving people a sense of identity and continuity. The Møllenberg district mainly consists of two-story wooden houses from the 1880s and 1890s. Due to their cultural heritage, it is difficult to get permission for renovating the houses at Møllenberg - even though it is much needed.",
+  "average_consumption": "The average electricity consumption per capita  at Møllenberg is 6889 kWh every year.",
+  "community_share": "Community Shared Ownership",
   "east": "East",
-  "eco_model": "Economic Models",
+  "eco_model": "Ownership Models",
   "eff_est": "Efficiency Estimation",
+  "energy_perspective": "With {energy} {kwt} you can:",
   "energy_storage": "Energy Storage",
+  "energy_storage_content_battery": "The most common home storage method, lithium-ion batteries, are at risk of causing fires that would damage the buildings thus are not a viable option. Large-scale facilities cannot be placed in Møllenberg without inducing fire risk on the protected houses.",
+  "energy_storage_content_intro": "Because the electricity generation of solar energy is unreliable on a day-to-day basis, an efficient storage technique is necessary. The houses being built of mostly wood requires an extra level of concern. Three ways of storing energy will be presented and discussed:",
+  "energy_storage_content_intro_battery": "Battery",
+  "energy_storage_content_intro_mechanical": "Mechanical Systems",
+  "energy_storage_content_intro_thermal": "Thermal Storage",
+  "energy_storage_content_mechanical": "In the context of Norway’s extensive hydropower facilities, the pumped storage method would imply the least amount of investment and the higher efficiency.",
+  "energy_storage_content_thermal": "However, exploring the sand heat storage option could help diversify the energy storage industry in Norway and not depend on the performance of just one system.",
+  "est_gen": "Current configuration is estimated to generate {total} {kwt} during its first year.",
   "external_resources": "External Resources",
   "feedback": "Feedback",
   "helloWorld": "Hello world in enlgish",
   "home": "Home",
   "homeTitle": "Photovoltaic Systems at Møllenberg",
   "information": "Information",
+  "information_context": "This interactive part of the application allows you to learn how solar panels and solar tiles impact the aesthetic profile of a house, and the estimated potential energy that comes with it. The house used as a model is Kirkegata 35. You can also learn more about different ownership models.",
   "interactive": "Interactive",
-  "interactive_info": "This interactive part of the application allows you to learn how solar panels and solar tiles impact the aesthetic profile of a house, and the estimated potential energy that comes with it. The house used as a model is Kirkegata 35. You can also learn more about different ownership models.",
+  "knowledge_base": "Knowledge Base",
+  "kwt": "kw/h",
   "language": "English",
+  "leasing": "Leasing",
   "north": "North",
+  "owner_4p": "In the PPPP-model (People-Private-Public-Partnership) of financing, private individuals, the public sector and companies jointly raise the necessary amount of money. The funds are used to purchase a certain number of PV systems, of which some percentages are owned by private individuals and the remainder by companies. The income from the various PV systems will be divided proportionally among the shareholders, depending on the percentage they have contributed to the crowdfunding. With this joint ownership the responsibility of maintenance is also shared. The owners will receive consistent proportional payments from the profits of the generated power.",
+  "owner_community": "In this financing form, private individuals and the public sector jointly raise a certain amount of money. This money is used to purchase a certain amount of PV systems, which are 100% owned by the private individuals. The income from the various PV systems will be divided proportionally among the people, depending on the percentage they have contributed to the crowdfunding. ​",
+  "owner_leasing": "Within the leasing model, consumers agree on a service contract with a service provider. This company provides all the technology, including installation. They are also responsible for the entire operation. However, the company owns all the equipment. Customers pay a constant monthly amount to the company. The entire financial risk and operational risk lies with the service provider.​",
+  "ownership_context": "A major barrier preventing the extensive installation of solar panels in the Møllenberg area is funding. The financial load may be distributed on several shoulders. In the following models, various solutions are explained more closely. The public and private sectors should not be addressed via a case-by-case approach, but should be addressed directly via a top-down approach across the entire site. The possible funding approaches for this are now presented. ",
+  "pPPP_short": "PPPP",
   "p_info": "About the project",
+  "pppp": "People Private Public Partnership",
   "read": "Information",
   "regulations": "Regulations",
   "roof_sides": "Roof sides",
   "s_panel": "Panel",
   "s_tile": "Tile",
+  "select_config": "Create a solar configuration to get an estimation of generated electricity.",
+  "select_own_model": "Select Ownership Model",
   "select_product": "Select product",
   "select_type": "Select solar type",
   "solar_potential": "Solar Potential",
   "south": "South",
   "sus_eco": "Economic Sustainability",
   "sus_env": "Environmental Sustainability",
-  "sus_social": "Social Sustainability",
+  "sustainability": "Sustainability",
   "visualization": "Visualization",
   "west": "West"
 }
