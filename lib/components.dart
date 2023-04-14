@@ -1,3 +1,6 @@
+import 'package:engagement/feedback.dart';
+import 'package:engagement/home.dart';
+import 'package:engagement/interactive.dart';
 import 'package:flutter/material.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
@@ -42,8 +45,35 @@ void changeSelectedPage(BuildContext context, int index) {
       return;
   }
   // ensure we dont navigate to the same page we are at
-  if (ModalRoute.of(context)?.settings.name == path) return;
+  //if (ModalRoute.of(context)?.settings.name == path) return;
   Navigator.pushNamed(context, path);
+
+  /*
+  Widget page;
+
+  switch (index) {
+    case 0:
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const HomePage(
+                    info: false,
+                  )));
+      break;
+    case 1:
+      page = InteractivePage();
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const InteractivePage()));
+      break;
+    case 2:
+      //page = FeedbackPage();
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const FeedbackPage()));
+      break;
+    default:
+      print("$index wtf");
+      return;
+  }*/
 }
 
 AppBar createAppBar(BuildContext context, String title,

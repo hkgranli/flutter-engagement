@@ -13,7 +13,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.info});
+  final bool info;
 
   @override
   State<HomePage> createState() => _MyHomePageState();
@@ -59,15 +60,28 @@ class _MyHomePageState extends State<HomePage> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Image.asset(
-            'assets/images/ntnu_logo.png',
-            width: 250,
+          Container(
+            decoration: BoxDecoration(color: Colors.white),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                'assets/images/ntnu_logo.png',
+                width: 250,
+              ),
+            ),
           ),
           SizedBox(height: 15),
           Text(AppLocalizations.of(context)!.about_project_blockp1),
-          Image.asset(
-            'assets/images/helios_logo.png',
-            width: 250,
+          SizedBox(height: 15),
+          Container(
+            decoration: BoxDecoration(color: Colors.white),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                'assets/images/helios_logo.png',
+                width: 250,
+              ),
+            ),
           ),
           SizedBox(height: 10),
           Text(AppLocalizations.of(context)!.about_project_blockp2),

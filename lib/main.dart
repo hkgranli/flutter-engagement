@@ -61,7 +61,8 @@ class _AppInitState extends State<AppInit> {
         themeMode: ThemeMode.system,
         initialRoute: "/",
         routes: {
-          "/": (contex) => const HomePage(),
+          "/": (contex) => const HomePage(info: false),
+          "/about": (contex) => const HomePage(info: true),
           "/interactive": (contex) => const InteractivePage(),
           "/feedback": (contex) => const FeedbackPage(),
         },

@@ -16,7 +16,7 @@ class InteractivePage extends StatefulWidget {
 enum Pages {
   home,
   pvView,
-  ecoView,
+  ownershipView,
   potential,
   storage,
   regulations,
@@ -103,7 +103,7 @@ class _InteractivePageState extends State<InteractivePage>
     switch (activePage) {
       case Pages.pvView:
         return AppLocalizations.of(context)!.interactive;
-      case Pages.ecoView:
+      case Pages.ownershipView:
         return AppLocalizations.of(context)!.interactive;
       case Pages.potential:
         return AppLocalizations.of(context)!.solar_potential;
@@ -142,39 +142,39 @@ class _InteractivePageState extends State<InteractivePage>
 
     switch (activePage) {
       case Pages.home:
-        page = _buildHome();
+        page = _pageHome();
         title = AppLocalizations.of(context)!.information;
         break;
       case Pages.pvView:
-        page = _buildPvView();
+        page = _pageInteractive();
         appBar = _buildPvBar(context);
         break;
       case Pages.potential:
-        page = _solarPotential(context);
+        page = _pageSolarPotential(context);
         title = AppLocalizations.of(context)!.solar_potential;
         break;
       case Pages.storage:
-        page = _energyStoragePage();
+        page = _pageEnergyStorage();
         title = AppLocalizations.of(context)!.energy_storage;
         break;
       case Pages.regulations:
-        page = _regulationsPage();
+        page = _pageRegulations();
         title = AppLocalizations.of(context)!.regulations;
         break;
       case Pages.sustainability:
-        page = _sustainability();
+        page = _pageSustainability();
         title = AppLocalizations.of(context)!.sustainability;
         break;
       case Pages.external:
-        page = _externalPage();
+        page = _pageSourceAndExternal();
         title = AppLocalizations.of(context)!.external_resources;
         break;
-      case Pages.ecoView:
+      case Pages.ownershipView:
         page = _buildEco();
         title = AppLocalizations.of(context)!.eco_model;
         break;
       default:
-        page = _buildHome();
+        page = _pageHome();
         title = AppLocalizations.of(context)!.information;
         break;
     }
@@ -201,7 +201,7 @@ class _InteractivePageState extends State<InteractivePage>
         ));
   }
 
-  Widget _buildHome() {
+  Widget _pageHome() {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -232,7 +232,7 @@ class _InteractivePageState extends State<InteractivePage>
               ),
             ),
             OutlinedButton.icon(
-                onPressed: () => setPage(Pages.ecoView),
+                onPressed: () => setPage(Pages.ownershipView),
                 icon: Icon(Icons.people),
                 label: Text(AppLocalizations.of(context)!.eco_model)),
             SizedBox(height: 10),
@@ -289,7 +289,7 @@ class _InteractivePageState extends State<InteractivePage>
     );
   }
 
-  Widget _energyStoragePage() => SingleChildScrollView(
+  Widget _pageEnergyStorage() => SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
@@ -317,25 +317,67 @@ class _InteractivePageState extends State<InteractivePage>
         ),
       );
 
-  Widget _regulationsPage() => SingleChildScrollView(
+  Widget _pageRegulations() => SingleChildScrollView(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(children: [
+              InteractiveViewer(
+                panEnabled: false,
+                boundaryMargin: EdgeInsets.all(100),
+                maxScale: 3,
+                minScale: 0.75,
+                child: Image.asset(
+                  'assets/images/regulations.png',
+                ),
+              ),
+              Text(AppLocalizations.of(context)!.reg_content_p1),
+              Text(AppLocalizations.of(context)!.reg_content_p2),
+              UnorderedList([
+                AppLocalizations.of(context)!.reg_content_l1_i1,
+                AppLocalizations.of(context)!.reg_content_l1_i2,
+                AppLocalizations.of(context)!.reg_content_l1_i3,
+              ])
+            ]),
+          ),
+        ]),
+      );
+
+  Widget _pageSustainability() => SingleChildScrollView(
+        child: Center(
+          child: Column(children: [
+            Text(AppLocalizations.of(context)!.sus_content_p1),
+            UnorderedList([
+              AppLocalizations.of(context)!.social_sustainability,
+              AppLocalizations.of(context)!.sus_eco,
+              AppLocalizations.of(context)!.sus_env,
+            ]),
+            Divider(),
+            Text(
+              AppLocalizations.of(context)!.social_sustainability,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Divider(),
+            Text(
+              AppLocalizations.of(context)!.sus_eco,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Divider(),
+            Text(
+              AppLocalizations.of(context)!.sus_env,
+              style: Theme.of(context).textTheme.titleMedium,
+            )
+          ]),
+        ),
+      );
+
+  Widget _pageSolarPotential(BuildContext context) => SingleChildScrollView(
         child: Center(
           child: Column(children: []),
         ),
       );
 
-  Widget _sustainability() => SingleChildScrollView(
-        child: Center(
-          child: Column(children: []),
-        ),
-      );
-
-  Widget _solarPotential(BuildContext context) => SingleChildScrollView(
-        child: Center(
-          child: Column(children: []),
-        ),
-      );
-
-  Widget _externalPage() => SingleChildScrollView(
+  Widget _pageSourceAndExternal() => SingleChildScrollView(
         child: Center(
           child: Column(children: []),
         ),
@@ -372,13 +414,13 @@ class _InteractivePageState extends State<InteractivePage>
         ));
   }
 
-  Widget _buildPvView() {
+  Widget _pageInteractive() {
     Widget page;
 
     if (_showcase) {
-      page = _modelViewer();
+      page = _pageVisualization();
     } else {
-      page = _energyEst(context);
+      page = _pageEnergyEstimation(context);
     }
 
     return Center(
@@ -453,7 +495,7 @@ class _InteractivePageState extends State<InteractivePage>
             ExpansionPanel(
                 headerBuilder: (context, isExpanded) => ListTile(
                       title: Text(
-                        "${AppLocalizations.of(context)!.roof_sides}",
+                        AppLocalizations.of(context)!.roof_sides,
                       ),
                     ),
                 body: Column(children: _sideSelector(context)),
@@ -497,7 +539,7 @@ class _InteractivePageState extends State<InteractivePage>
     return EconomicModels();
   }
 
-  Widget _modelViewer() {
+  Widget _pageVisualization() {
     // the widget will draw infinite pixels when sharing body without expanded
     // <https://stackoverflow.com/questions/56354923/flutter-bottom-overflowed-by-infinity-pixels>
 
@@ -620,7 +662,7 @@ class _InteractivePageState extends State<InteractivePage>
     return total;
   }
 
-  Widget _energyEst(BuildContext context) {
+  Widget _pageEnergyEstimation(BuildContext context) {
     List<FlSpot> estProd = _estimateEnergy();
     double total = _f1total(estProd);
 
@@ -632,7 +674,9 @@ class _InteractivePageState extends State<InteractivePage>
         children: [
           Text(AppLocalizations.of(context)!
               .est_gen(AppLocalizations.of(context)!.kwt, total.toInt())),
-          SizedBox(),
+          SizedBox(
+            height: 10,
+          ),
           AspectRatio(
             aspectRatio: 2,
             child: Padding(

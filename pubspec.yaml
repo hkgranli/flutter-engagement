@@ -78,6 +78,8 @@ flutter:
     - assets/images/4p.png
     - assets/images/ntnu_logo.png
     - assets/images/helios_logo.png
+    - assets/images/regulations.png
+
     - assets/models/house.glb
     - assets/models/house_panel_1_1000.glb
     - assets/models/house_panel_1_1100.glb
