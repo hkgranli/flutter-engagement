@@ -322,6 +322,13 @@ class _InteractivePageState extends State<InteractivePage>
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
+              Text(AppLocalizations.of(context)!.reg_content_p1),
+              Text(AppLocalizations.of(context)!.reg_content_p2),
+              UnorderedList([
+                AppLocalizations.of(context)!.reg_content_l1_i1,
+                AppLocalizations.of(context)!.reg_content_l1_i2,
+                AppLocalizations.of(context)!.reg_content_l1_i3,
+              ]),
               InteractiveViewer(
                 panEnabled: false,
                 boundaryMargin: EdgeInsets.all(100),
@@ -331,13 +338,6 @@ class _InteractivePageState extends State<InteractivePage>
                   'assets/images/regulations.png',
                 ),
               ),
-              Text(AppLocalizations.of(context)!.reg_content_p1),
-              Text(AppLocalizations.of(context)!.reg_content_p2),
-              UnorderedList([
-                AppLocalizations.of(context)!.reg_content_l1_i1,
-                AppLocalizations.of(context)!.reg_content_l1_i2,
-                AppLocalizations.of(context)!.reg_content_l1_i3,
-              ])
             ]),
           ),
         ]),
