@@ -21,19 +21,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  var info = false;
-
   void _changeSelectedPage(int index) {
     if (index != 0) return changeSelectedPage(context, index);
-    setState(() {
-      info = !info;
-    });
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const HomePage(info: true)));
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget page = info ? infopage(context) : _homepage(context);
-    AppBar a = info
+    Widget page = widget.info ? infopage(context) : _homepage(context);
+    AppBar a = widget.info
         ? infoBar(context)
         : createAppBar(context, AppLocalizations.of(context)!.home);
 

@@ -59,13 +59,7 @@ class _AppInitState extends State<AppInit> {
               brightness: Brightness.dark),
         ),
         themeMode: ThemeMode.system,
-        initialRoute: "/",
-        routes: {
-          "/": (contex) => const HomePage(info: false),
-          "/about": (contex) => const HomePage(info: true),
-          "/interactive": (contex) => const InteractivePage(),
-          "/feedback": (contex) => const FeedbackPage(),
-        },
+        home: HomePage(info: false),
       ),
     );
   }

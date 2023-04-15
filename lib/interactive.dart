@@ -6,13 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class InteractivePage extends StatefulWidget {
-  const InteractivePage({super.key});
-
-  @override
-  State<InteractivePage> createState() => _InteractivePageState();
-}
-
 enum Pages {
   home,
   pvView,
@@ -50,10 +43,25 @@ enum Tile {
   final String name;
 }
 
+class InteractivePage extends StatefulWidget {
+  InteractivePage({super.key, required this.activePage, this.showcase = false});
+
+  final Pages activePage;
+  bool showcase;
+
+  @override
+  State<InteractivePage> createState() => _InteractivePageState();
+}
+
 class _InteractivePageState extends State<InteractivePage>
     with TickerProviderStateMixin {
   bool _showcase = true;
-  var activePage = Pages.home;
+
+  @override
+  void initState() {
+    super.initState();
+    _showcase = widget.showcase;
+  }
 
   bool _dropdownSideSelectorActive = false;
 
@@ -100,7 +108,7 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   String getPageTitle(BuildContext context) {
-    switch (activePage) {
+    switch (widget.activePage) {
       case Pages.pvView:
         return AppLocalizations.of(context)!.interactive;
       case Pages.ownershipView:
@@ -121,10 +129,19 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   void setPage(Pages p, [bool? show = false]) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => InteractivePage(
+                  activePage: p,
+                  showcase: show!,
+                )));
+    /*
     setState(() {
       activePage = p;
       _showcase = show!;
     });
+    */
   }
 
   void toggleShowcase(int index) {
@@ -140,7 +157,7 @@ class _InteractivePageState extends State<InteractivePage>
     AppBar? appBar;
     String? title;
 
-    switch (activePage) {
+    switch (widget.activePage) {
       case Pages.home:
         page = _pageHome();
         title = AppLocalizations.of(context)!.information;
@@ -180,7 +197,7 @@ class _InteractivePageState extends State<InteractivePage>
     }
 
     // this checks if appbar is null, if yes then eval to set correct appbar
-    appBar ??= activePage == Pages.home
+    appBar ??= widget.activePage == Pages.home
         ? createAppBar(context, title!)
         : _appBarWithBack(context, title!);
 
@@ -202,87 +219,94 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   Widget _pageHome() {
+    var about = Text(AppLocalizations.of(context)!.information_context);
+
+    List<Widget> interactive = [
+      Text(
+        AppLocalizations.of(context)!.interactive,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      SizedBox(height: 10),
+      Center(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            OutlinedButton.icon(
+                onPressed: () => setPage(Pages.pvView, true),
+                icon: Icon(Icons.roofing),
+                label: Text(AppLocalizations.of(context)!.visualization)),
+            OutlinedButton.icon(
+                onPressed: () => setPage(Pages.pvView, false),
+                icon: Icon(Icons.calculate),
+                label: Text(AppLocalizations.of(context)!.eff_est)),
+          ],
+        ),
+      ),
+      OutlinedButton.icon(
+          onPressed: () => setPage(Pages.ownershipView),
+          icon: Icon(Icons.people),
+          label: Text(AppLocalizations.of(context)!.eco_model))
+    ];
+
+    List<Widget> knowledgeBase = [
+      Text(
+        AppLocalizations.of(context)!.knowledge_base,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      SizedBox(height: 10),
+      Center(
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              OutlinedButton.icon(
+                  onPressed: () => setPage(Pages.potential),
+                  icon: Icon(Icons.sunny),
+                  label: Text(AppLocalizations.of(context)!.solar_potential)),
+              OutlinedButton.icon(
+                  onPressed: () => setPage(Pages.storage),
+                  icon: Icon(Icons.battery_4_bar),
+                  label: Text(AppLocalizations.of(context)!.energy_storage)),
+            ]),
+      ),
+      SizedBox(height: 10),
+      Center(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            OutlinedButton.icon(
+                icon: Icon(Icons.rule),
+                onPressed: () => setPage(Pages.regulations),
+                label: Text(AppLocalizations.of(context)!.regulations)),
+            SizedBox(height: 10),
+            OutlinedButton.icon(
+                icon: Icon(Icons.energy_savings_leaf),
+                onPressed: () => setPage(Pages.sustainability),
+                label: Text(AppLocalizations.of(context)!.sustainability)),
+          ],
+        ),
+      ),
+      SizedBox(height: 10),
+      OutlinedButton.icon(
+          onPressed: () => setPage(Pages.external),
+          icon: Icon(Icons.more),
+          label: Text(AppLocalizations.of(context)!.external_resources)),
+      SizedBox(height: 10),
+    ];
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
             child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.information_context),
+            about,
             Divider(),
-            Text(
-              AppLocalizations.of(context)!.interactive,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton.icon(
-                      onPressed: () => setPage(Pages.pvView, true),
-                      icon: Icon(Icons.roofing),
-                      label: Text(AppLocalizations.of(context)!.visualization)),
-                  OutlinedButton.icon(
-                      onPressed: () => setPage(Pages.pvView, false),
-                      icon: Icon(Icons.calculate),
-                      label: Text(AppLocalizations.of(context)!.eff_est)),
-                ],
-              ),
-            ),
-            OutlinedButton.icon(
-                onPressed: () => setPage(Pages.ownershipView),
-                icon: Icon(Icons.people),
-                label: Text(AppLocalizations.of(context)!.eco_model)),
-            SizedBox(height: 10),
+            ...knowledgeBase,
             Divider(),
-            Text(
-              AppLocalizations.of(context)!.knowledge_base,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    OutlinedButton.icon(
-                        onPressed: () => setPage(Pages.potential),
-                        icon: Icon(Icons.sunny),
-                        label: Text(
-                            AppLocalizations.of(context)!.solar_potential)),
-                    OutlinedButton.icon(
-                        onPressed: () => setPage(Pages.storage),
-                        icon: Icon(Icons.battery_4_bar),
-                        label:
-                            Text(AppLocalizations.of(context)!.energy_storage)),
-                  ]),
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton.icon(
-                      icon: Icon(Icons.rule),
-                      onPressed: () => setPage(Pages.regulations),
-                      label: Text(AppLocalizations.of(context)!.regulations)),
-                  SizedBox(height: 10),
-                  OutlinedButton.icon(
-                      icon: Icon(Icons.energy_savings_leaf),
-                      onPressed: () => setPage(Pages.sustainability),
-                      label:
-                          Text(AppLocalizations.of(context)!.sustainability)),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            OutlinedButton.icon(
-                onPressed: () => setPage(Pages.external),
-                icon: Icon(Icons.more),
-                label: Text(AppLocalizations.of(context)!.external_resources)),
+            ...interactive,
           ],
         )),
       ),
@@ -666,8 +690,6 @@ class _InteractivePageState extends State<InteractivePage>
     List<FlSpot> estProd = _estimateEnergy();
     double total = _f1total(estProd);
 
-    const double showerHourCost = 8.5;
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -698,6 +720,7 @@ class _InteractivePageState extends State<InteractivePage>
                       getTitlesWidget: bottomTitleWidgets,
                     ),
                   ),
+                  leftTitles: AxisTitles(sideTitles: SideTitles()),
                   topTitles: AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
@@ -716,15 +739,25 @@ class _InteractivePageState extends State<InteractivePage>
               )),
             ),
           ),
+          ..._energyContext(total),
           Text(AppLocalizations.of(context)!.average_consumption),
           Text(AppLocalizations.of(context)!.energy_perspective(
               total.toInt(), AppLocalizations.of(context)!.kwt)),
-          Text(
-              "${(total / showerHourCost).toInt()} hours of showering. ${(total / showerHourCost).toInt() * 4} - 15 minute showers"),
           Text("I snitt brukes 14 560 kwt til oppvarming i året")
         ],
       ),
     );
+  }
+
+  List<Widget> _energyContext(double total) {
+    const double showerHourCost = 8.5;
+    int hoursShower = total ~/ showerHourCost;
+
+    return [
+      Row(
+        children: [Icon(Icons.shower), Text("$hoursShower")],
+      )
+    ];
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {

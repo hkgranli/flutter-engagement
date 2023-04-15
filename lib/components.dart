@@ -29,24 +29,27 @@ NavigationBar createNavBar(int index, BuildContext context) {
 }
 
 void changeSelectedPage(BuildContext context, int index) {
-  String path;
   switch (index) {
     case 0:
-      path = "/";
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const HomePage(info: false)));
       break;
     case 1:
-      path = "/interactive";
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => InteractivePage(activePage: Pages.home)));
       break;
     case 2:
-      path = "/feedback";
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => FeedbackPage()));
       break;
     default:
-      print("$index wtf");
       return;
   }
   // ensure we dont navigate to the same page we are at
   //if (ModalRoute.of(context)?.settings.name == path) return;
-  Navigator.pushNamed(context, path);
+  //Navigator.pushNamed(context, path);
 
   /*
   Widget page;
