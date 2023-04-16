@@ -29,7 +29,7 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page = widget.info ? infopage(context) : _homepage(context);
+    Widget page = widget.info ? _pageInfo(context) : _pageHome(context);
     AppBar a = widget.info
         ? infoBar(context)
         : createAppBar(context, AppLocalizations.of(context)!.home);
@@ -38,7 +38,7 @@ class _MyHomePageState extends State<HomePage> {
       appBar: a,
       body: SingleChildScrollView(
           child: ConstrainedBox(constraints: BoxConstraints(), child: page)),
-      bottomNavigationBar: createNavBar(0, context),
+      bottomNavigationBar: EngagementNavBar(index: 0),
     );
   }
 
@@ -48,11 +48,11 @@ class _MyHomePageState extends State<HomePage> {
         AppLocalizations.of(context)!.p_info,
         IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => _changeSelectedPage(0),
+          onPressed: () => Navigator.pop(context),
         ));
   }
 
-  Widget infopage(BuildContext context) {
+  Widget _pageInfo(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -89,18 +89,32 @@ class _MyHomePageState extends State<HomePage> {
           SizedBox(height: 20),
           Text(AppLocalizations.of(context)!.about_contact),
           SizedBox(height: 10),
-          Center(
-            child: UnorderedList([
-              "Hans Kristian Granli - hkgranli@stud.ntnu.no",
-              "Sobah Abbas Petersen - sap@ntnu.no"
-            ]),
-          )
+          Row(children: [
+            Icon(Icons.email),
+            Text("Hans Kristian Granli - hkgranli@stud.ntnu.no")
+          ]),
+          Row(children: [
+            Icon(Icons.email),
+            Text("Sobah Abbas Petersen - sap@ntnu.no")
+          ]),
+
+          SizedBox(height: 10),
+          Text(AppLocalizations.of(context)!.helios_contact),
+
+          Row(children: [
+            Icon(Icons.email),
+            Text("Gabrielle Lobaccaro - gabriele.lobaccaro@ntnu.no")
+          ]),
+          Row(children: [
+            Icon(Icons.email),
+            Text("Tahmineh Akbarinejad - tahmineh.akbarinejad@ntnu.no")
+          ]),
         ],
       ),
     );
   }
 
-  Widget _homepage(BuildContext context) {
+  Widget _pageHome(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
     return SafeArea(

@@ -6,26 +6,31 @@ import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-NavigationBar createNavBar(int index, BuildContext context) {
-  var theme = Theme.of(context);
-  return NavigationBar(
-    destinations: <NavigationDestination>[
-      NavigationDestination(
-        icon: Icon(Icons.home),
-        label: AppLocalizations.of(context)!.home,
-      ),
-      NavigationDestination(
-        icon: Icon(Icons.school),
-        label: AppLocalizations.of(context)!.information,
-      ),
-      NavigationDestination(
-        icon: Icon(Icons.feedback),
-        label: AppLocalizations.of(context)!.feedback,
-      ),
-    ],
-    selectedIndex: index,
-    onDestinationSelected: (int index) => changeSelectedPage(context, index),
-  );
+class EngagementNavBar extends StatelessWidget {
+  const EngagementNavBar({super.key, required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) => NavigationBar(
+        destinations: <NavigationDestination>[
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            label: AppLocalizations.of(context)!.home,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.school),
+            label: AppLocalizations.of(context)!.information,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.feedback),
+            label: AppLocalizations.of(context)!.feedback,
+          ),
+        ],
+        selectedIndex: index,
+        onDestinationSelected: (int index) =>
+            changeSelectedPage(context, index),
+      );
 }
 
 void changeSelectedPage(BuildContext context, int index) {
@@ -145,5 +150,69 @@ class UnorderedListItem extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class ZoomableImage extends StatelessWidget {
+  ZoomableImage({super.key, required this.path, this.label});
+
+  final String path;
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        InteractiveViewer(
+          panEnabled: false,
+          boundaryMargin: EdgeInsets.fromLTRB(0, 200, 0, 200),
+          maxScale: 3,
+          minScale: 1,
+          child: Image.asset(
+            path,
+          ),
+        ),
+        label is String
+            ? Text(label!, style: Theme.of(context).textTheme.labelSmall)
+            : SizedBox.shrink()
+      ],
+    );
+  }
+}
+
+class EngagementTable extends StatelessWidget {
+  const EngagementTable({super.key, required this.titles, required this.data});
+
+  final List<String> titles;
+  final List<List<String>> data;
+
+  @override
+  Widget build(BuildContext context) {
+    List<DataColumn> dc = [];
+
+    for (var t in titles) {
+      dc.add(DataColumn(
+          label: Expanded(
+        child: Text(t,
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: Theme.of(context).textTheme.labelSmall!.fontSize)),
+      )));
+    }
+
+    List<DataRow> dr = [];
+
+    for (var row in data) {
+      List<DataCell> d = [];
+
+      for (var item in row) {
+        d.add(DataCell(
+            Text(item, style: Theme.of(context).textTheme.labelSmall)));
+      }
+
+      dr.add(DataRow(cells: d));
+    }
+
+    return SingleChildScrollView(child: DataTable(columns: dc, rows: dr));
   }
 }

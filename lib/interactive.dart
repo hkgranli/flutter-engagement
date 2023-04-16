@@ -1,5 +1,6 @@
 import 'package:engagement/components.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart' show ModelViewer;
 import 'package:engagement/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,15 +15,16 @@ enum Pages {
   storage,
   regulations,
   sustainability,
-  external
+  external,
+  sources
 }
 
 enum SolarType { none, panel, tile }
 
 enum Panel {
   none(efficiency: 0, id: -1, name: "None"),
-  prodOne(efficiency: 0.22, id: 1, name: "Darksun"),
-  prodTwo(efficiency: 0.35, id: 2, name: "Bluepan");
+  prodOne(efficiency: 0.20, id: 1, name: "Darksun"),
+  prodTwo(efficiency: 0.23, id: 2, name: "Bluepan");
 
   const Panel({required this.efficiency, required this.id, required this.name});
 
@@ -64,18 +66,25 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   bool _dropdownSideSelectorActive = false;
+  bool _dropdownTechnicalInfoActive = false;
 
   var _solarSides = [1, 1, 1, 1];
   // north south east west
   // 0 = false; 1 = true
 
-  SolarType _solarType = SolarType.none;
-  Panel _activePanel = Panel.none;
+  SolarType _solarType = SolarType.panel;
+  Panel _activePanel = Panel.prodOne;
   Tile _activeTile = Tile.none;
 
-  void toggleDropdown() {
+  void toggleDropdownSideSelector() {
     setState(() {
       _dropdownSideSelectorActive = !_dropdownSideSelectorActive;
+    });
+  }
+
+  void toggleDropdownTechnicalInfo() {
+    setState(() {
+      _dropdownTechnicalInfoActive = !_dropdownTechnicalInfoActive;
     });
   }
 
@@ -105,27 +114,6 @@ class _InteractivePageState extends State<InteractivePage>
     setState(() {
       _solarSides[index] = i;
     });
-  }
-
-  String getPageTitle(BuildContext context) {
-    switch (widget.activePage) {
-      case Pages.pvView:
-        return AppLocalizations.of(context)!.interactive;
-      case Pages.ownershipView:
-        return AppLocalizations.of(context)!.interactive;
-      case Pages.potential:
-        return AppLocalizations.of(context)!.solar_potential;
-      case Pages.storage:
-        return AppLocalizations.of(context)!.energy_storage;
-      case Pages.regulations:
-        return AppLocalizations.of(context)!.regulations;
-      case Pages.sustainability:
-        return AppLocalizations.of(context)!.sustainability;
-      case Pages.external:
-        return AppLocalizations.of(context)!.external_resources;
-      default:
-        return AppLocalizations.of(context)!.read;
-    }
   }
 
   void setPage(Pages p, [bool? show = false]) {
@@ -167,7 +155,7 @@ class _InteractivePageState extends State<InteractivePage>
         appBar = _buildPvBar(context);
         break;
       case Pages.potential:
-        page = _pageSolarPotential(context);
+        page = SolarPotential();
         title = AppLocalizations.of(context)!.solar_potential;
         break;
       case Pages.storage:
@@ -190,6 +178,10 @@ class _InteractivePageState extends State<InteractivePage>
         page = _buildEco();
         title = AppLocalizations.of(context)!.eco_model;
         break;
+      case Pages.sources:
+        page = _pageSources();
+        title = AppLocalizations.of(context)!.sources;
+        break;
       default:
         page = _pageHome();
         title = AppLocalizations.of(context)!.information;
@@ -204,7 +196,7 @@ class _InteractivePageState extends State<InteractivePage>
     return Scaffold(
       appBar: appBar,
       body: SafeArea(child: page),
-      bottomNavigationBar: createNavBar(1, context),
+      bottomNavigationBar: EngagementNavBar(index: 1),
     );
   }
 
@@ -288,12 +280,6 @@ class _InteractivePageState extends State<InteractivePage>
           ],
         ),
       ),
-      SizedBox(height: 10),
-      OutlinedButton.icon(
-          onPressed: () => setPage(Pages.external),
-          icon: Icon(Icons.more),
-          label: Text(AppLocalizations.of(context)!.external_resources)),
-      SizedBox(height: 10),
     ];
 
     return SingleChildScrollView(
@@ -307,6 +293,20 @@ class _InteractivePageState extends State<InteractivePage>
             ...knowledgeBase,
             Divider(),
             ...interactive,
+            Divider(),
+            Text(
+              "_placeholder More information",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            OutlinedButton.icon(
+                onPressed: () => setPage(Pages.external),
+                icon: Icon(Icons.more),
+                label: Text(AppLocalizations.of(context)!.external_resources)),
+            OutlinedButton.icon(
+                onPressed: () => setPage(Pages.sources),
+                icon: Icon(Icons.source),
+                label: Text(AppLocalizations.of(context)!.sources)),
+            SizedBox(height: 10),
           ],
         )),
       ),
@@ -319,23 +319,40 @@ class _InteractivePageState extends State<InteractivePage>
           child: Center(
             child: Column(children: [
               Text(AppLocalizations.of(context)!.energy_storage_content_intro),
-              UnorderedList([
-                AppLocalizations.of(context)!
-                    .energy_storage_content_intro_battery,
-                AppLocalizations.of(context)!
-                    .energy_storage_content_intro_thermal,
-                AppLocalizations.of(context)!
-                    .energy_storage_content_intro_mechanical
-              ]),
               Divider(),
+              Text(
+                  AppLocalizations.of(context)!
+                      .energy_storage_content_intro_battery,
+                  style: Theme.of(context).textTheme.titleMedium),
               Text(
                   AppLocalizations.of(context)!.energy_storage_content_battery),
               Divider(),
               Text(
+                  AppLocalizations.of(context)!
+                      .energy_storage_content_intro_thermal,
+                  style: Theme.of(context).textTheme.titleMedium),
+              Text(
                   AppLocalizations.of(context)!.energy_storage_content_thermal),
               Divider(),
+              Text(
+                  AppLocalizations.of(context)!
+                      .energy_storage_content_intro_mechanical,
+                  style: Theme.of(context).textTheme.titleMedium),
               Text(AppLocalizations.of(context)!
-                  .energy_storage_content_mechanical)
+                  .energy_storage_content_mechanical),
+              Divider(),
+              Text(AppLocalizations.of(context)!.comparison,
+                  style: Theme.of(context).textTheme.titleMedium),
+              EngagementTable(titles: [
+                'Type',
+                'Risk',
+                'Lifespan',
+                'Efficiency'
+              ], data: [
+                ['Li-ion Battery', 'High', '2-3 years', '95%'],
+                ['Pumped Storage', 'Very Low', '50 years', '80%'],
+                ['Thermal and Heat storage', 'Low', '15-20 years', '50-90%'],
+              ])
             ]),
           ),
         ),
@@ -353,15 +370,7 @@ class _InteractivePageState extends State<InteractivePage>
                 AppLocalizations.of(context)!.reg_content_l1_i2,
                 AppLocalizations.of(context)!.reg_content_l1_i3,
               ]),
-              InteractiveViewer(
-                panEnabled: false,
-                boundaryMargin: EdgeInsets.all(100),
-                maxScale: 3,
-                minScale: 0.75,
-                child: Image.asset(
-                  'assets/images/regulations.png',
-                ),
-              ),
+              ZoomableImage(path: 'assets/images/regulations.png')
             ]),
           ),
         ]),
@@ -381,23 +390,21 @@ class _InteractivePageState extends State<InteractivePage>
               AppLocalizations.of(context)!.social_sustainability,
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            Text(AppLocalizations.of(context)!.economic_sustainability),
             Divider(),
             Text(
               AppLocalizations.of(context)!.sus_eco,
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            Text(AppLocalizations.of(context)!.social_sustainability_content),
             Divider(),
             Text(
               AppLocalizations.of(context)!.sus_env,
               style: Theme.of(context).textTheme.titleMedium,
-            )
+            ),
+            Text(AppLocalizations.of(context)!
+                .environmental_sustainability_content),
           ]),
-        ),
-      );
-
-  Widget _pageSolarPotential(BuildContext context) => SingleChildScrollView(
-        child: Center(
-          child: Column(children: []),
         ),
       );
 
@@ -513,8 +520,13 @@ class _InteractivePageState extends State<InteractivePage>
             b,
           ],
         ),
+        OutlinedButton.icon(
+            onPressed: () => print("pressed"),
+            icon: Icon(Icons.compare),
+            label: Text("_placeholder Compare")),
         ExpansionPanelList(
-          expansionCallback: (panelIndex, isExpanded) => toggleDropdown(),
+          expansionCallback: (panelIndex, isExpanded) =>
+              toggleDropdownSideSelector(),
           children: [
             ExpansionPanel(
                 headerBuilder: (context, isExpanded) => ListTile(
@@ -620,19 +632,19 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   List<FlSpot> _estimateEnergy() {
-    List<List<double>> monthCoeff = [
-      [5.63, 5.2, 4.54], // jan
-      [16.7, 15.36, 13.26], // feb
-      [54.8, 51.3, 45.59], // mar
-      [105.5, 97.09, 84.41], // apr
-      [153.4, 140, 119.81], // mai
-      [157, 139.77, 113.82], // jun
-      [160, 143.4, 117.94], // jul
-      [116, 104.94, 88.10], // aug
-      [66, 61, 52.98], // sep
-      [32.1, 30.32, 27.59], // oct
-      [8.17, 7.56, 6.63], // nov
-      [2.9, 2.64, 2.25], // des
+    List<double> monthCoeff = [
+      .05,
+      .18,
+      .5,
+      .8,
+      .98,
+      1,
+      .94,
+      .73,
+      .55,
+      .27,
+      .06,
+      .01
     ];
 
     List<FlSpot> estProd = [];
@@ -652,9 +664,27 @@ class _InteractivePageState extends State<InteractivePage>
 
     // north, south, east, west
     // which table coeff should be used per side
-    List<int> sideEff = [2, 1, 2, 0];
     // in m^2
-    List<double> sideSize = [99, 99, 27, 27];
+    //List<List<double> sideSize = [72, 87, 38, 38];
+
+    var sides = [
+      {
+        'sizes': [72.91],
+        'rad': [400]
+      },
+      {
+        'sizes': [32.69, 48.80, 7.18],
+        'rad': [1000, 800, 600]
+      },
+      {
+        'sizes': [38.59],
+        'rad': [400]
+      },
+      {
+        'sizes': [27.62, 9.26, 2.61],
+        'rad': [1100, 1000, 800]
+      }
+    ];
 
     // loop all months of the year
 
@@ -663,14 +693,18 @@ class _InteractivePageState extends State<InteractivePage>
 
       // loop for every side of the house
 
-      for (int i = 0; i < sideEff.length; i++) {
+      for (var side in sides) {
         // total estimated production per side is
         // estimated incident radiation times size of the side
         // lastly _solarSides is 1 if the panel is selected and 0 if it is inactive
-        t += monthCoeff[x][sideEff[i]] * sideSize[i] * _solarSides[i];
+        //t += monthCoeff[x][sideEff[i]] * sideSize[i] * _solarSides[i];
+        for (int i = 0; i < side['sizes']!.length; i++) {
+          t += (side['sizes']![i] * side['rad']![i] * panelEff) / 12;
+          //t += (side['sizes']![i] * side['rad']![i] * panelEff);
+        }
       }
 
-      estProd.add(FlSpot(x.toDouble(), (panelEff * t).round().toDouble()));
+      estProd.add(FlSpot(x.toDouble(), (t).round().toDouble()));
     }
 
     return estProd;
@@ -690,61 +724,29 @@ class _InteractivePageState extends State<InteractivePage>
     List<FlSpot> estProd = _estimateEnergy();
     double total = _f1total(estProd);
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text(AppLocalizations.of(context)!
-              .est_gen(AppLocalizations.of(context)!.kwt, total.toInt())),
-          SizedBox(
-            height: 10,
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              //Text(AppLocalizations.of(context)!.est_gen(AppLocalizations.of(context)!.kwt, total.toInt())),
+              Text(
+                AppLocalizations.of(context)!.est_usage,
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ..._energyContext(total),
+              SizedBox(
+                height: 10,
+              ),
+              _technicalInformation(estProd, total),
+              Text(AppLocalizations.of(context)!.average_consumption),
+            ],
           ),
-          AspectRatio(
-            aspectRatio: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: LineChart(LineChartData(
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: estProd,
-                    isCurved: true,
-                    barWidth: 2,
-                  )
-                ],
-                minY: 0,
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 1,
-                      getTitlesWidget: bottomTitleWidgets,
-                    ),
-                  ),
-                  leftTitles: AxisTitles(sideTitles: SideTitles()),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false,
-                  horizontalInterval: 1,
-                  checkToShowHorizontalLine: (double value) {
-                    return value == 1 || value == 6 || value == 4 || value == 5;
-                  },
-                ),
-              )),
-            ),
-          ),
-          ..._energyContext(total),
-          Text(AppLocalizations.of(context)!.average_consumption),
-          Text(AppLocalizations.of(context)!.energy_perspective(
-              total.toInt(), AppLocalizations.of(context)!.kwt)),
-          Text("I snitt brukes 14 560 kwt til oppvarming i året")
-        ],
+        ),
       ),
     );
   }
@@ -753,11 +755,98 @@ class _InteractivePageState extends State<InteractivePage>
     const double showerHourCost = 8.5;
     int hoursShower = total ~/ showerHourCost;
 
+    double carBatterySize = 57.5;
+    int carCharges = total ~/ carBatterySize;
+
+    double energyPizza = 625;
+
+    NumberFormat formatter = NumberFormat.decimalPattern('no');
+
     return [
       Row(
-        children: [Icon(Icons.shower), Text("$hoursShower")],
-      )
+        children: [
+          Icon(Icons.bolt),
+          Text(
+              "${formatter.format(total)} ${AppLocalizations.of(context)!.kwt}")
+        ],
+      ),
+      Row(
+        children: [
+          Icon(Icons.shower),
+          Text("$hoursShower _placeholder Hours oin Shower")
+        ],
+      ),
+      Row(
+        children: [
+          Icon(Icons.car_crash),
+          Text("$carCharges _placeholder Full Tesla Model 3 charges")
+        ],
+      ),
+      Row(
+        children: [
+          Icon(Icons.local_pizza),
+          Text("${(total ~/ energyPizza)} _placeholder Stek of pizza")
+        ],
+      ),
+      SliderMoneySaved(total: total)
     ];
+  }
+
+  Widget _technicalInformation(List<FlSpot> estProd, double total) {
+    return ExpansionPanelList(
+      expansionCallback: (panelIndex, isExpanded) =>
+          toggleDropdownTechnicalInfo(),
+      children: [
+        ExpansionPanel(
+            headerBuilder: (context, isExpanded) => ListTile(
+                  title: Text("_placeholder Technical info"),
+                ),
+            body: Column(children: [_efficiencyGraph(estProd, total)]),
+            isExpanded: _dropdownTechnicalInfoActive),
+      ],
+    );
+  }
+
+  Widget _efficiencyGraph(List<FlSpot> estProd, double total) {
+    return AspectRatio(
+      aspectRatio: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: LineChart(LineChartData(
+          lineBarsData: [
+            LineChartBarData(
+              spots: estProd,
+              isCurved: true,
+              barWidth: 2,
+            )
+          ],
+          minY: 0,
+          titlesData: FlTitlesData(
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                getTitlesWidget: bottomTitleWidgets,
+              ),
+            ),
+            topTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+          ),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            horizontalInterval: 1,
+            checkToShowHorizontalLine: (double value) {
+              return value == 1 || value == 6 || value == 4 || value == 5;
+            },
+          ),
+        )),
+      ),
+    );
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -824,9 +913,73 @@ class _InteractivePageState extends State<InteractivePage>
       ),
     );
   }
+
+  Widget _pageSources() {
+    return Container();
+  }
 }
 
-enum EcoModelSelections { none, community, leasing, PPPP }
+class SolarPotential extends StatefulWidget {
+  const SolarPotential({
+    super.key,
+  });
+
+  @override
+  State<SolarPotential> createState() => _SolarPotentialState();
+}
+
+class _SolarPotentialState extends State<SolarPotential> {
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+        child: Center(
+          child: Column(children: []),
+        ),
+      );
+}
+
+class SliderMoneySaved extends StatefulWidget {
+  SliderMoneySaved({super.key, required this.total});
+
+  final double total;
+
+  @override
+  State<SliderMoneySaved> createState() => _SliderMoneySavedState();
+}
+
+class _SliderMoneySavedState extends State<SliderMoneySaved> {
+  double _energyPrice = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    NumberFormat formatter = NumberFormat.decimalPattern('no');
+    return Column(
+      children: [
+        Text(
+            "_placeholder Drag to change electricity price and see estiamted savings:"),
+        Slider(
+            value: _energyPrice,
+            min: 0,
+            max: 600,
+            divisions: 600,
+            label: "${_energyPrice.round()}øre",
+            onChanged: (value) => setState(() {
+                  print(value);
+                  _energyPrice = value;
+                })),
+        RichText(
+          text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
+            WidgetSpan(child: Icon(Icons.savings)),
+            TextSpan(
+                text:
+                    "${formatter.format((widget.total * (_energyPrice / 100)).toInt())}kr _placeholder Worth of electricity generated at ${_energyPrice.toInt()} øre/kwt")
+          ]),
+        ),
+      ],
+    );
+  }
+}
+
+enum EcoModelSelections { none, community, leasing, pppp }
 
 class EconomicModels extends StatefulWidget {
   const EconomicModels({super.key});
@@ -857,7 +1010,7 @@ class _EconomicModelsState extends State<EconomicModels> {
       case EcoModelSelections.leasing:
         content = _leasingModel(context);
         break;
-      case EcoModelSelections.PPPP:
+      case EcoModelSelections.pppp:
         content = _p4Model(context);
         break;
       default:
@@ -886,7 +1039,7 @@ class _EconomicModelsState extends State<EconomicModels> {
           value: EcoModelSelections.community,
           child: Text(AppLocalizations.of(context)!.community_share)),
       DropdownMenuItem(
-          value: EcoModelSelections.PPPP,
+          value: EcoModelSelections.pppp,
           child: Text(AppLocalizations.of(context)!.pPPP_short)),
     ];
 
@@ -898,7 +1051,7 @@ class _EconomicModelsState extends State<EconomicModels> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(children: [
-            _img('assets/images/4p.png', context),
+            ZoomableImage(path: 'assets/images/4p.png'),
             Text(AppLocalizations.of(context)!.owner_4p)
           ]),
         ),
@@ -908,7 +1061,7 @@ class _EconomicModelsState extends State<EconomicModels> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(children: [
-            _img('assets/images/leasing.png', context),
+            ZoomableImage(path: 'assets/images/leasing.png'),
             Text(AppLocalizations.of(context)!.owner_leasing)
           ]),
         ),
@@ -919,7 +1072,10 @@ class _EconomicModelsState extends State<EconomicModels> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
-          _img('assets/images/community.png', context, "Label"),
+          ZoomableImage(path: 'assets/images/community.png', label: "Label"),
+          SizedBox(
+            height: 10,
+          ),
           Text(AppLocalizations.of(context)!.owner_community)
         ]),
       ),
@@ -935,21 +1091,4 @@ class _EconomicModelsState extends State<EconomicModels> {
       ),
     );
   }
-
-  Column _img(String path, BuildContext context, [String? label]) => Column(
-        children: [
-          InteractiveViewer(
-            panEnabled: false,
-            boundaryMargin: EdgeInsets.all(100),
-            maxScale: 3,
-            minScale: 0.75,
-            child: Image.asset(
-              path,
-            ),
-          ),
-          label is String
-              ? Text(label, style: Theme.of(context).textTheme.labelSmall)
-              : SizedBox.shrink()
-        ],
-      );
 }

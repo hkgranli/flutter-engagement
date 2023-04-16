@@ -56,7 +56,7 @@ class _ReadPageState extends State<ReadPage> {
     return Scaffold(
       appBar: _CreateAppBar(context),
       body: Center(child: _BuildPage()),
-      bottomNavigationBar: createNavBar(2, context),
+      bottomNavigationBar: EngagementNavBar(index: 2),
     );
   }
 
