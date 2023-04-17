@@ -33,6 +33,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  image_compare_slider:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -87,6 +88,11 @@ flutter:
     - assets/images/kirkegata35-default.png
     - assets/images/kirkegata35-alt-panel.png
     - assets/images/kirkegata35-trad-panel.png
+
+    - assets/images/kirkegata.png
+
+    - assets/images/potential.png
+    - assets/images/potential2.png
 
     - assets/models/house.glb
     - assets/models/house_panel_1_1000.glb

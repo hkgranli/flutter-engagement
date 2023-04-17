@@ -122,7 +122,7 @@ class _MyHomePageState extends State<HomePage> {
         child: Column(
           children: [
             Image.asset(
-              'assets/images/overview_crop.jpg',
+              'assets/images/kirkegata.png',
             ),
             SizedBox(
               height: 10,

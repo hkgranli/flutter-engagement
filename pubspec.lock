@@ -173,6 +173,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  image_compare_slider:
+    dependency: "direct main"
+    description:
+      name: image_compare_slider
+      sha256: "6bc1f8d99385a67283f334515b5d1b03670c425e4ce54050c734d794f033b39f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.0"
   intl:
     dependency: "direct main"
     description:

@@ -6,6 +6,8 @@ import 'package:engagement/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_compare_slider/image_compare_slider.dart';
+
 
 enum Pages {
   home,
@@ -637,7 +639,7 @@ class _InteractivePageState extends State<InteractivePage>
         // lastly _solarSides is 1 if the panel is selected and 0 if it is inactive
         //t += monthCoeff[x][sideEff[i]] * sideSize[i] * _solarSides[i];
         for (int i = 0; i < side['sizes']!.length; i++) {
-          t += (side['sizes']![i] * side['rad']![i] * panelEff) / 12;
+          t += (side['sizes']![i] * side['rad']![i] * panelEff * (monthCoeff[x]/12));
           //t += (side['sizes']![i] * side['rad']![i] * panelEff);
         }
       }
@@ -908,8 +910,7 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
                           ),
                       body: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(AppLocalizations.of(context)!
-                            .energy_storage_content_battery),
+                        child: batteryBody(),
                       ),
                       isExpanded: batteryActive),
                   ExpansionPanel(
@@ -921,8 +922,7 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
                           ),
                       body: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(AppLocalizations.of(context)!
-                            .energy_storage_content_thermal),
+                        child: thermalBody(),
                       ),
                       isExpanded: heatActive),
                   ExpansionPanel(
@@ -934,8 +934,7 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
                           ),
                       body: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(AppLocalizations.of(context)!
-                            .energy_storage_content_mechanical),
+                        child: hydroBody(),
                       ),
                       isExpanded: mechanicActive)
                 ],
@@ -959,6 +958,32 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
           ),
         ),
       );
+  Widget batteryBody() => Column(children: [
+    Text(AppLocalizations.of(context)!
+                            .energy_storage_content_battery_p1),
+                            SizedBox(height: 10,),
+                            Text(AppLocalizations.of(context)!
+                            .energy_storage_content_battery_p2),
+                            SizedBox(height: 10,),
+                            Text(AppLocalizations.of(context)!
+                            .energy_storage_content_battery_p3),
+  ]);
+
+  Widget thermalBody() => Column(children: [
+    Text(AppLocalizations.of(context)!
+                            .energy_storage_content_thermal_p1)
+  ],);
+
+  Widget hydroBody () => Column(
+children: [
+  Text(AppLocalizations.of(context)!
+                            .energy_storage_content_mechanical_p1),
+                            SizedBox(height: 10,),
+                            Text(AppLocalizations.of(context)!
+                            .energy_storage_content_mechanical_p2)
+],
+  );
+
 }
 
 class PageSustainability extends StatefulWidget {
@@ -1077,6 +1102,10 @@ class _SolarTechnologyState extends State<SolarTechnology> {
   bool monoCrystalActive = false;
   bool polyCrystalActive = false;
   bool thinFilmActive = false;
+  bool showcaseOld = false;
+  bool showcaseNew = false;
+
+  bool trad = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1105,6 +1134,16 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                       thinFilmActive = !thinFilmActive;
                     });
                     break;
+                    case 3:
+                    setState(() {
+                      showcaseOld = !showcaseOld;
+                    });
+                    break;
+                    case 4:
+                    setState(() {
+                      showcaseNew = !showcaseNew;
+                    });
+                    break;
                 }
               },
               children: [
@@ -1130,18 +1169,54 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                         ),
                     body: Text(AppLocalizations.of(context)!
                         .environmental_sustainability_content),
-                    isExpanded: thinFilmActive)
+                    isExpanded: thinFilmActive),
+                    ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Example Kirkegata 35"),
+                        ),
+                    body: kirkegata35(),
+                    isExpanded: showcaseOld),
+                    ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Example Berggate 4B"),
+                        ),
+                    body: berggate(),
+                    isExpanded: showcaseNew)
               ],
             ),
-            ZoomableImage(path: 'assets/images/kirkegata35-default.png'),
-            ZoomableImage(path: 'assets/images/kirkegata35-trad-panel.png'),
-            ZoomableImage(path: 'assets/images/kirkegata35-alt-panel.png'),
-            ZoomableImage(path: 'assets/images/berggate4b-default.png'),
-            ZoomableImage(path: 'assets/images/berggate4b-trad-panel.png'),
-            ZoomableImage(path: 'assets/images/berggate4b-alt-panel.png')
+            
+            
           ],
         ),
       ),
+    );
+  }
+
+  Widget berggate(){
+    return Column(children: [
+ZoomableImage(path: 'assets/images/berggate4b-default.png'),
+            ZoomableImage(path: 'assets/images/berggate4b-trad-panel.png'),
+            ZoomableImage(path: 'assets/images/berggate4b-alt-panel.png')
+    ],);
+  }
+
+  Widget kirkegata35(){
+    return Column(children :[
+      Text("_placeholder Drag to see - (House without tiles on the left)"),
+        OutlinedButton(onPressed: () =>
+        setState(() {
+          trad = !trad;
+        }), child: Text(!trad ? "Traditional panel" : "Colored panel")),
+      ImageCompareSlider(
+  itemOne: Image.asset('assets/images/kirkegata35-default.png'),
+  itemTwo: Image.asset(trad ? 'assets/images/kirkegata35-trad-panel.png' : 'assets/images/kirkegata35-alt-panel.png'),
+    itemOneBuilder: (child, context) => IntrinsicHeight(child: child),
+  itemTwoBuilder: (child, context) => IntrinsicHeight(child: child),
+)
+      /*ZoomableImage(path: 'assets/images/kirkegata35-default.png'),
+            ZoomableImage(path: 'assets/images/kirkegata35-trad-panel.png'),
+            ZoomableImage(path: 'assets/images/kirkegata35-alt-panel.png'),*/
+            ]
     );
   }
 }
@@ -1159,7 +1234,9 @@ class _SolarPotentialState extends State<SolarPotential> {
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
         child: Center(
-          child: Column(children: []),
+          child: Column(children: [
+            ZoomableImage(path: 'assets/images/potential.png')
+          ]),
         ),
       );
 }
