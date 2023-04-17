@@ -80,6 +80,14 @@ flutter:
     - assets/images/helios_logo.png
     - assets/images/regulations.png
 
+    - assets/images/berggate4b-default.png
+    - assets/images/berggate4b-alt-panel.png
+    - assets/images/berggate4b-trad-panel.png
+
+    - assets/images/kirkegata35-default.png
+    - assets/images/kirkegata35-alt-panel.png
+    - assets/images/kirkegata35-trad-panel.png
+
     - assets/models/house.glb
     - assets/models/house_panel_1_1000.glb
     - assets/models/house_panel_1_1100.glb

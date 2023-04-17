@@ -16,6 +16,7 @@ enum Pages {
   regulations,
   sustainability,
   external,
+  solarTechnology,
   sources
 }
 
@@ -159,7 +160,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.solar_potential;
         break;
       case Pages.storage:
-        page = _pageEnergyStorage();
+        page = PageEnergyStorage();
         title = AppLocalizations.of(context)!.energy_storage;
         break;
       case Pages.regulations:
@@ -167,7 +168,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.regulations;
         break;
       case Pages.sustainability:
-        page = _pageSustainability();
+        page = PageSustainability();
         title = AppLocalizations.of(context)!.sustainability;
         break;
       case Pages.external:
@@ -181,6 +182,10 @@ class _InteractivePageState extends State<InteractivePage>
       case Pages.sources:
         page = _pageSources();
         title = AppLocalizations.of(context)!.sources;
+        break;
+      case Pages.solarTechnology:
+        page = SolarTechnology();
+        title = AppLocalizations.of(context)!.solar_technology;
         break;
       default:
         page = _pageHome();
@@ -280,6 +285,11 @@ class _InteractivePageState extends State<InteractivePage>
           ],
         ),
       ),
+      Center(
+          child: OutlinedButton.icon(
+              icon: Icon(Icons.place),
+              onPressed: () => setPage(Pages.solarTechnology),
+              label: Text(AppLocalizations.of(context)!.solar_technology)))
     ];
 
     return SingleChildScrollView(
@@ -313,97 +323,25 @@ class _InteractivePageState extends State<InteractivePage>
     );
   }
 
-  Widget _pageEnergyStorage() => SingleChildScrollView(
+  Widget _pageRegulations() => SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Column(children: [
-              Text(AppLocalizations.of(context)!.energy_storage_content_intro),
-              Divider(),
-              Text(
-                  AppLocalizations.of(context)!
-                      .energy_storage_content_intro_battery,
-                  style: Theme.of(context).textTheme.titleMedium),
-              Text(
-                  AppLocalizations.of(context)!.energy_storage_content_battery),
-              Divider(),
-              Text(
-                  AppLocalizations.of(context)!
-                      .energy_storage_content_intro_thermal,
-                  style: Theme.of(context).textTheme.titleMedium),
-              Text(
-                  AppLocalizations.of(context)!.energy_storage_content_thermal),
-              Divider(),
-              Text(
-                  AppLocalizations.of(context)!
-                      .energy_storage_content_intro_mechanical,
-                  style: Theme.of(context).textTheme.titleMedium),
-              Text(AppLocalizations.of(context)!
-                  .energy_storage_content_mechanical),
-              Divider(),
-              Text(AppLocalizations.of(context)!.comparison,
-                  style: Theme.of(context).textTheme.titleMedium),
-              EngagementTable(titles: [
-                'Type',
-                'Risk',
-                'Lifespan',
-                'Efficiency'
-              ], data: [
-                ['Li-ion Battery', 'High', '2-3 years', '95%'],
-                ['Pumped Storage', 'Very Low', '50 years', '80%'],
-                ['Thermal and Heat storage', 'Low', '15-20 years', '50-90%'],
-              ])
-            ]),
-          ),
-        ),
-      );
-
-  Widget _pageRegulations() => SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              Text(AppLocalizations.of(context)!.reg_content_p1),
-              Text(AppLocalizations.of(context)!.reg_content_p2),
-              UnorderedList([
-                AppLocalizations.of(context)!.reg_content_l1_i1,
-                AppLocalizations.of(context)!.reg_content_l1_i2,
-                AppLocalizations.of(context)!.reg_content_l1_i3,
-              ]),
-              ZoomableImage(path: 'assets/images/regulations.png')
-            ]),
-          ),
-        ]),
-      );
-
-  Widget _pageSustainability() => SingleChildScrollView(
-        child: Center(
           child: Column(children: [
-            Text(AppLocalizations.of(context)!.sus_content_p1),
+            Text(AppLocalizations.of(context)!.reg_content_p1),
+            Text(AppLocalizations.of(context)!.reg_content_p2),
             UnorderedList([
-              AppLocalizations.of(context)!.social_sustainability,
-              AppLocalizations.of(context)!.sus_eco,
-              AppLocalizations.of(context)!.sus_env,
+              AppLocalizations.of(context)!.reg_content_l1_i1,
+              AppLocalizations.of(context)!.reg_content_l1_i2,
+              AppLocalizations.of(context)!.reg_content_l1_i3,
             ]),
-            Divider(),
+            ZoomableImage(path: 'assets/images/regulations.png'),
+            SizedBox(
+              height: 10,
+            ),
             Text(
-              AppLocalizations.of(context)!.social_sustainability,
+              "_placeholder Guidelines by Byantikvaren",
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            Text(AppLocalizations.of(context)!.economic_sustainability),
-            Divider(),
-            Text(
-              AppLocalizations.of(context)!.sus_eco,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text(AppLocalizations.of(context)!.social_sustainability_content),
-            Divider(),
-            Text(
-              AppLocalizations.of(context)!.sus_env,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text(AppLocalizations.of(context)!
-                .environmental_sustainability_content),
           ]),
         ),
       );
@@ -743,7 +681,6 @@ class _InteractivePageState extends State<InteractivePage>
                 height: 10,
               ),
               _technicalInformation(estProd, total),
-              Text(AppLocalizations.of(context)!.average_consumption),
             ],
           ),
         ),
@@ -919,6 +856,296 @@ class _InteractivePageState extends State<InteractivePage>
   }
 }
 
+class PageEnergyStorage extends StatefulWidget {
+  const PageEnergyStorage({
+    super.key,
+  });
+
+  @override
+  State<PageEnergyStorage> createState() => _PageEnergyStorageState();
+}
+
+class _PageEnergyStorageState extends State<PageEnergyStorage> {
+  bool batteryActive = false;
+  bool heatActive = false;
+  bool mechanicActive = false;
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(children: [
+              Text(AppLocalizations.of(context)!.energy_storage_content_intro),
+              Divider(),
+              ExpansionPanelList(
+                expansionCallback: (panelIndex, isExpanded) {
+                  switch (panelIndex) {
+                    case 0:
+                      setState(() {
+                        batteryActive = !batteryActive;
+                      });
+                      break;
+                    case 1:
+                      setState(() {
+                        heatActive = !heatActive;
+                      });
+                      break;
+                    case 2:
+                      setState(() {
+                        mechanicActive = !mechanicActive;
+                      });
+                      break;
+                  }
+                },
+                children: [
+                  ExpansionPanel(
+                      headerBuilder: (context, isExpanded) => ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!
+                                  .energy_storage_content_intro_battery,
+                            ),
+                          ),
+                      body: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(AppLocalizations.of(context)!
+                            .energy_storage_content_battery),
+                      ),
+                      isExpanded: batteryActive),
+                  ExpansionPanel(
+                      headerBuilder: (_, __) => ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!
+                                  .energy_storage_content_intro_thermal,
+                            ),
+                          ),
+                      body: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(AppLocalizations.of(context)!
+                            .energy_storage_content_thermal),
+                      ),
+                      isExpanded: heatActive),
+                  ExpansionPanel(
+                      headerBuilder: (_, __) => ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!
+                                  .energy_storage_content_intro_mechanical,
+                            ),
+                          ),
+                      body: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(AppLocalizations.of(context)!
+                            .energy_storage_content_mechanical),
+                      ),
+                      isExpanded: mechanicActive)
+                ],
+              ),
+              Divider(),
+              Text(
+                "_placeholder Summary",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              EngagementTable(titles: [
+                'Type',
+                'Risk',
+                'Lifespan',
+                'Efficiency'
+              ], data: [
+                ['Li-ion Battery', 'High', '2-3 years', '95%'],
+                ['Pumped Storage', 'Very Low', '50 years', '80%'],
+                ['Thermal and Heat storage', 'Low', '15-20 years', '50-90%'],
+              ])
+            ]),
+          ),
+        ),
+      );
+}
+
+class PageSustainability extends StatefulWidget {
+  const PageSustainability({
+    super.key,
+  });
+
+  @override
+  State<PageSustainability> createState() => _PageSustainabilityState();
+}
+
+class _PageSustainabilityState extends State<PageSustainability> {
+  bool socialActive = false;
+  bool ecoActive = false;
+  bool envActive = false;
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(children: [
+              Text(
+                  "${AppLocalizations.of(context)!.sus_content_p1} ${AppLocalizations.of(context)!.social_sustainability}, ${AppLocalizations.of(context)!.sus_eco}, ${AppLocalizations.of(context)!.sus_env}"),
+              /*UnorderedList([
+                AppLocalizations.of(context)!.social_sustainability,
+                AppLocalizations.of(context)!.sus_eco,
+                AppLocalizations.of(context)!.sus_env,
+              ]),
+
+              ExpansionPanelList(
+          expansionCallback: (panelIndex, isExpanded) =>
+              toggleDropdownSideSelector(),
+          children: [
+            ExpansionPanel(
+                headerBuilder: (context, isExpanded) => ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.roof_sides,
+                      ),
+                    ),
+                body: Column(children: _sideSelector(context)),
+                isExpanded: _dropdownSideSelectorActive),
+          ],
+        ),
+              
+              
+              */
+              Divider(),
+              ExpansionPanelList(
+                expansionCallback: (panelIndex, isExpanded) {
+                  switch (panelIndex) {
+                    case 0:
+                      setState(() {
+                        socialActive = !socialActive;
+                      });
+                      break;
+                    case 1:
+                      setState(() {
+                        ecoActive = !ecoActive;
+                      });
+                      break;
+                    case 2:
+                      setState(() {
+                        envActive = !envActive;
+                      });
+                      break;
+                  }
+                },
+                children: [
+                  ExpansionPanel(
+                      headerBuilder: (context, isExpanded) => ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!
+                                  .social_sustainability,
+                            ),
+                          ),
+                      body: Text(AppLocalizations.of(context)!
+                          .social_sustainability_content),
+                      isExpanded: socialActive),
+                  ExpansionPanel(
+                      headerBuilder: (_, __) => ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!.sus_eco,
+                            ),
+                          ),
+                      body: Text(AppLocalizations.of(context)!
+                          .economic_sustainability),
+                      isExpanded: ecoActive),
+                  ExpansionPanel(
+                      headerBuilder: (_, __) => ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!.sus_env,
+                            ),
+                          ),
+                      body: Text(AppLocalizations.of(context)!
+                          .environmental_sustainability_content),
+                      isExpanded: envActive)
+                ],
+              ),
+            ]),
+          ),
+        ),
+      );
+}
+
+class SolarTechnology extends StatefulWidget {
+  const SolarTechnology({
+    super.key,
+  });
+
+  @override
+  State<SolarTechnology> createState() => _SolarTechnologyState();
+}
+
+class _SolarTechnologyState extends State<SolarTechnology> {
+  bool monoCrystalActive = false;
+  bool polyCrystalActive = false;
+  bool thinFilmActive = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+                "_placeholder. There are three main PV-systems available: Monocrystalline, Polycrystaline and Thin film. "),
+            ExpansionPanelList(
+              expansionCallback: (panelIndex, isExpanded) {
+                switch (panelIndex) {
+                  case 0:
+                    setState(() {
+                      monoCrystalActive = !monoCrystalActive;
+                    });
+                    break;
+                  case 1:
+                    setState(() {
+                      polyCrystalActive = !polyCrystalActive;
+                    });
+                    break;
+                  case 2:
+                    setState(() {
+                      thinFilmActive = !thinFilmActive;
+                    });
+                    break;
+                }
+              },
+              children: [
+                ExpansionPanel(
+                    headerBuilder: (context, isExpanded) => ListTile(
+                          title: Text(
+                            "Monocrystalline",
+                          ),
+                        ),
+                    body: Text(AppLocalizations.of(context)!
+                        .social_sustainability_content),
+                    isExpanded: monoCrystalActive),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Polycrystaline"),
+                        ),
+                    body: Text(
+                        AppLocalizations.of(context)!.economic_sustainability),
+                    isExpanded: polyCrystalActive),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Thin Film"),
+                        ),
+                    body: Text(AppLocalizations.of(context)!
+                        .environmental_sustainability_content),
+                    isExpanded: thinFilmActive)
+              ],
+            ),
+            ZoomableImage(path: 'assets/images/kirkegata35-default.png'),
+            ZoomableImage(path: 'assets/images/kirkegata35-trad-panel.png'),
+            ZoomableImage(path: 'assets/images/kirkegata35-alt-panel.png'),
+            ZoomableImage(path: 'assets/images/berggate4b-default.png'),
+            ZoomableImage(path: 'assets/images/berggate4b-trad-panel.png'),
+            ZoomableImage(path: 'assets/images/berggate4b-alt-panel.png')
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SolarPotential extends StatefulWidget {
   const SolarPotential({
     super.key,
@@ -954,8 +1181,14 @@ class _SliderMoneySavedState extends State<SliderMoneySaved> {
     NumberFormat formatter = NumberFormat.decimalPattern('no');
     return Column(
       children: [
-        Text(
-            "_placeholder Drag to change electricity price and see estiamted savings:"),
+        RichText(
+          text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
+            WidgetSpan(child: Icon(Icons.payment)),
+            TextSpan(
+                text:
+                    "_placeholder Drag to change electricity price calculate market value:")
+          ]),
+        ),
         Slider(
             value: _energyPrice,
             min: 0,
