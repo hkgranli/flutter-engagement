@@ -1,4 +1,5 @@
 import 'package:engagement/components.dart';
+import 'package:engagement/interactive.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,7 +15,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  bool a = false;
+
+  void toggleAb() {
+    setState(() {
+      a = !a;
+    });
+  }
+
   void _changeSelectedPage(int index) {
+    if (index == 4) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => InteractivePage(
+                    activePage: Pages.pvView,
+                    showcasePage: EstimationPages.aesthetic,
+                  )));
+      return;
+    }
     if (index != 0) return changeSelectedPage(context, index);
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const HomePage(info: true)));
@@ -110,6 +129,58 @@ class _MyHomePageState extends State<HomePage> {
   Widget _pageHome(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    var b = OutlinedButton(onPressed: toggleAb, child: Icon(Icons.abc));
+
+    if (a) {
+      return SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/kirkegata.png',
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                AppLocalizations.of(context)!.homeTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Learn about solar Technology",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              SizedBox(height: 10),
+              _homePageButton(appState, Icon(Icons.school),
+                  AppLocalizations.of(context)!.information, 1),
+              Text(
+                "Test configurations on Kirkegata 35",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              SizedBox(height: 10),
+              _homePageButton(
+                  appState, Icon(Icons.touch_app), "Interactive Showcase", 4),
+              SizedBox(height: 10),
+              Text(
+                "Make your voice heard by giving feedback",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              _homePageButton(appState, Icon(Icons.feedback),
+                  AppLocalizations.of(context)!.feedback, 2),
+              SizedBox(height: 10),
+              _homePageButton(appState, Icon(Icons.info),
+                  AppLocalizations.of(context)!.p_info, 0),
+              SizedBox(
+                height: 10,
+              ),
+              b
+            ],
+          ),
+        ),
+      );
+    }
+
     return SafeArea(
       child: Center(
         child: Column(
@@ -133,6 +204,10 @@ class _MyHomePageState extends State<HomePage> {
             SizedBox(height: 10),
             _homePageButton(appState, Icon(Icons.feedback),
                 AppLocalizations.of(context)!.feedback, 2),
+            SizedBox(
+              height: 10,
+            ),
+            b
           ],
         ),
       ),

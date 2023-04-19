@@ -382,12 +382,12 @@ class _EstimationsState extends State<Estimations> {
   // north south east west
   // 0 = false; 1 = true
 
-  SolarType _solarType = SolarType.panel;
-  Panel _activePanel = Panel.prodOne;
+  SolarType _solarType = SolarType.none;
+  Panel _activePanel = Panel.none;
   Tile _activeTile = Tile.none;
 
-  SolarType _solarTypeCompare = SolarType.panel;
-  Panel _activePanelCompare = Panel.prodOne;
+  SolarType _solarTypeCompare = SolarType.none;
+  Panel _activePanelCompare = Panel.none;
   Tile _activeTileCompare = Tile.none;
 
   bool compare = false;
