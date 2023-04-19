@@ -4,17 +4,13 @@ import 'package:engagement/estimations/radiation.dart';
 import 'package:engagement/estimations/visual.dart';
 import 'package:engagement/knowledge_base/economicmodels.dart';
 import 'package:engagement/knowledge_base/energystorage.dart';
+import 'package:engagement/knowledge_base/regulations.dart';
 import 'package:engagement/knowledge_base/solarpotential.dart';
 import 'package:engagement/knowledge_base/solartechnology.dart';
 import 'package:engagement/knowledge_base/sustainability.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart' show ModelViewer;
-import 'package:engagement/main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:image_compare_slider/image_compare_slider.dart';
 
 enum Pages {
   home,
@@ -56,11 +52,10 @@ enum Tile {
 }
 
 class InteractivePage extends StatefulWidget {
-  InteractivePage(
-      {super.key, required this.activePage, this.showcasePage = null});
+  InteractivePage({super.key, required this.activePage, this.showcasePage});
 
   final Pages activePage;
-  EstimationPages? showcasePage;
+  final EstimationPages? showcasePage;
 
   @override
   State<InteractivePage> createState() => _InteractivePageState();
@@ -84,7 +79,7 @@ class _InteractivePageState extends State<InteractivePage>
     });
   }
 
-  void setPage(Pages p, [EstimationPages? ep = null]) {
+  void setPage(Pages p, [EstimationPages? ep]) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -127,7 +122,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.energy_storage;
         break;
       case Pages.regulations:
-        page = _pageRegulations();
+        page = RegulationsPage();
         title = AppLocalizations.of(context)!.regulations;
         break;
       case Pages.sustainability:
@@ -298,29 +293,6 @@ class _InteractivePageState extends State<InteractivePage>
     );
   }
 
-  Widget _pageRegulations() => SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(children: [
-            Text(AppLocalizations.of(context)!.reg_content_p1),
-            Text(AppLocalizations.of(context)!.reg_content_p2),
-            UnorderedList([
-              AppLocalizations.of(context)!.reg_content_l1_i1,
-              AppLocalizations.of(context)!.reg_content_l1_i2,
-              AppLocalizations.of(context)!.reg_content_l1_i3,
-            ]),
-            ZoomableImage(path: 'assets/images/regulations.png'),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "_placeholder Guidelines by Byantikvaren",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ]),
-        ),
-      );
-
   Widget _pageSourceAndExternal() => SingleChildScrollView(
         child: Center(
           child: Column(children: []),
@@ -378,7 +350,9 @@ class _InteractivePageState extends State<InteractivePage>
             Tab(
                 icon: Icon(Icons.calculate),
                 text: AppLocalizations.of(context)!.eff_est),
-            Tab(icon: Icon(Icons.sunny), text: "_placeholder rad"),
+            Tab(
+                icon: Icon(Icons.sunny),
+                text: AppLocalizations.of(context)!.rad_tab),
           ],
           controller: tabController,
         ));
@@ -386,54 +360,6 @@ class _InteractivePageState extends State<InteractivePage>
 
   Widget _pageSources() {
     return Container();
-  }
-}
-
-class SliderMoneySaved extends StatefulWidget {
-  SliderMoneySaved({super.key, required this.total});
-
-  final double total;
-
-  @override
-  State<SliderMoneySaved> createState() => _SliderMoneySavedState();
-}
-
-class _SliderMoneySavedState extends State<SliderMoneySaved> {
-  double _energyPrice = 1;
-
-  @override
-  Widget build(BuildContext context) {
-    NumberFormat formatter = NumberFormat.decimalPattern('no');
-    return Column(
-      children: [
-        RichText(
-          text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
-            WidgetSpan(child: Icon(Icons.payment)),
-            TextSpan(
-                text:
-                    "_placeholder Drag to change electricity price calculate market value:")
-          ]),
-        ),
-        Slider(
-            value: _energyPrice,
-            min: 0,
-            max: 600,
-            divisions: 600,
-            label: "${_energyPrice.round()}øre",
-            onChanged: (value) => setState(() {
-                  print(value);
-                  _energyPrice = value;
-                })),
-        RichText(
-          text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
-            WidgetSpan(child: Icon(Icons.savings)),
-            TextSpan(
-                text:
-                    "${formatter.format((widget.total * (_energyPrice / 100)).toInt())}kr _placeholder Worth of electricity generated at ${_energyPrice.toInt()} øre/kwt")
-          ]),
-        ),
-      ],
-    );
   }
 }
 
@@ -460,10 +386,45 @@ class _EstimationsState extends State<Estimations> {
   Panel _activePanel = Panel.prodOne;
   Tile _activeTile = Tile.none;
 
+  SolarType _solarTypeCompare = SolarType.panel;
+  Panel _activePanelCompare = Panel.prodOne;
+  Tile _activeTileCompare = Tile.none;
+
+  bool compare = false;
+
+  void toggleCompare() {
+    setState(() {
+      compare = !compare;
+    });
+  }
+
+  void setSelectedPanelCompare(dynamic p) {
+    if (p is Panel) {
+      setState(() {
+        _activePanelCompare = p;
+      });
+    }
+  }
+
+  void setSelectedTileCompare(dynamic t) {
+    if (t is Tile) {
+      setState(() {
+        _activeTileCompare = t;
+      });
+    }
+  }
+
   bool _dropdownSideSelectorActive = false;
+
   void toggleDropdownSideSelector() {
     setState(() {
       _dropdownSideSelectorActive = !_dropdownSideSelectorActive;
+    });
+  }
+
+  void setSolarTypeCompare(dynamic s) {
+    setState(() {
+      _solarTypeCompare = s!;
     });
   }
 
@@ -495,19 +456,39 @@ class _EstimationsState extends State<Estimations> {
     });
   }
 
+  Widget configRadiation() {
+    return Column(
+      children: [
+        Text(
+            "_placeholder This model shows yearly estimated radiation for surfaces over 400 kWh/m^2:"),
+        UnorderedList(
+          texts: [
+            UnorderedListItemInline(
+                text: "1110 ${AppLocalizations.of(context)!.kwt}/m^2",
+                color: Colors.red),
+            UnorderedListItemInline(
+                text: "1000 ${AppLocalizations.of(context)!.kwt}/m^2",
+                color: Colors.orange),
+            UnorderedListItemInline(
+                text: "800 ${AppLocalizations.of(context)!.kwt}/m^2",
+                color: Colors.yellow),
+            UnorderedListItemInline(
+                text: "600 ${AppLocalizations.of(context)!.kwt}/m^2",
+                color: Colors.green),
+            UnorderedListItemInline(
+                text: "400 ${AppLocalizations.of(context)!.kwt}/m^2",
+                color: Colors.blue),
+          ],
+          inline: true,
+        ),
+      ],
+    );
+  }
+
   Widget _buildConfig() {
-    if (widget.page == EstimationPages.radiation) {
-      return Column(
-        children: [
-          Text(
-              "_placeholder This model shows yearly estimated radiation for surfaces over 400 kWh/m^2:"),
-          Text("red 1100 kwh/m^2"),
-          Text("orange 1000 kwh/m^2"),
-          Text("yellow 800 kwh/m^2"),
-          Text("green 600 kwh/m^2"),
-          Text("blue 400 kwh/m^2"),
-        ],
-      );
+    if (widget.page == EstimationPages.radiation) return configRadiation();
+    if (widget.page == EstimationPages.efficiency && compare) {
+      return buildConfigCompare();
     }
 
     List<DropdownMenuItem<SolarType>> menuItems = [
@@ -521,6 +502,13 @@ class _EstimationsState extends State<Estimations> {
           value: SolarType.tile,
           child: Text(AppLocalizations.of(context)!.s_tile)),
     ];
+
+    Widget compareButton = widget.page == EstimationPages.aesthetic
+        ? Container()
+        : OutlinedButton.icon(
+            onPressed: () => toggleCompare(),
+            icon: Icon(Icons.compare),
+            label: Text("_placeholder"));
 
     DropdownButton b = DropdownButton(items: null, onChanged: null);
 
@@ -565,10 +553,118 @@ class _EstimationsState extends State<Estimations> {
             b,
           ],
         ),
+        compareButton,
+        ExpansionPanelList(
+          expansionCallback: (panelIndex, isExpanded) =>
+              toggleDropdownSideSelector(),
+          children: [
+            ExpansionPanel(
+                headerBuilder: (context, isExpanded) => ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.roof_sides,
+                      ),
+                    ),
+                body: Column(children: _sideSelector(context)),
+                isExpanded: _dropdownSideSelectorActive),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildConfigCompare() {
+    List<DropdownMenuItem<SolarType>> menuItems = [
+      DropdownMenuItem(
+          value: SolarType.none,
+          child: Text(AppLocalizations.of(context)!.select_type)),
+      DropdownMenuItem(
+          value: SolarType.panel,
+          child: Text(AppLocalizations.of(context)!.s_panel)),
+      DropdownMenuItem(
+          value: SolarType.tile,
+          child: Text(AppLocalizations.of(context)!.s_tile)),
+    ];
+
+    DropdownButton b = DropdownButton(items: null, onChanged: null);
+    DropdownButton d = DropdownButton(items: null, onChanged: null);
+
+    if (_solarType == SolarType.panel) {
+      List<DropdownMenuItem<Panel>> productItems = [
+        DropdownMenuItem(
+            value: Panel.none,
+            child: Text(AppLocalizations.of(context)!.select_product)),
+        DropdownMenuItem(value: Panel.prodTwo, child: Text(Panel.prodTwo.name)),
+        DropdownMenuItem(value: Panel.prodOne, child: Text(Panel.prodOne.name))
+      ];
+
+      b = DropdownButton(
+          value: _activePanel,
+          items: productItems,
+          onChanged: setSelectedPanel);
+    } else if (_solarType == SolarType.tile) {
+      List<DropdownMenuItem<Tile>> productItems = [
+        DropdownMenuItem(
+            value: Tile.none,
+            child: Text(AppLocalizations.of(context)!.select_product)),
+        DropdownMenuItem(value: Tile.prodTwo, child: Text(Tile.prodTwo.name)),
+        DropdownMenuItem(value: Tile.prodOne, child: Text(Tile.prodOne.name)),
+      ];
+
+      b = DropdownButton(
+          value: _activeTile, items: productItems, onChanged: setSelectedTile);
+    }
+
+    if (_solarTypeCompare == SolarType.panel) {
+      List<DropdownMenuItem<Panel>> productItems = [
+        DropdownMenuItem(
+            value: Panel.none,
+            child: Text(AppLocalizations.of(context)!.select_product)),
+        DropdownMenuItem(value: Panel.prodTwo, child: Text(Panel.prodTwo.name)),
+        DropdownMenuItem(value: Panel.prodOne, child: Text(Panel.prodOne.name)),
+      ];
+      d = DropdownButton(
+          value: _activePanelCompare,
+          items: productItems,
+          onChanged: setSelectedPanelCompare);
+    } else if (_solarTypeCompare == SolarType.tile) {
+      List<DropdownMenuItem<Tile>> productItems = [
+        DropdownMenuItem(
+            value: Tile.none,
+            child: Text(AppLocalizations.of(context)!.select_product)),
+        DropdownMenuItem(value: Tile.prodTwo, child: Text(Tile.prodTwo.name)),
+        DropdownMenuItem(value: Tile.prodOne, child: Text(Tile.prodOne.name)),
+      ];
+
+      d = DropdownButton(
+          value: _activeTileCompare,
+          items: productItems,
+          onChanged: setSelectedTileCompare);
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            DropdownButton(
+                value: _solarType, items: menuItems, onChanged: setSolarType),
+            b
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            DropdownButton(
+                value: _solarTypeCompare,
+                items: menuItems,
+                onChanged: setSolarTypeCompare),
+            d
+          ],
+        ),
         OutlinedButton.icon(
-            onPressed: () => print("pressed"),
+            onPressed: () => toggleCompare(),
             icon: Icon(Icons.compare),
-            label: Text("_placeholder Compare")),
+            label: Text("_placeholder")),
         ExpansionPanelList(
           expansionCallback: (panelIndex, isExpanded) =>
               toggleDropdownSideSelector(),
@@ -629,11 +725,37 @@ class _EstimationsState extends State<Estimations> {
             solarType: _solarType);
         break;
       case EstimationPages.efficiency:
-        content = EnergyEstimation(
+        if (compare) {
+          content = Expanded(
+            child: Column(
+              children: [
+                Text("Config1:"),
+                EnergyEstimation(
+                  activePanel: _activePanel,
+                  activeTile: _activeTile,
+                  solarSides: _solarSides,
+                  solarType: _solarType,
+                  boolSlider: false,
+                ),
+                Text("Config2:"),
+                EnergyEstimation(
+                  activePanel: _activePanelCompare,
+                  activeTile: _activeTileCompare,
+                  solarSides: _solarSides,
+                  solarType: _solarTypeCompare,
+                  boolSlider: false,
+                ),
+              ],
+            ),
+          );
+        } else {
+          content = EnergyEstimation(
             activePanel: _activePanel,
             activeTile: _activeTile,
             solarSides: _solarSides,
-            solarType: _solarType);
+            solarType: _solarType,
+          );
+        }
         break;
       case EstimationPages.radiation:
         content = RadiationPage();

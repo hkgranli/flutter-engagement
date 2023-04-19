@@ -34,6 +34,10 @@ dependencies:
     sdk: flutter
   intl: any
   image_compare_slider:
+  model_viewer_plus: ^1.5.0
+  fl_chart: ^0.61.0
+  video_player: ^2.6.1
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -46,9 +50,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  model_viewer_plus: 
-  fl_chart: ^0.61.0
-  video_player:
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -93,6 +94,13 @@ flutter:
 
     - assets/images/potential.png
     - assets/images/potential2.png
+
+    - assets/images/map_overview.png
+
+    - assets/images/map_overview_des.png
+    - assets/images/map_overview_june.png
+    - assets/images/map_overview_march.png
+    - assets/images/map_overview_september.png
 
     - assets/models/house.glb
     - assets/models/house_colorized.glb

@@ -1,18 +1,5 @@
-import 'package:engagement/components.dart';
-import 'package:engagement/interactive.dart';
-import 'package:engagement/knowledge_base/economicmodels.dart';
-import 'package:engagement/knowledge_base/energystorage.dart';
-import 'package:engagement/knowledge_base/solarpotential.dart';
-import 'package:engagement/knowledge_base/solartechnology.dart';
-import 'package:engagement/knowledge_base/sustainability.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart' show ModelViewer;
-import 'package:engagement/main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:image_compare_slider/image_compare_slider.dart';
 
 class RadiationPage extends StatelessWidget {
   const RadiationPage({

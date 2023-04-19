@@ -1,18 +1,8 @@
-import 'package:engagement/components.dart';
 import 'package:engagement/interactive.dart';
-import 'package:engagement/knowledge_base/economicmodels.dart';
-import 'package:engagement/knowledge_base/energystorage.dart';
-import 'package:engagement/knowledge_base/solarpotential.dart';
-import 'package:engagement/knowledge_base/solartechnology.dart';
-import 'package:engagement/knowledge_base/sustainability.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart' show ModelViewer;
-import 'package:engagement/main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:image_compare_slider/image_compare_slider.dart';
+import 'package:intl/intl.dart';
 
 class EnergyEstimation extends StatefulWidget {
   const EnergyEstimation(
@@ -20,7 +10,8 @@ class EnergyEstimation extends StatefulWidget {
       required this.solarSides,
       required this.solarType,
       required this.activePanel,
-      required this.activeTile});
+      required this.activeTile,
+      this.boolSlider = true});
 
   final List<int> solarSides;
 
@@ -28,6 +19,8 @@ class EnergyEstimation extends StatefulWidget {
 
   final Panel activePanel;
   final Tile activeTile;
+
+  final bool boolSlider;
 
   @override
   State<EnergyEstimation> createState() => _EnergyEstimationState();
@@ -105,7 +98,7 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
           t += (side['sizes']![i] *
               side['rad']![i] *
               panelEff *
-              (monthCoeff[x] / 12));
+              (monthCoeff[x] / 6));
           //t += (side['sizes']![i] * side['rad']![i] * panelEff);
         }
       }
@@ -135,6 +128,8 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
   }
 
   Widget _technicalInformation(List<FlSpot> estProd, double total) {
+    return Container();
+    // ignore: dead_code
     return ExpansionPanelList(
       expansionCallback: (panelIndex, isExpanded) =>
           toggleDropdownTechnicalInfo(),
@@ -156,7 +151,7 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
     double carBatterySize = 57.5;
     int carCharges = total ~/ carBatterySize;
 
-    double energyPizza = 625;
+    double energyPizza = 0.93;
 
     NumberFormat formatter = NumberFormat.decimalPattern('no');
 
@@ -171,22 +166,26 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
       Row(
         children: [
           Icon(Icons.shower),
-          Text("$hoursShower _placeholder Hours oin Shower")
+          Text("$hoursShower ${AppLocalizations.of(context)!.est_shower}")
         ],
       ),
       Row(
         children: [
           Icon(Icons.car_crash),
-          Text("$carCharges _placeholder Full Tesla Model 3 charges")
+          Text("$carCharges ${AppLocalizations.of(context)!.est_tesla}")
         ],
       ),
       Row(
         children: [
           Icon(Icons.local_pizza),
-          Text("${(total ~/ energyPizza)} _placeholder Stek of pizza")
+          Text(
+              "${(total ~/ energyPizza)} ${AppLocalizations.of(context)!.est_pizza}")
         ],
       ),
-      SliderMoneySaved(total: total)
+      SizedBox(
+        height: 10,
+      ),
+      widget.boolSlider ? SliderMoneySaved(total: total) : Container(),
     ];
   }
 
@@ -309,10 +308,12 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
           child: Column(
             children: [
               //Text(AppLocalizations.of(context)!.est_gen(AppLocalizations.of(context)!.kwt, total.toInt())),
-              Text(
-                AppLocalizations.of(context)!.est_usage,
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+              widget.boolSlider
+                  ? Text(
+                      AppLocalizations.of(context)!.est_usage,
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    )
+                  : Container(),
               SizedBox(
                 height: 10,
               ),
@@ -325,6 +326,53 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SliderMoneySaved extends StatefulWidget {
+  SliderMoneySaved({super.key, required this.total});
+
+  final double total;
+
+  @override
+  State<SliderMoneySaved> createState() => _SliderMoneySavedState();
+}
+
+class _SliderMoneySavedState extends State<SliderMoneySaved> {
+  double _energyPrice = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    NumberFormat formatter = NumberFormat.decimalPattern('no');
+    return Column(
+      children: [
+        Row(
+          children: [
+            //Icon(Icons.payment),
+            Text(AppLocalizations.of(context)!.est_value,
+                style: TextStyle(fontStyle: FontStyle.italic)),
+          ],
+        ),
+        Slider(
+            value: _energyPrice,
+            min: 0,
+            max: 600,
+            divisions: 600,
+            label: "${_energyPrice.round()} øre",
+            onChanged: (value) => setState(() {
+                  print(value);
+                  _energyPrice = value;
+                })),
+        RichText(
+          text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
+            WidgetSpan(child: Icon(Icons.savings)),
+            TextSpan(
+                text:
+                    "${formatter.format((widget.total * (_energyPrice / 100)).toInt())}kr ${AppLocalizations.of(context)!.est_value_gen}")
+          ]),
+        ),
+      ],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:engagement/feedback.dart';
 import 'package:engagement/home.dart';
 import 'package:engagement/interactive.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
@@ -118,33 +119,63 @@ AppBar createAppBar(BuildContext context, String title,
 //  https://stackoverflow.com/questions/51690067/how-can-i-write-a-paragraph-with-bullet-points-using-flutter
 
 class UnorderedList extends StatelessWidget {
-  UnorderedList(this.texts);
-  final List<String> texts;
+  UnorderedList({required this.texts, this.inline = false});
+  final List<UnorderedListItem> texts;
+  final bool inline;
 
   @override
   Widget build(BuildContext context) {
     var widgetList = <Widget>[];
     for (var text in texts) {
       // Add list item
-      widgetList.add(UnorderedListItem(text));
+      widgetList.add(text);
       // Add space between items
       widgetList.add(SizedBox(height: 5.0));
     }
+    return inline
+        ? Wrap(
+            children: widgetList,
+          )
+        : Column(children: widgetList);
+  }
+}
 
-    return Column(children: widgetList);
+class UnorderedListItemInline extends StatelessWidget
+    implements UnorderedListItem {
+  UnorderedListItemInline({required this.text, this.color});
+  @override
+  final String text;
+  @override
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    var pre = color != null
+        ? Icon(Icons.fiber_manual_record, color: color)
+        : Icon(Icons.fiber_manual_record);
+    return Wrap(
+      children: <Widget>[
+        pre,
+        Text(text),
+      ],
+    );
   }
 }
 
 class UnorderedListItem extends StatelessWidget {
-  UnorderedListItem(this.text);
+  UnorderedListItem({required this.text, this.color});
   final String text;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    var pre = color != null
+        ? Icon(Icons.fiber_manual_record, color: color)
+        : Icon(Icons.fiber_manual_record);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("• "),
+        pre,
         Expanded(
           child: Text(text),
         ),
@@ -215,4 +246,14 @@ class EngagementTable extends StatelessWidget {
 
     return SingleChildScrollView(child: DataTable(columns: dc, rows: dr));
   }
+}
+
+double _f1total(List<FlSpot> list) {
+  double total = 0;
+
+  for (var f in list) {
+    total += f.y;
+  }
+
+  return total;
 }

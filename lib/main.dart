@@ -1,14 +1,9 @@
-import 'package:engagement/components.dart';
 import 'package:engagement/home.dart';
 import 'package:engagement/l10n/l10n.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:engagement/feedback.dart';
-import 'package:engagement/interactive.dart';
-import 'package:engagement/read.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(AppInit());
@@ -19,6 +14,7 @@ class AppInit extends StatefulWidget {
   State<AppInit> createState() => _AppInitState();
 
   // required for language
+  // ignore: library_private_types_in_public_api
   static _AppInitState? of(BuildContext context) =>
       context.findAncestorStateOfType<_AppInitState>();
 }
