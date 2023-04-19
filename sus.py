@@ -27,3 +27,7 @@ def calc_sus(response: list[int]):
 calc_sus([4, 2, 4, 1, 3, 4, 4, 2, 5, 1])
 calc_sus([4, 2, 4, 2, 4, 5, 4, 1, 4, 1])
 calc_sus([5, 1, 5, 1, 3, 4, 5, 1, 5, 1])
+print("it.2")
+calc_sus([4,2,4,1,5,5,5,1,5,1])
+calc_sus([5,2,4,1,5,5,4,1,5,1])
+
