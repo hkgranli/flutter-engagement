@@ -215,7 +215,7 @@ class EngagementTable extends StatelessWidget {
   const EngagementTable({super.key, required this.titles, required this.data});
 
   final List<String> titles;
-  final List<List<String>> data;
+  final List<List<Widget>> data;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,8 @@ class EngagementTable extends StatelessWidget {
 
       for (var item in row) {
         d.add(DataCell(
-            Text(item, style: Theme.of(context).textTheme.labelSmall)));
+            //Text(item, style: Theme.of(context).textTheme.labelSmall)
+            item));
       }
 
       dr.add(DataRow(cells: d));
@@ -248,7 +249,7 @@ class EngagementTable extends StatelessWidget {
   }
 }
 
-double _f1total(List<FlSpot> list) {
+double f1total(List<FlSpot> list) {
   double total = 0;
 
   for (var f in list) {

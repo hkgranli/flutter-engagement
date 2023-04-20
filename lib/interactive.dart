@@ -508,7 +508,7 @@ class _EstimationsState extends State<Estimations> {
         : OutlinedButton.icon(
             onPressed: () => toggleCompare(),
             icon: Icon(Icons.compare),
-            label: Text("_placeholder"));
+            label: Text("Compare"));
 
     DropdownButton b = DropdownButton(items: null, onChanged: null);
 
@@ -727,27 +727,15 @@ class _EstimationsState extends State<Estimations> {
       case EstimationPages.efficiency:
         if (compare) {
           content = Expanded(
-            child: Column(
-              children: [
-                Text("Config1:"),
-                EnergyEstimation(
+              child: EfficiencyTableComparator(
                   activePanel: _activePanel,
+                  activePanelCompare: _activePanelCompare,
                   activeTile: _activeTile,
+                  activeTileCompare: _activeTileCompare,
                   solarSides: _solarSides,
                   solarType: _solarType,
-                  boolSlider: false,
-                ),
-                Text("Config2:"),
-                EnergyEstimation(
-                  activePanel: _activePanelCompare,
-                  activeTile: _activeTileCompare,
-                  solarSides: _solarSides,
-                  solarType: _solarTypeCompare,
-                  boolSlider: false,
-                ),
-              ],
-            ),
-          );
+                  solarTypeCompare: _solarTypeCompare,
+                  key: UniqueKey()));
         } else {
           content = EnergyEstimation(
             activePanel: _activePanel,
