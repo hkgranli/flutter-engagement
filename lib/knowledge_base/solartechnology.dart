@@ -222,7 +222,9 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         ),
       );
 
-  Widget exampleOther() => Column();
+  Widget exampleOther() => Column(
+        children: [ZoomableImage(path: 'assets/images/rt.jpg')],
+      );
 
   Widget exampleShow() {
     return Column(children: [
@@ -242,7 +244,16 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           minWidth: 80.0,
         ),
         isSelected: houseSelect,
-        children: [Text("Kirkegata 35"), Text("Berggateeeee")],
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Kirkegata 35"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Nordre Berggate 4B"),
+          )
+        ],
       ),
       SizedBox(
         height: 10,
@@ -263,7 +274,16 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           minWidth: 80.0,
         ),
         isSelected: panelSelect,
-        children: [Text("trad panel"), Text("color panel")],
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Monocrystalline panel"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Colored Panel"),
+          )
+        ],
       ),
       SizedBox(
         height: 10,

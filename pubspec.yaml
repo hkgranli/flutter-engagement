@@ -95,6 +95,9 @@ flutter:
 
     - assets/images/solar_tile.png
 
+    - assets/images/pump-store.jpg
+    - assets/images/zoning_plan.png
+
     - assets/images/bakkegata.png
     - assets/images/bispehaugen.png
     - assets/images/rosenborg.png

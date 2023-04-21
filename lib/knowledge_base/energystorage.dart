@@ -137,6 +137,7 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
         children: [
           Text(AppLocalizations.of(context)!
               .energy_storage_content_mechanical_p1),
+          ZoomableImage(path: 'assets/images/pump-store.jpg'),
           SizedBox(
             height: 10,
           ),

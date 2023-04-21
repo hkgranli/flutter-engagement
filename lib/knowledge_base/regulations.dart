@@ -108,8 +108,9 @@ class _RegulationsPageState extends State<RegulationsPage> {
               ),
               UnorderedListItem(
                 text: AppLocalizations.of(context)!.reg_zone_4,
-              )
+              ),
             ]),
+            ZoomableImage(path: 'assets/images/zoning_plan.png')
           ],
         ),
       );
