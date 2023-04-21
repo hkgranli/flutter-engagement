@@ -172,6 +172,13 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
       ));
     }
 
+    if (widget.boolSlider) {
+      widgets.add(SizedBox(
+        height: 10,
+      ));
+      widgets.add(SliderMoneySaved(total: total));
+    }
+
     return widgets;
 
     /*
@@ -418,9 +425,6 @@ class EnergyContext {
 
   static List<FlSpot> estimateEnergy(SolarType solarType, Panel activePanel,
       Tile activeTile, List<int> solarSides) {
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAaaa");
-    print(solarSides);
-
     List<double> monthCoeff = [
       .05,
       .18,

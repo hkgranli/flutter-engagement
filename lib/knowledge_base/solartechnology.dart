@@ -18,10 +18,12 @@ class _SolarTechnologyState extends State<SolarTechnology> {
   bool transparentPvActive = false;
   bool coloredPvActive = false;
   bool showcaseOld = false;
-  bool showcaseNew = false;
+  bool showcaseOther = false;
 
   List<bool> houseSelect = [true, false];
   List<bool> panelSelect = [true, false];
+
+  List<bool> cellSelect = [true, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
             Text(AppLocalizations.of(context)!.solar_technology_intro),
             ExpansionPanelList(
               expansionCallback: (panelIndex, isExpanded) {
+                print(panelIndex);
                 switch (panelIndex) {
                   case 0:
                     setState(() {
@@ -61,7 +64,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                     break;
                   case 5:
                     setState(() {
-                      showcaseNew = !showcaseNew;
+                      showcaseOther = !showcaseOther;
                     });
                     break;
                 }
@@ -97,10 +100,17 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                     isExpanded: coloredPvActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
-                          title: Text("Example Kirkegata 35"),
+                          title: Text("_placeholder Examples at Møllenberg"),
                         ),
                     body: exampleShow(),
                     isExpanded: showcaseOld),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text(
+                              "_placeholder Examples at historical buildings"),
+                        ),
+                    body: exampleOther(),
+                    isExpanded: showcaseOther),
               ],
             ),
           ],
@@ -113,18 +123,79 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.solar_technology_cell_types_p1),
-            Text(AppLocalizations.of(context)!.solar_technology_cell_types_p2),
-            Text(AppLocalizations.of(context)!.solar_technology_cell_types_p3),
+            Text(AppLocalizations.of(context)!
+                .solar_technology_cell_types_intro),
+            SizedBox(
+              height: 10,
+            ),
+            ToggleButtons(
+              direction: Axis.horizontal,
+              onPressed: (int index) {
+                setState(() {
+                  // The button that is tapped is set to true, and the others to false.
+                  for (int i = 0; i < cellSelect.length; i++) {
+                    cellSelect[i] = i == index;
+                  }
+                });
+              },
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              constraints: const BoxConstraints(
+                minHeight: 40.0,
+                minWidth: 80.0,
+              ),
+              isSelected: cellSelect,
+              children: [
+                Text("Monocrystalline"),
+                Text("Polycrystalline"),
+                Text("Thin film")
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            cellSelect[0] ? mono() : Container(),
+            cellSelect[1] ? poly() : Container(),
+            cellSelect[2] ? thin() : Container(),
           ],
         ),
+      );
+
+  Widget mono() => Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solar_technology_cell_types_p1),
+          SizedBox(
+            height: 10,
+          ),
+          ZoomableImage(path: 'assets/images/tech_mono.png')
+        ],
+      );
+
+  Widget poly() => Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solar_technology_cell_types_p2),
+          SizedBox(
+            height: 10,
+          ),
+          ZoomableImage(path: 'assets/images/tech_poly.png')
+        ],
+      );
+
+  Widget thin() => Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solar_technology_cell_types_p3),
+          SizedBox(
+            height: 10,
+          ),
+          ZoomableImage(path: 'assets/images/tech_thin.jpg')
+        ],
       );
 
   Widget solarRoofTilesBody() => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.solar_technology_tiles_p1)
+            Text(AppLocalizations.of(context)!.solar_technology_tiles_p1),
+            ZoomableImage(path: 'assets/images/solar_tile.png')
           ],
         ),
       );
@@ -133,7 +204,8 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.solar_technology_transparent_p1)
+            Text(AppLocalizations.of(context)!.solar_technology_transparent_p1),
+            ZoomableImage(path: 'assets/images/transparent.png')
           ],
         ),
       );
@@ -144,10 +216,13 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           children: [
             Text(AppLocalizations.of(context)!.solar_technology_colored_p1),
             Text(AppLocalizations.of(context)!.solar_technology_colored_p2),
+            ZoomableImage(path: 'assets/images/color_pv.png'),
             Text(AppLocalizations.of(context)!.solar_technology_colored_p3),
           ],
         ),
       );
+
+  Widget exampleOther() => Column();
 
   Widget exampleShow() {
     return Column(children: [

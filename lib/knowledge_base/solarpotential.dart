@@ -17,6 +17,11 @@ class _SolarPotentialState extends State<SolarPotential> {
   bool solarPotentialActive = false;
   List<bool> selectedTime = [true, false, false, false];
 
+  bool bakkegataActive = false;
+  bool bispehaugenActive = false;
+  bool roseborgActive = false;
+  bool ovreActive = false;
+
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
         child: Center(
@@ -32,6 +37,26 @@ class _SolarPotentialState extends State<SolarPotential> {
                   case 1:
                     setState(() {
                       solarPotentialActive = !solarPotentialActive;
+                    });
+                    break;
+                  case 2:
+                    setState(() {
+                      bakkegataActive = !bakkegataActive;
+                    });
+                    break;
+                  case 3:
+                    setState(() {
+                      bispehaugenActive = !bispehaugenActive;
+                    });
+                    break;
+                  case 4:
+                    setState(() {
+                      roseborgActive = !roseborgActive;
+                    });
+                    break;
+                  case 5:
+                    setState(() {
+                      ovreActive = !ovreActive;
                     });
                     break;
                 }
@@ -51,6 +76,30 @@ class _SolarPotentialState extends State<SolarPotential> {
                         ),
                     body: solarPotential(),
                     isExpanded: solarPotentialActive),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Bakkegata"),
+                        ),
+                    body: bakkegata(),
+                    isExpanded: bakkegataActive),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Bispehaugen"),
+                        ),
+                    body: bispehaugen(),
+                    isExpanded: bispehaugenActive),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Rosenborg Gate"),
+                        ),
+                    body: rosenborg(),
+                    isExpanded: roseborgActive),
+                ExpansionPanel(
+                    headerBuilder: (_, __) => ListTile(
+                          title: Text("Øvre Møllenberg"),
+                        ),
+                    body: ovre(),
+                    isExpanded: ovreActive),
               ],
             ),
             //ZoomableImage(path: 'assets/images/potential.png'),
@@ -128,5 +177,53 @@ class _SolarPotentialState extends State<SolarPotential> {
     }
 
     return "${base}_des.png";
+  }
+
+  Widget bakkegata() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solarpot_pot_bakke),
+          ZoomableImage(path: 'assets/images/bakkegata.png')
+        ],
+      ),
+    );
+  }
+
+  Widget bispehaugen() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solarpot_pot_bispehaugen),
+          ZoomableImage(path: 'assets/images/bispehaugen.png')
+        ],
+      ),
+    );
+  }
+
+  Widget rosenborg() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solarpot_pot_rosenborg),
+          ZoomableImage(path: 'assets/images/rosenborg.png')
+        ],
+      ),
+    );
+  }
+
+  Widget ovre() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.solarpot_pot_ovre),
+          ZoomableImage(path: 'assets/images/ovre.png')
+        ],
+      ),
+    );
   }
 }

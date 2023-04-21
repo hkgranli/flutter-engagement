@@ -117,7 +117,10 @@ class _RegulationsPageState extends State<RegulationsPage> {
   Widget guidelinesBody() => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          children: [Text(AppLocalizations.of(context)!.reg_guidelines)],
+          children: [
+            Text(AppLocalizations.of(context)!.reg_guidelines),
+            ZoomableImage(path: 'assets/images/guidelines.png')
+          ],
         ),
       );
 }

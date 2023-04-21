@@ -82,6 +82,24 @@ flutter:
     - assets/images/helios_logo.png
     - assets/images/regulations.png
 
+    - assets/images/guidelines.png
+
+    - assets/images/tech_mono.png
+    - assets/images/tech_poly.png
+    - assets/images/tech_thin.jpg
+
+    - assets/images/color_pv.png
+    - assets/images/transparent.png
+
+    - assets/images/rt.jpg
+
+    - assets/images/solar_tile.png
+
+    - assets/images/bakkegata.png
+    - assets/images/bispehaugen.png
+    - assets/images/rosenborg.png
+    - assets/images/ovre.png
+
     - assets/images/berggate4b-default.png
     - assets/images/berggate4b-alt-panel.png
     - assets/images/berggate4b-trad-panel.png
