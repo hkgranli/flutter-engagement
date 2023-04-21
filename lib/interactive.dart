@@ -663,8 +663,8 @@ class _EstimationsState extends State<Estimations> {
         ),
         OutlinedButton.icon(
             onPressed: () => toggleCompare(),
-            icon: Icon(Icons.compare),
-            label: Text("_placeholder")),
+            icon: Icon(Icons.arrow_back),
+            label: Text("Single")),
         ExpansionPanelList(
           expansionCallback: (panelIndex, isExpanded) =>
               toggleDropdownSideSelector(),

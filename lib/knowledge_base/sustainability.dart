@@ -67,13 +67,16 @@ class _PageSustainabilityState extends State<PageSustainability> {
                             ),
                           ),
                       body: environmentalSustainabilityBody(),
-                      isExpanded: envActive)
+                      isExpanded: envActive),
                 ],
               ),
+              summary()
             ]),
           ),
         ),
       );
+
+  Widget summary() => Text("summar");
 
   Widget socialSustainabilityBody() => Padding(
         padding: const EdgeInsets.all(8.0),

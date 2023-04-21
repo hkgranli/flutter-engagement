@@ -145,9 +145,18 @@ class _SolarTechnologyState extends State<SolarTechnology> {
               ),
               isSelected: cellSelect,
               children: [
-                Text("Monocrystalline"),
-                Text("Polycrystalline"),
-                Text("Thin film")
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Monocrystalline"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Polycrystalline"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Thin film"),
+                )
               ],
             ),
             SizedBox(
