@@ -100,14 +100,15 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                     isExpanded: coloredPvActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
-                          title: Text("_placeholder Examples at Møllenberg"),
+                          title: Text(
+                              AppLocalizations.of(context)!.solartech_moll_ex),
                         ),
                     body: exampleShow(),
                     isExpanded: showcaseOld),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text(
-                              "_placeholder Examples at historical buildings"),
+                              AppLocalizations.of(context)!.solartech_ex_world),
                         ),
                     body: exampleOther(),
                     isExpanded: showcaseOther),

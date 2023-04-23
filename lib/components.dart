@@ -192,6 +192,9 @@ class ZoomableImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String l = label != null
+        ? label as String
+        : AppLocalizations.of(context)!.image_pinch_zoom;
     return Column(
       children: [
         InteractiveViewer(
@@ -203,9 +206,7 @@ class ZoomableImage extends StatelessWidget {
             path,
           ),
         ),
-        label is String
-            ? Text(label!, style: Theme.of(context).textTheme.labelSmall)
-            : SizedBox.shrink()
+        Text(l, style: Theme.of(context).textTheme.labelSmall)
       ],
     );
   }

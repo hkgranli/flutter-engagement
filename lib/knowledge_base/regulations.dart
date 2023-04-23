@@ -43,20 +43,22 @@ class _RegulationsPageState extends State<RegulationsPage> {
               children: [
                 ExpansionPanel(
                     headerBuilder: (context, isExpanded) => ListTile(
-                          title: Text("_placeholder Protection areas"),
+                          title: Text(AppLocalizations.of(context)!
+                              .reg_protection_intro),
                         ),
                     body: areaBody(),
                     isExpanded: areasActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
-                          title: Text("_placeholder Zoning Plan"),
+                          title: Text(
+                              AppLocalizations.of(context)!.reg_zoning_intro),
                         ),
                     body: zoningPlanBody(),
                     isExpanded: zoningActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text(
-                            "_placeholder Guidelines",
+                            AppLocalizations.of(context)!.reg_guidelines_intro,
                           ),
                         ),
                     body: guidelinesBody(),
@@ -119,8 +121,9 @@ class _RegulationsPageState extends State<RegulationsPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.reg_guidelines),
-            ZoomableImage(path: 'assets/images/guidelines.png')
+            Text(AppLocalizations.of(context)!.reg_guidelines_p1),
+            ZoomableImage(path: 'assets/images/guidelines.png'),
+            Text(AppLocalizations.of(context)!.reg_guidelines_p2),
           ],
         ),
       );

@@ -19,9 +19,24 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
   @override
   Widget build(BuildContext context) {
     List<List<String>> textData = [
-      ['Li-ion Battery', 'High', '2-3 years', '95%'],
-      ['Pumped Storage', 'Very Low', '50 years', '80%'],
-      ['Thermal and Heat storage', 'Low', '15-20 years', '50-90%'],
+      [
+        AppLocalizations.of(context)!.storage_table_battery_type,
+        AppLocalizations.of(context)!.storage_table_battery_risk,
+        AppLocalizations.of(context)!.storage_table_battery_lifespan,
+        AppLocalizations.of(context)!.storage_table_battery_efficiency
+      ],
+      [
+        AppLocalizations.of(context)!.storage_table_pes_type,
+        AppLocalizations.of(context)!.storage_table_pes_risk,
+        AppLocalizations.of(context)!.storage_table_pes_lifespan,
+        AppLocalizations.of(context)!.storage_table_pes_efficiency
+      ],
+      [
+        AppLocalizations.of(context)!.storage_table_tes_type,
+        AppLocalizations.of(context)!.storage_table_tes_risk,
+        AppLocalizations.of(context)!.storage_table_tes_lifespan,
+        AppLocalizations.of(context)!.storage_table_tes_efficiency
+      ],
     ];
 
     List<List<Widget>> data = [];
@@ -107,8 +122,12 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
               "_placeholder Summary",
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            EngagementTable(
-                titles: ['Type', 'Risk', 'Lifespan', 'Efficiency'], data: data)
+            EngagementTable(titles: [
+              AppLocalizations.of(context)!.storage_table_header_type,
+              AppLocalizations.of(context)!.storage_table_header_risk,
+              AppLocalizations.of(context)!.storage_table_header_lifespan,
+              AppLocalizations.of(context)!.storage_table_header_efficiency
+            ], data: data)
           ]),
         ),
       ),
@@ -129,7 +148,8 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
 
   Widget thermalBody() => Column(
         children: [
-          Text(AppLocalizations.of(context)!.energy_storage_content_thermal_p1)
+          Text(AppLocalizations.of(context)!.energy_storage_content_thermal_p1),
+          ZoomableImage(path: 'assets/images/tes.png'),
         ],
       );
 

@@ -7,6 +7,7 @@ import 'package:engagement/knowledge_base/energystorage.dart';
 import 'package:engagement/knowledge_base/regulations.dart';
 import 'package:engagement/knowledge_base/solarpotential.dart';
 import 'package:engagement/knowledge_base/solartechnology.dart';
+import 'package:engagement/knowledge_base/sources.dart';
 import 'package:engagement/knowledge_base/sustainability.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -138,7 +139,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.eco_model;
         break;
       case Pages.sources:
-        page = _pageSources();
+        page = SourcesPage();
         title = AppLocalizations.of(context)!.sources;
         break;
       case Pages.solarTechnology:
@@ -356,10 +357,6 @@ class _InteractivePageState extends State<InteractivePage>
           ],
           controller: tabController,
         ));
-  }
-
-  Widget _pageSources() {
-    return Container();
   }
 }
 
