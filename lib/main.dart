@@ -20,7 +20,7 @@ class AppInit extends StatefulWidget {
 }
 
 class _AppInitState extends State<AppInit> {
-  Locale _locale = Locale('no', 'NO');
+  Locale _locale = Locale('en', 'UK');
 
   void setLocale(Locale value) {
     setState(() {

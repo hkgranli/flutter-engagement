@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  bool a = false;
+  bool a = true;
 
   void toggleAb() {
     setState(() {
@@ -129,7 +129,10 @@ class _MyHomePageState extends State<HomePage> {
   Widget _pageHome(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    var b = OutlinedButton(onPressed: toggleAb, child: Icon(Icons.abc));
+    //var b = OutlinedButton(onPressed: toggleAb, child: Icon(Icons.abc));
+    
+    var b = Container();
+
 
     if (a) {
       return SafeArea(

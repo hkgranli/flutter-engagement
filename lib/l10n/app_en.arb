@@ -71,7 +71,7 @@
   "hours": "Hours",
   "image_pinch_zoom": "Pinch to zoom",
   "information": "Information",
-  "information_context": "This interactive part of the application allows you to learn how solar panels and solar tiles impact the aesthetic profile of a house, and the estimated potential energy that comes with it. The house used as a model is Kirkegata 35. You can also learn more about different ownership models.",
+  "information_context": "This part of the application is built to increase your knowledge and confidence on the topic of solar technology. You can read about the technology, challenges and possibilities in the knowledge base. In the interactive section you can interactively test out different configurations on Kirkegata 35.",
   "interactive": "Interactive",
   "knowledge_base": "Knowledge Base",
   "kwt": "kw/h",

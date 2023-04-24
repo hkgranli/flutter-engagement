@@ -39,7 +39,6 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
   }
 
   Widget _technicalInformation(List<FlSpot> estProd, double total) {
-    return Container();
     // ignore: dead_code
     return ExpansionPanelList(
       expansionCallback: (panelIndex, isExpanded) =>
@@ -178,6 +177,8 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
       ));
       widgets.add(SliderMoneySaved(total: total));
     }
+
+
 
     return widgets;
 
