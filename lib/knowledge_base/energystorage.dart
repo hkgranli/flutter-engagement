@@ -119,7 +119,7 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
             ),
             Divider(),
             Text(
-              "_placeholder Summary",
+              AppLocalizations.of(context)!.summary,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             EngagementTable(titles: [

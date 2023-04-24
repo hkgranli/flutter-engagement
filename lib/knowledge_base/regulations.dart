@@ -85,10 +85,7 @@ class _RegulationsPageState extends State<RegulationsPage> {
                   text: AppLocalizations.of(context)!.reg_content_l1_i3,
                   color: Colors.blue),
             ]),
-            ZoomableImage(
-              path: 'assets/images/regulations.png',
-              label: "_placeholder Pinch to zoom",
-            )
+            ZoomableImage(path: 'assets/images/regulations.png')
           ],
         ),
       );

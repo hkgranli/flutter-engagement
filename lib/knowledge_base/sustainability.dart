@@ -76,7 +76,7 @@ class _PageSustainabilityState extends State<PageSustainability> {
         ),
       );
 
-  Widget summary() => Text("summar");
+  Widget summary() => Container();
 
   Widget socialSustainabilityBody() => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -104,8 +104,12 @@ class _PageSustainabilityState extends State<PageSustainability> {
           children: [
             Text(
               AppLocalizations.of(context)!
-                  .environmental_sustainability_content,
-            )
+                  .environmental_sustainability_content_p1,
+            ),
+            Text(
+              AppLocalizations.of(context)!
+                  .environmental_sustainability_content_p2,
+            ),
           ],
         ),
       );

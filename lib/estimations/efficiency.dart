@@ -39,14 +39,13 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
   }
 
   Widget _technicalInformation(List<FlSpot> estProd, double total) {
-    // ignore: dead_code
     return ExpansionPanelList(
       expansionCallback: (panelIndex, isExpanded) =>
           toggleDropdownTechnicalInfo(),
       children: [
         ExpansionPanel(
             headerBuilder: (context, isExpanded) => ListTile(
-                  title: Text("_placeholder Technical info"),
+                  title: Text(AppLocalizations.of(context)!.technical_info),
                 ),
             body: Column(children: [_efficiencyGraph(estProd, total)]),
             isExpanded: _dropdownTechnicalInfoActive),
@@ -178,8 +177,6 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
       widgets.add(SliderMoneySaved(total: total));
     }
 
-
-
     return widgets;
 
     /*
@@ -298,7 +295,7 @@ class _SliderMoneySavedState extends State<SliderMoneySaved> {
             WidgetSpan(child: Icon(Icons.savings)),
             TextSpan(
                 text:
-                    "${formatter.format((widget.total * (_energyPrice / 100)).toInt())}kr ${AppLocalizations.of(context)!.est_value_gen}")
+                    "${formatter.format((widget.total * (_energyPrice / 100)).toInt())}kr ${AppLocalizations.of(context)!.est_value_gen("${_energyPrice.toInt()} øre / ${AppLocalizations.of(context)!.kwt}")}")
           ]),
         ),
       ],

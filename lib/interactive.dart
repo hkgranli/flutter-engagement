@@ -276,7 +276,7 @@ class _InteractivePageState extends State<InteractivePage>
             ...interactive,
             Divider(),
             Text(
-              "_placeholder More information",
+              AppLocalizations.of(context)!.more_info,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             OutlinedButton.icon(
@@ -454,31 +454,63 @@ class _EstimationsState extends State<Estimations> {
   }
 
   Widget configRadiation() {
-    return Column(
-      children: [
-        Text(
-            "_placeholder This model shows yearly estimated radiation for surfaces over 400 kWh/m^2:"),
-        UnorderedList(
-          texts: [
-            UnorderedListItemInline(
-                text: "1110 ${AppLocalizations.of(context)!.kwt}/m^2",
-                color: Colors.red),
-            UnorderedListItemInline(
-                text: "1000 ${AppLocalizations.of(context)!.kwt}/m^2",
-                color: Colors.orange),
-            UnorderedListItemInline(
-                text: "800 ${AppLocalizations.of(context)!.kwt}/m^2",
-                color: Colors.yellow),
-            UnorderedListItemInline(
-                text: "600 ${AppLocalizations.of(context)!.kwt}/m^2",
-                color: Colors.green),
-            UnorderedListItemInline(
-                text: "400 ${AppLocalizations.of(context)!.kwt}/m^2",
-                color: Colors.blue),
-          ],
-          inline: true,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.radiation_about),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.fiber_manual_record, color: Colors.red),
+              Text("1100 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Icon(Icons.fiber_manual_record, color: Colors.orange),
+              Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.fiber_manual_record, color: Colors.yellow),
+              Text("800 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Icon(Icons.fiber_manual_record, color: Colors.green),
+              Text("600 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.fiber_manual_record, color: Colors.blue),
+              Text("400 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+            ],
+          ), /*
+          Text(
+              "_placeholder This model shows yearly estimated radiation for surfaces over 400 kWh/m^2:"),
+          UnorderedList(
+            texts: [
+              UnorderedListItemInline(
+                  text: "1100 ${AppLocalizations.of(context)!.kwtt}/m^2",
+                  color: Colors.red),
+              UnorderedListItemInline(
+                  text: "1000 ${AppLocalizations.of(context)!.kwtt}/m^2",
+                  color: Colors.orange),
+              UnorderedListItemInline(
+                  text: "800 ${AppLocalizations.of(context)!.kwtt}/m^2",
+                  color: Colors.yellow),
+              UnorderedListItemInline(
+                  text: "600 ${AppLocalizations.of(context)!.kwtt}/m^2",
+                  color: Colors.green),
+              UnorderedListItemInline(
+                  text: "400 ${AppLocalizations.of(context)!.kwtt}/m^2",
+                  color: Colors.blue),
+            ],
+            inline: true,
+          ),*/
+        ],
+      ),
     );
   }
 
