@@ -115,12 +115,12 @@ class _MyHomePageState extends State<HomePage> {
 
           Row(children: [
             Icon(Icons.email),
-            Text("Gabrielle Lobaccaro - gabriele.lobaccaro@ntnu.no")
+            Text("Gabriele Lobaccaro - gabriele.lobaccaro@ntnu.no")
           ]),
           Row(children: [
             Icon(Icons.email),
             Text("Tahmineh Akbarinejad - tahmineh.akbarinejad@ntnu.no")
-          ]),
+          ])
         ],
       ),
     );
@@ -130,9 +130,8 @@ class _MyHomePageState extends State<HomePage> {
     var appState = context.watch<MyAppState>();
 
     //var b = OutlinedButton(onPressed: toggleAb, child: Icon(Icons.abc));
-    
-    var b = Container();
 
+    var b = Container();
 
     if (a) {
       return SafeArea(
@@ -140,7 +139,7 @@ class _MyHomePageState extends State<HomePage> {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/kirkegata.png',
+                'assets/images/helios_logo_cool.png',
               ),
               SizedBox(
                 height: 10,

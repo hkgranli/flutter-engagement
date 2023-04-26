@@ -48,6 +48,7 @@ class _SourcesPageState extends State<SourcesPage> {
                             .sources_content_intro),
                       ),
                   body: contentSources(),
+                  canTapOnHeader: true,
                   isExpanded: contentSourcesActive),
             ],
           ),

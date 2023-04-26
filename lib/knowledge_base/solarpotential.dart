@@ -68,6 +68,7 @@ class _SolarPotentialState extends State<SolarPotential> {
                               AppLocalizations.of(context)!.solarpot_rad_intro),
                         ),
                     body: solarRadiation(),
+                    canTapOnHeader: true,
                     isExpanded: solarRadActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
@@ -75,30 +76,35 @@ class _SolarPotentialState extends State<SolarPotential> {
                               AppLocalizations.of(context)!.solarpot_pot_intro),
                         ),
                     body: solarPotential(),
+                    canTapOnHeader: true,
                     isExpanded: solarPotentialActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text("Bakkegata"),
                         ),
                     body: bakkegata(),
+                    canTapOnHeader: true,
                     isExpanded: bakkegataActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text("Bispehaugen"),
                         ),
                     body: bispehaugen(),
+                    canTapOnHeader: true,
                     isExpanded: bispehaugenActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text("Rosenborg Gate"),
                         ),
                     body: rosenborg(),
+                    canTapOnHeader: true,
                     isExpanded: roseborgActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text("Øvre Møllenberg"),
                         ),
                     body: ovre(),
+                    canTapOnHeader: true,
                     isExpanded: ovreActive),
               ],
             ),

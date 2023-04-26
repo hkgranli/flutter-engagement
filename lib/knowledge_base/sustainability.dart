@@ -53,12 +53,14 @@ class _PageSustainabilityState extends State<PageSustainability> {
                             ),
                           ),
                       body: socialSustainabilityBody(),
+                      canTapOnHeader: true,
                       isExpanded: socialActive),
                   ExpansionPanel(
                       headerBuilder: (_, __) => ListTile(
                             title: Text(AppLocalizations.of(context)!.sus_eco),
                           ),
                       body: economicSustainabilityBody(),
+                      canTapOnHeader: true,
                       isExpanded: ecoActive),
                   ExpansionPanel(
                       headerBuilder: (_, __) => ListTile(
@@ -67,6 +69,7 @@ class _PageSustainabilityState extends State<PageSustainability> {
                             ),
                           ),
                       body: environmentalSustainabilityBody(),
+                      canTapOnHeader: true,
                       isExpanded: envActive),
                 ],
               ),

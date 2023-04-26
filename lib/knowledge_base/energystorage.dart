@@ -90,7 +90,8 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
                       padding: const EdgeInsets.all(8.0),
                       child: batteryBody(),
                     ),
-                    isExpanded: batteryActive),
+                    isExpanded: batteryActive,
+                    canTapOnHeader: true),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text(
@@ -102,7 +103,8 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
                       padding: const EdgeInsets.all(8.0),
                       child: thermalBody(),
                     ),
-                    isExpanded: heatActive),
+                    isExpanded: heatActive,
+                    canTapOnHeader: true),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text(
@@ -114,7 +116,8 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
                       padding: const EdgeInsets.all(8.0),
                       child: hydroBody(),
                     ),
-                    isExpanded: mechanicActive)
+                    isExpanded: mechanicActive,
+                    canTapOnHeader: true)
               ],
             ),
             Divider(),

@@ -47,14 +47,16 @@ class _RegulationsPageState extends State<RegulationsPage> {
                               .reg_protection_intro),
                         ),
                     body: areaBody(),
-                    isExpanded: areasActive),
+                    isExpanded: areasActive,
+                    canTapOnHeader: true),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text(
                               AppLocalizations.of(context)!.reg_zoning_intro),
                         ),
                     body: zoningPlanBody(),
-                    isExpanded: zoningActive),
+                    isExpanded: zoningActive,
+                    canTapOnHeader: true),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
                           title: Text(
@@ -62,7 +64,8 @@ class _RegulationsPageState extends State<RegulationsPage> {
                           ),
                         ),
                     body: guidelinesBody(),
-                    isExpanded: guidelinesActive)
+                    isExpanded: guidelinesActive,
+                    canTapOnHeader: true)
               ],
             ),
           ]),

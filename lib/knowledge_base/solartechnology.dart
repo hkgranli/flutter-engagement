@@ -76,6 +76,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                               .solar_technology_cell_types_header),
                         ),
                     body: cellTypesBody(),
+                    canTapOnHeader: true,
                     isExpanded: cellTypesActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
@@ -83,6 +84,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                               .solar_technology_tiles_header),
                         ),
                     body: solarRoofTilesBody(),
+                    canTapOnHeader: true,
                     isExpanded: solarRoofTilesActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
@@ -90,6 +92,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                               .solar_technology_transparent_header),
                         ),
                     body: transparentPvBody(),
+                    canTapOnHeader: true,
                     isExpanded: transparentPvActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
@@ -97,6 +100,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                               .solar_technology_colored_header),
                         ),
                     body: coloredPvBody(),
+                    canTapOnHeader: true,
                     isExpanded: coloredPvActive),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
@@ -104,6 +108,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                               AppLocalizations.of(context)!.solartech_moll_ex),
                         ),
                     body: exampleShow(),
+                    canTapOnHeader: true,
                     isExpanded: showcaseOld),
                 ExpansionPanel(
                     headerBuilder: (_, __) => ListTile(
@@ -111,6 +116,7 @@ class _SolarTechnologyState extends State<SolarTechnology> {
                               AppLocalizations.of(context)!.solartech_ex_world),
                         ),
                     body: exampleOther(),
+                    canTapOnHeader: true,
                     isExpanded: showcaseOther),
               ],
             ),

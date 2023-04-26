@@ -250,11 +250,11 @@ class EngagementTable extends StatelessWidget {
   }
 }
 
-double f1total(List<FlSpot> list) {
+double barChartTotal(List<BarChartGroupData> list) {
   double total = 0;
 
   for (var f in list) {
-    total += f.y;
+    total += f.barRods[0].toY;
   }
 
   return total;

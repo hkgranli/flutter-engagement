@@ -38,34 +38,55 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
     });
   }
 
-  Widget _technicalInformation(List<FlSpot> estProd, double total) {
+  Widget _technicalInformation(List<BarChartGroupData> estProd, double total) {
     return ExpansionPanelList(
       expansionCallback: (panelIndex, isExpanded) =>
           toggleDropdownTechnicalInfo(),
+      elevation: 4,
       children: [
         ExpansionPanel(
             headerBuilder: (context, isExpanded) => ListTile(
                   title: Text(AppLocalizations.of(context)!.technical_info),
                 ),
-            body: Column(children: [_efficiencyGraph(estProd, total)]),
-            isExpanded: _dropdownTechnicalInfoActive),
+            body: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.fiber_manual_record, color: Colors.orange),
+                  Text(AppLocalizations.of(context)!.elec_roof),
+                  Icon(Icons.fiber_manual_record, color: Colors.grey),
+                  Text(AppLocalizations.of(context)!.elec_fasca),
+                ],
+              ),
+              _efficiencyGraph(estProd, total)
+            ]),
+            isExpanded: _dropdownTechnicalInfoActive,
+            canTapOnHeader: true),
       ],
     );
   }
 
-  Widget _efficiencyGraph(List<FlSpot> estProd, double total) {
+  Widget _efficiencyGraph(List<BarChartGroupData> estProd, double total) {
     return AspectRatio(
       aspectRatio: 2,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: LineChart(LineChartData(
-          lineBarsData: [
-            LineChartBarData(
-              spots: estProd,
-              isCurved: true,
-              barWidth: 2,
-            )
-          ],
+        child: BarChart(BarChartData(
+          barTouchData: BarTouchData(
+              enabled: true,
+              touchTooltipData: BarTouchTooltipData(
+                fitInsideHorizontally: true,
+                tooltipBgColor: Theme.of(context).dialogBackgroundColor,
+                fitInsideVertically: true,
+                getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                  print(rod.color);
+                  return BarTooltipItem(
+                      "${rod.toY.toInt()} ${AppLocalizations.of(context)!.kwt}",
+                      TextStyle(fontStyle: FontStyle.italic, color: rod.color));
+                },
+              )),
+          barGroups: estProd,
           minY: 0,
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
@@ -87,7 +108,7 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
             drawVerticalLine: false,
             horizontalInterval: 1,
             checkToShowHorizontalLine: (double value) {
-              return value == 1 || value == 6 || value == 4 || value == 5;
+              return false;
             },
           ),
         )),
@@ -223,9 +244,12 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
 
   @override
   Widget build(BuildContext context) {
-    List<FlSpot> estProd = EnergyContext.estimateEnergy(widget.solarType,
-        widget.activePanel, widget.activeTile, widget.solarSides);
-    double total = f1total(estProd);
+    List<BarChartGroupData> estProd = EnergyContext.estimateEnergy(
+        widget.solarType,
+        widget.activePanel,
+        widget.activeTile,
+        widget.solarSides);
+    double total = barChartTotal(estProd);
 
     return Expanded(
       child: SingleChildScrollView(
@@ -332,18 +356,21 @@ class EfficiencyTableComparator extends StatefulWidget {
 class _EfficiencyTableComparatorState extends State<EfficiencyTableComparator> {
   @override
   Widget build(BuildContext context) {
-    List<FlSpot> dataRaw = EnergyContext.estimateEnergy(widget.solarType,
-        widget.activePanel, widget.activeTile, widget.solarSides);
+    List<BarChartGroupData> dataRaw = EnergyContext.estimateEnergy(
+        widget.solarType,
+        widget.activePanel,
+        widget.activeTile,
+        widget.solarSides);
     List<EnergyContext> dataMain =
-        EnergyContext.energyContext(f1total(dataRaw), context);
+        EnergyContext.energyContext(barChartTotal(dataRaw), context);
 
-    List<FlSpot> dataRawCompare = EnergyContext.estimateEnergy(
+    List<BarChartGroupData> dataRawCompare = EnergyContext.estimateEnergy(
         widget.solarTypeCompare,
         widget.activePanelCompare,
         widget.activeTileCompare,
         widget.solarSides);
     List<EnergyContext> dataCompare =
-        EnergyContext.energyContext(f1total(dataRawCompare), context);
+        EnergyContext.energyContext(barChartTotal(dataRawCompare), context);
 
     List<List<Widget>> data = [];
 
@@ -421,24 +448,9 @@ class EnergyContext {
     ];
   }
 
-  static List<FlSpot> estimateEnergy(SolarType solarType, Panel activePanel,
-      Tile activeTile, List<int> solarSides) {
-    List<double> monthCoeff = [
-      .05,
-      .18,
-      .5,
-      .8,
-      .98,
-      1,
-      .94,
-      .73,
-      .55,
-      .27,
-      .06,
-      .01
-    ];
-
-    List<FlSpot> estProd = [];
+  static List<BarChartGroupData> estimateEnergy(SolarType solarType,
+      Panel activePanel, Tile activeTile, List<int> solarSides) {
+    List<BarChartGroupData> estProd = [];
 
     double panelEff;
 
@@ -458,51 +470,76 @@ class EnergyContext {
     // in m^2
     //List<List<double> sideSize = [72, 87, 38, 38];
 
-    var sides = [
-      {
-        'sizes': [72.91],
-        'rad': [400]
-      },
-      {
-        'sizes': [32.69, 48.80, 7.18],
-        'rad': [1000, 800, 600]
-      },
-      {
-        'sizes': [38.59],
-        'rad': [400]
-      },
-      {
-        'sizes': [27.62, 9.26, 2.61],
-        'rad': [1100, 1000, 800]
-      }
-    ];
+    var roofSidesMonthly = Constants.rOOFSIDESMONTLY;
+    var fascadesSidesMonthly = Constants.fASCADESIDESMONTLY;
 
     // loop all months of the year
 
-    for (int x = 0; x < monthCoeff.length; x++) {
-      double t = 0;
+    for (int x = 0; x < roofSidesMonthly.length; x++) {
+      double roofTotal = 0;
+      double fascadeTotal = 0;
 
       // loop for every side of the house
 
-      for (int z = 0; z < sides.length; z++) {
-        var side = sides[z];
+      List<num> monthRoof = roofSidesMonthly[x];
+      List<num> monthFascade = fascadesSidesMonthly[x];
+
+      for (int z = 0; z < monthRoof.length; z++) {
         // total estimated production per side is
         // estimated incident radiation times size of the side
         // lastly _solarSides is 1 if the panel is selected and 0 if it is inactive
-        //t += monthCoeff[x][sideEff[i]] * sideSize[i] * _solarSides[i];
-        for (int i = 0; i < side['sizes']!.length; i++) {
-          t += (side['sizes']![i] *
-              side['rad']![i] *
-              panelEff *
-              solarSides[z] *
-              (monthCoeff[x] / 6));
-          //t += (side['sizes']![i] * side['rad']![i] * panelEff);
-        }
+        roofTotal += monthRoof[z] * solarSides[z] * panelEff;
+        fascadeTotal += monthFascade[z] * solarSides[z] * panelEff;
       }
 
-      estProd.add(FlSpot(x.toDouble(), (t).round().toDouble()));
+      BarChartGroupData b =
+          BarChartGroupData(x: x, groupVertically: true, barRods: [
+        BarChartRodData(
+            toY: roofTotal, fromY: 0, width: 5, color: Colors.orange),
+        BarChartRodData(
+            toY: roofTotal + fascadeTotal,
+            fromY: roofTotal,
+            width: 5,
+            color: Colors.grey),
+      ]);
+
+      estProd.add(b);
+
+      //estProd.add(FlSpot(x.toDouble(), (total).round().toDouble()));
     }
 
     return estProd;
   }
+}
+
+class Constants {
+  static final rOOFSIDESMONTLY = [
+    [159.2, 637.6, 70.6, 357.6],
+    [510.9, 1749.3, 228.2, 965.3],
+    [1582.2, 5230.1, 772.3, 2392],
+    [3402.2, 7964.9, 1669.1, 3518.6],
+    [5307.3, 10184.1, 2639.2, 4328.1],
+    [6322.6, 10653.8, 3070.1, 4530.3],
+    [5382.8, 9245.8, 2618.5, 3949.1],
+    [3556.9, 8030.9, 1769.9, 3454.5],
+    [1739.5, 5173.4, 880.1, 2273.7],
+    [698.2, 2821.4, 311, 1500.1],
+    [217.5, 640.7, 96, 371.7],
+    [66.3, 200.1, 28.6, 104.1]
+  ];
+
+  static final fASCADESIDESMONTLY = [
+    [69.1, 212, 34, 325.9],
+    [211.6, 727.2, 108.3, 1184.2],
+    [672.6, 2144.2, 345.4, 3288.5],
+    [1535.2, 3483.5, 688.9, 4289.2],
+    [2304.6, 4844.8, 1078.3, 4679.8],
+    [2538.7, 5103.1, 1322.3, 4589.2],
+    [2302.6, 4469.2, 1087.4, 4104.4],
+    [1583.2, 3762.8, 701.7, 3961.8],
+    [769.1, 2179.8, 381.3, 2966.6],
+    [304, 1230.7, 143.7, 2106],
+    [93.8, 265.3, 46.8, 403.6],
+    [28.4, 58.1, 14.1, 85.2],
+  ];
 }

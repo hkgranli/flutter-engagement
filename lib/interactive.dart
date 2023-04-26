@@ -11,7 +11,6 @@ import 'package:engagement/knowledge_base/sources.dart';
 import 'package:engagement/knowledge_base/sustainability.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 
 enum Pages {
   home,
@@ -65,6 +64,30 @@ class InteractivePage extends StatefulWidget {
 class _InteractivePageState extends State<InteractivePage>
     with TickerProviderStateMixin {
   late EstimationPages e;
+
+  bool knowledge = false;
+  bool visualization = false;
+  bool moreInfo = false;
+
+  bool a = true;
+
+  void toggleMoreInfo() {
+    setState(() {
+      moreInfo = !moreInfo;
+    });
+  }
+
+  void toggleVisualization() {
+    setState(() {
+      visualization = !visualization;
+    });
+  }
+
+  void toggleKnowledge() {
+    setState(() {
+      knowledge = !knowledge;
+    });
+  }
 
   @override
   void initState() {
@@ -174,40 +197,73 @@ class _InteractivePageState extends State<InteractivePage>
         ));
   }
 
-  Widget _pageHome() {
-    var about = Text(AppLocalizations.of(context)!.information_context);
+  List<Widget> newKnowledge() {
+    var knowledgeList = [];
 
-    List<Widget> interactive = [
-      Text(
-        AppLocalizations.of(context)!.interactive,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      SizedBox(height: 10),
-      Center(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            OutlinedButton.icon(
-                onPressed: () =>
-                    setPage(Pages.pvView, EstimationPages.aesthetic),
-                icon: Icon(Icons.roofing),
-                label: Text(AppLocalizations.of(context)!.visualization)),
-            OutlinedButton.icon(
-                onPressed: () =>
-                    setPage(Pages.pvView, EstimationPages.efficiency),
-                icon: Icon(Icons.calculate),
-                label: Text(AppLocalizations.of(context)!.eff_est)),
-          ],
+    if (knowledge) {
+      knowledgeList.addAll([
+        ListTile(
+          leading: Icon(Icons.sunny),
+          title: Text(AppLocalizations.of(context)!.solar_potential),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.potential),
         ),
-      ),
-      OutlinedButton.icon(
-          onPressed: () => setPage(Pages.pvView, EstimationPages.radiation),
-          icon: Icon(Icons.sunny),
-          label: Text(AppLocalizations.of(context)!.solar_potential)),
-    ];
+        ListTile(
+          leading: Icon(Icons.battery_4_bar),
+          title: Text(AppLocalizations.of(context)!.energy_storage),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.storage),
+        ),
+        ListTile(
+          leading: Icon(Icons.rule),
+          title: Text(AppLocalizations.of(context)!.regulations),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.regulations),
+        ),
+        ListTile(
+          leading: Icon(Icons.energy_savings_leaf),
+          title: Text(AppLocalizations.of(context)!.sustainability),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.pvView),
+        ),
+        ListTile(
+          leading: Icon(Icons.engineering),
+          title: Text(AppLocalizations.of(context)!.solar_technology),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.solarTechnology),
+        ),
+        ListTile(
+          leading: Icon(Icons.people),
+          title: Text(AppLocalizations.of(context)!.eco_model),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.ownershipView),
+        )
+      ]);
+    }
 
-    List<Widget> knowledgeBase = [
+    return [
+      Center(
+        child: Card(
+            child: Column(
+          children: [
+            ListTile(
+              leading: Icon(Icons.book),
+              title: Text(AppLocalizations.of(context)!.knowledge_base),
+              subtitle: Text(AppLocalizations.of(context)!.knowledge_short),
+              trailing: knowledge
+                  ? Icon(Icons.arrow_upward)
+                  : Icon(Icons.arrow_downward),
+              onTap: () => toggleKnowledge(),
+            ),
+            ...knowledgeList
+          ],
+        )),
+      ),
+    ];
+  }
+
+  List<Widget> oldKnowledge() {
+    return [
       Text(
         AppLocalizations.of(context)!.knowledge_base,
         style: Theme.of(context).textTheme.titleMedium,
@@ -262,6 +318,123 @@ class _InteractivePageState extends State<InteractivePage>
         ],
       ))
     ];
+  }
+
+  List<Widget> newInteractive() {
+    var interactiveList = [];
+
+    if (visualization) {
+      interactiveList = [
+        ListTile(
+          leading: Icon(Icons.roofing),
+          title: Text(AppLocalizations.of(context)!.visualization),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.pvView, EstimationPages.aesthetic),
+        ),
+        ListTile(
+          leading: Icon(Icons.calculate),
+          title: Text(AppLocalizations.of(context)!.eff_est),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.pvView, EstimationPages.efficiency),
+        ),
+        ListTile(
+          leading: Icon(Icons.sunny),
+          title: Text(AppLocalizations.of(context)!.solar_potential),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.pvView, EstimationPages.radiation),
+        )
+      ];
+    }
+
+    return [
+      Center(
+        child: Card(
+            child: Column(
+          children: [
+            ListTile(
+              leading: Icon(Icons.touch_app),
+              title: Text(AppLocalizations.of(context)!.visualization),
+              subtitle: Text(AppLocalizations.of(context)!.visualization_short),
+              trailing: Icon(
+                  visualization ? Icons.arrow_upward : Icons.arrow_downward),
+              onTap: () => toggleVisualization(),
+            ),
+            ...interactiveList
+          ],
+        )),
+      ),
+    ];
+  }
+
+  List<Widget> oldInteractive() {
+    return [
+      Text(
+        AppLocalizations.of(context)!.interactive,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          OutlinedButton.icon(
+              onPressed: () => setPage(Pages.pvView, EstimationPages.aesthetic),
+              icon: Icon(Icons.roofing),
+              label: Text(AppLocalizations.of(context)!.visualization)),
+          OutlinedButton.icon(
+              onPressed: () =>
+                  setPage(Pages.pvView, EstimationPages.efficiency),
+              icon: Icon(Icons.calculate),
+              label: Text(AppLocalizations.of(context)!.eff_est)),
+        ],
+      ),
+      OutlinedButton.icon(
+          onPressed: () => setPage(Pages.pvView, EstimationPages.radiation),
+          icon: Icon(Icons.sunny),
+          label: Text(AppLocalizations.of(context)!.solar_potential)),
+    ];
+  }
+
+  Widget _pageHome() {
+    var about = Text(AppLocalizations.of(context)!.information_context);
+
+    var moreList = [];
+
+    if (moreInfo) {
+      moreList = [
+        ListTile(
+          leading: Icon(Icons.more),
+          title: Text(AppLocalizations.of(context)!.external_resources),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.external),
+        ),
+        ListTile(
+          leading: Icon(Icons.source),
+          title: Text(AppLocalizations.of(context)!.sources),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.sources),
+        ),
+      ];
+    }
+
+    var more = Center(
+      child: Card(
+        child: Column(children: [
+          ListTile(
+            leading: Icon(Icons.book),
+            title: Text(AppLocalizations.of(context)!.more_info),
+            subtitle: Text(AppLocalizations.of(context)!.knowledge_short),
+            trailing: moreInfo
+                ? Icon(Icons.arrow_upward)
+                : Icon(Icons.arrow_downward),
+            onTap: () => toggleMoreInfo(),
+          ),
+          ...moreList
+        ]),
+      ),
+    );
+
+    var knowledgeComponent = a ? newKnowledge() : oldKnowledge();
+    var interactiveComponent = a ? newInteractive() : oldInteractive();
 
     return SingleChildScrollView(
       child: Padding(
@@ -271,22 +444,11 @@ class _InteractivePageState extends State<InteractivePage>
           children: [
             about,
             Divider(),
-            ...knowledgeBase,
+            ...knowledgeComponent,
             Divider(),
-            ...interactive,
+            ...interactiveComponent,
             Divider(),
-            Text(
-              AppLocalizations.of(context)!.more_info,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            OutlinedButton.icon(
-                onPressed: () => setPage(Pages.external),
-                icon: Icon(Icons.more),
-                label: Text(AppLocalizations.of(context)!.external_resources)),
-            OutlinedButton.icon(
-                onPressed: () => setPage(Pages.sources),
-                icon: Icon(Icons.source),
-                label: Text(AppLocalizations.of(context)!.sources)),
+            more,
             SizedBox(height: 10),
           ],
         )),
@@ -541,14 +703,26 @@ class _EstimationsState extends State<Estimations> {
 
     DropdownButton b = DropdownButton(items: null, onChanged: null);
 
+    Widget questionMark = Container();
+
     if (_solarType == SolarType.panel) {
       List<DropdownMenuItem<Panel>> panelItems = [
         DropdownMenuItem(
             value: Panel.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Panel.prodTwo, child: Text(Panel.prodTwo.name)),
-        DropdownMenuItem(value: Panel.prodOne, child: Text(Panel.prodOne.name)),
+        DropdownMenuItem(
+            value: Panel.prodTwo,
+            child: Text(
+                "${Panel.prodTwo.name} ${((Panel.prodTwo.efficiency) * 100).toInt()}%")),
+        DropdownMenuItem(
+            value: Panel.prodOne,
+            child: Text(
+                "${Panel.prodOne.name} ${((Panel.prodOne.efficiency) * 100).toInt()}%")),
       ];
+
+      if (_activePanel != Panel.none) {
+        questionMark = productInfoButton();
+      }
 
       b = DropdownButton(
           value: _activePanel, items: panelItems, onChanged: setSelectedPanel);
@@ -557,47 +731,97 @@ class _EstimationsState extends State<Estimations> {
         DropdownMenuItem(
             value: Tile.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Tile.prodTwo, child: Text(Tile.prodTwo.name)),
-        DropdownMenuItem(value: Tile.prodOne, child: Text(Tile.prodOne.name)),
+        DropdownMenuItem(
+            value: Tile.prodTwo,
+            child: Text(
+                "${Tile.prodTwo.name} ${((Tile.prodTwo.efficiency) * 100).toInt()}%")),
+        DropdownMenuItem(
+            value: Tile.prodOne,
+            child: Text(
+                "${Tile.prodOne.name} ${((Tile.prodOne.efficiency) * 100).toInt()}%")),
       ];
+
+      if (_activeTile != Tile.none) {
+        questionMark = productInfoButton();
+      }
 
       b = DropdownButton(
           value: _activeTile, items: tileItems, onChanged: setSelectedTile);
     }
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("${AppLocalizations.of(context)!.select_type}: "),
-            DropdownButton(
-                value: _solarType, items: menuItems, onChanged: setSolarType),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("${AppLocalizations.of(context)!.select_product}: "),
-            b,
-          ],
-        ),
-        compareButton,
-        ExpansionPanelList(
-          expansionCallback: (panelIndex, isExpanded) =>
-              toggleDropdownSideSelector(),
-          children: [
-            ExpansionPanel(
-                headerBuilder: (context, isExpanded) => ListTile(
-                      title: Text(
-                        AppLocalizations.of(context)!.roof_sides,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text("${AppLocalizations.of(context)!.select_type}: "),
+              DropdownButton(
+                value: _solarType,
+                items: menuItems,
+                onChanged: setSolarType,
+                isDense: true,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text("${AppLocalizations.of(context)!.select_product}: "),
+              b,
+              questionMark
+            ],
+          ),
+          compareButton,
+          ExpansionPanelList(
+            expansionCallback: (panelIndex, isExpanded) =>
+                toggleDropdownSideSelector(),
+            children: [
+              ExpansionPanel(
+                  headerBuilder: (context, isExpanded) => ListTile(
+                        title: Text(
+                          AppLocalizations.of(context)!.roof_sides,
+                        ),
                       ),
-                    ),
-                body: Column(children: _sideSelector(context)),
-                isExpanded: _dropdownSideSelectorActive),
+                  body: Column(children: _sideSelector(context)),
+                  isExpanded: _dropdownSideSelectorActive,
+                  canTapOnHeader: true),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget productInfoButton() {
+    return IconButton(
+      icon: Icon(Icons.question_mark),
+      onPressed: () {
+        print("press");
+        showModalBottomSheet(
+            context: context, builder: (context) => productInfo());
+      },
+      tooltip: 'ProductInfo',
+    );
+  }
+
+  Widget productInfo() {
+    return SizedBox(
+      height: 400,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Text('Modal BottomSheet'),
+            ElevatedButton(
+              child: const Text('Close BottomSheet'),
+              onPressed: () => Navigator.pop(context),
+            ),
           ],
         ),
-      ],
+      ),
     );
   }
 
@@ -705,7 +929,8 @@ class _EstimationsState extends State<Estimations> {
                       ),
                     ),
                 body: Column(children: _sideSelector(context)),
-                isExpanded: _dropdownSideSelectorActive),
+                isExpanded: _dropdownSideSelectorActive,
+                canTapOnHeader: true),
           ],
         ),
       ],
