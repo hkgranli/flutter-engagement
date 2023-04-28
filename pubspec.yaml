@@ -129,6 +129,7 @@ flutter:
 
     - assets/models/house.glb
     - assets/models/house_colorized.glb
+    - assets/models/house_colorized_2.glb
 
     - assets/models/house_panel_1_1000.glb
     - assets/models/house_panel_1_1100.glb

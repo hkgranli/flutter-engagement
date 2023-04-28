@@ -327,7 +327,7 @@ class _InteractivePageState extends State<InteractivePage>
       interactiveList = [
         ListTile(
           leading: Icon(Icons.roofing),
-          title: Text(AppLocalizations.of(context)!.visualization),
+          title: Text(AppLocalizations.of(context)!.aesthetic),
           trailing: Icon(Icons.arrow_right),
           onTap: () => setPage(Pages.pvView, EstimationPages.aesthetic),
         ),
@@ -422,7 +422,6 @@ class _InteractivePageState extends State<InteractivePage>
           ListTile(
             leading: Icon(Icons.book),
             title: Text(AppLocalizations.of(context)!.more_info),
-            subtitle: Text(AppLocalizations.of(context)!.knowledge_short),
             trailing: moreInfo
                 ? Icon(Icons.arrow_upward)
                 : Icon(Icons.arrow_downward),
@@ -509,7 +508,7 @@ class _InteractivePageState extends State<InteractivePage>
           tabs: [
             Tab(
                 icon: Icon(Icons.roofing),
-                text: AppLocalizations.of(context)!.visualization),
+                text: AppLocalizations.of(context)!.aesthetic),
             Tab(
                 icon: Icon(Icons.calculate),
                 text: AppLocalizations.of(context)!.eff_est),
@@ -626,9 +625,9 @@ class _EstimationsState extends State<Estimations> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(Icons.fiber_manual_record, color: Colors.red),
-              Text("1100 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-              Icon(Icons.fiber_manual_record, color: Colors.orange),
               Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Icon(Icons.fiber_manual_record, color: Colors.orange),
+              Text("800 ${AppLocalizations.of(context)!.kwtt}/m^2"),
             ],
           ),
           Row(
@@ -636,41 +635,11 @@ class _EstimationsState extends State<Estimations> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(Icons.fiber_manual_record, color: Colors.yellow),
-              Text("800 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-              Icon(Icons.fiber_manual_record, color: Colors.green),
-              Text("600 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Text("500 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Icon(Icons.fiber_manual_record, color: Colors.blue),
+              Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.fiber_manual_record, color: Colors.blue),
-              Text("400 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-            ],
-          ), /*
-          Text(
-              "_placeholder This model shows yearly estimated radiation for surfaces over 400 kWh/m^2:"),
-          UnorderedList(
-            texts: [
-              UnorderedListItemInline(
-                  text: "1100 ${AppLocalizations.of(context)!.kwtt}/m^2",
-                  color: Colors.red),
-              UnorderedListItemInline(
-                  text: "1000 ${AppLocalizations.of(context)!.kwtt}/m^2",
-                  color: Colors.orange),
-              UnorderedListItemInline(
-                  text: "800 ${AppLocalizations.of(context)!.kwtt}/m^2",
-                  color: Colors.yellow),
-              UnorderedListItemInline(
-                  text: "600 ${AppLocalizations.of(context)!.kwtt}/m^2",
-                  color: Colors.green),
-              UnorderedListItemInline(
-                  text: "400 ${AppLocalizations.of(context)!.kwtt}/m^2",
-                  color: Colors.blue),
-            ],
-            inline: true,
-          ),*/
         ],
       ),
     );
