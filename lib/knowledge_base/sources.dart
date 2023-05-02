@@ -132,7 +132,8 @@ class _SourcesPageState extends State<SourcesPage> {
       'Sindre Thorsnes',
       'Gabriela Rocha Jurado',
       'Mikkel Andreas Gravbrøt Mona',
-      'Pablo Lettow'
+      'Pablo Lettow',
+      'Matteo Formolli'
     ];
 
     var papers = [
@@ -145,6 +146,7 @@ class _SourcesPageState extends State<SourcesPage> {
       'Management of energy between different users at district buildings in Møllenberg, Trondheim where solar panels might not supply the necessary energy',
       'In what degree could solar energy solutions increase neighborhood value and social revitalization?',
       'Economic comparison of solar energy in Møllenberg: Can photovoltaic systems be profitable over their lifetime?',
+      "Møllenberg Solar Radiation Simulations"
     ];
 
     List<Widget> w = [];

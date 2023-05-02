@@ -4,6 +4,7 @@ import 'package:engagement/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class HomePage extends StatefulWidget {
@@ -120,7 +121,12 @@ class _MyHomePageState extends State<HomePage> {
           Row(children: [
             Icon(Icons.email),
             Text("Tahmineh Akbarinejad - tahmineh.akbarinejad@ntnu.no")
-          ])
+          ]),
+          SizedBox(height: 10,),
+          ElevatedButton(
+              onPressed:() => launchUrl(Uri.parse('https://www.ntnu.edu/helios')),
+              child: Text(AppLocalizations.of(context)!.helios_homepage),
+            ),
         ],
       ),
     );
@@ -136,48 +142,53 @@ class _MyHomePageState extends State<HomePage> {
     if (a) {
       return SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/helios_logo_cool.png',
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                AppLocalizations.of(context)!.homeTitle,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Learn about solar Technology",
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              SizedBox(height: 10),
-              _homePageButton(appState, Icon(Icons.school),
-                  AppLocalizations.of(context)!.information, 1),
-              Text(
-                "Test configurations on Kirkegata 35",
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              SizedBox(height: 10),
-              _homePageButton(
-                  appState, Icon(Icons.touch_app), "Interactive Showcase", 4),
-              SizedBox(height: 10),
-              Text(
-                "Make your voice heard by giving feedback",
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              _homePageButton(appState, Icon(Icons.feedback),
-                  AppLocalizations.of(context)!.feedback, 2),
-              SizedBox(height: 10),
-              _homePageButton(appState, Icon(Icons.info),
-                  AppLocalizations.of(context)!.p_info, 0),
-              SizedBox(
-                height: 10,
-              ),
-              b
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/helios_logo_cool.png',
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.homeTitle,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  AppLocalizations.of(context)!.learn_solar,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                SizedBox(height: 10),
+                _homePageButton(appState, Icon(Icons.school),
+                    AppLocalizations.of(context)!.information, 1),
+                Text(
+                  AppLocalizations.of(context)!.test_conf,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                SizedBox(height: 10),
+                _homePageButton(
+                    appState, Icon(Icons.touch_app), AppLocalizations.of(context)!.int_show, 4),
+                SizedBox(height: 10),
+                Text(
+                  AppLocalizations.of(context)!.feedb,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                              SizedBox(height: 10),
+                _homePageButton(appState, Icon(Icons.feedback),
+                    AppLocalizations.of(context)!.feedback, 2),
+                SizedBox(height: 10),
+                _homePageButton(appState, Icon(Icons.info),
+                    AppLocalizations.of(context)!.p_info, 0),
+                SizedBox(
+                  height: 10,
+                ),
+                b
+              ],
+            ),
           ),
         ),
       );
@@ -218,7 +229,7 @@ class _MyHomePageState extends State<HomePage> {
 
   Widget _homePageButton(
       MyAppState appState, Icon icon, String text, int page) {
-    return OutlinedButton.icon(
+    return ElevatedButton.icon(
       onPressed: () {
         _changeSelectedPage(page);
       },

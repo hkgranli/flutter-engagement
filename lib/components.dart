@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EngagementNavBar extends StatelessWidget {
   const EngagementNavBar({super.key, required this.index});
@@ -213,10 +214,12 @@ class ZoomableImage extends StatelessWidget {
 }
 
 class EngagementTable extends StatelessWidget {
-  const EngagementTable({super.key, required this.titles, required this.data});
+  const EngagementTable({super.key, required this.titles, required this.data, this.titleStyled = true});
 
   final List<String> titles;
   final List<List<Widget>> data;
+  final bool titleStyled;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -226,9 +229,9 @@ class EngagementTable extends StatelessWidget {
       dc.add(DataColumn(
           label: Expanded(
         child: Text(t,
-            style: TextStyle(
+            style: titleStyled?  TextStyle(
                 fontStyle: FontStyle.italic,
-                fontSize: Theme.of(context).textTheme.labelSmall!.fontSize)),
+                fontSize: Theme.of(context).textTheme.labelSmall!.fontSize) : TextStyle()),
       )));
     }
 
@@ -258,4 +261,24 @@ double barChartTotal(List<BarChartGroupData> list) {
   }
 
   return total;
+}
+
+List<Widget> stringListToTextList(List<String> strings){
+  List<Widget> textList = [];
+
+  for (var s in strings){
+    textList.add(Text(s));
+  }
+  return textList;
+}
+
+List<List<Widget>> twoDimStringToText(List<List<String>> strings){
+  List<List<Widget>> textList = [];
+
+  for(var s in strings){
+    textList.add(stringListToTextList(s));
+  }
+
+  return textList;
+
 }

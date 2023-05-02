@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:engagement/components.dart';
 import 'package:engagement/estimations/efficiency.dart';
 import 'package:engagement/estimations/radiation.dart';
@@ -11,6 +13,7 @@ import 'package:engagement/knowledge_base/sources.dart';
 import 'package:engagement/knowledge_base/sustainability.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum Pages {
   home,
@@ -28,27 +31,29 @@ enum Pages {
 enum SolarType { none, panel, tile }
 
 enum Panel {
-  none(efficiency: 0, id: -1, name: "None"),
-  prodOne(efficiency: 0.20, id: 1, name: "Darksun"),
-  prodTwo(efficiency: 0.23, id: 2, name: "Bluepan");
+  none(efficiency: 0, id: -1, name: "None", url:""),
+  prodOne(efficiency: 0.211, id: 1, name: "Evervolt H", url: "https://ftp.panasonic.com/solar/datasheet/ds_evpv390h.pdf"),
+  prodTwo(efficiency: 0.17, id: 2, name: "RS Pro Poly", url: "https://docs.rs-online.com/13c9/0900766b815873b0.pdf");
 
-  const Panel({required this.efficiency, required this.id, required this.name});
+  const Panel({required this.efficiency, required this.id, required this.name, required this.url});
 
   final double efficiency;
   final int id;
   final String name;
+  final String url;
 }
 
 enum Tile {
-  none(efficiency: 0, id: -1, name: "None"),
-  prodOne(efficiency: 0.12, id: 1, name: "Maxitile"),
-  prodTwo(efficiency: 0.15, id: 2, name: "Sunking");
+  none(efficiency: 0, id: -1, name: "None", url : ""),
+  prodOne(efficiency: 0.19, id: 1, name: "Solarstone", url: "https://solarstone.com/assets/product-cards/_2023-04-solar-tiled-roof-datasheet.pdf"),
+  prodTwo(efficiency: 0.192, id: 2, name: "ErgoSun", url:"https://www.ergosun.com/_files/ugd/29edcf_7d4fce17429f458fa660ce124e007ff7.pdf");
 
-  const Tile({required this.efficiency, required this.id, required this.name});
+  const Tile({required this.efficiency, required this.id, required this.name, required this.url});
 
   final double efficiency;
   final int id;
   final String name;
+  final String url;
 }
 
 class InteractivePage extends StatefulWidget {
@@ -154,7 +159,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.sustainability;
         break;
       case Pages.external:
-        page = _pageSourceAndExternal();
+        page = ExternalPage();
         title = AppLocalizations.of(context)!.external_resources;
         break;
       case Pages.ownershipView:
@@ -395,8 +400,6 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   Widget _pageHome() {
-    var about = Text(AppLocalizations.of(context)!.information_context);
-
     var moreList = [];
 
     if (moreInfo) {
@@ -441,8 +444,6 @@ class _InteractivePageState extends State<InteractivePage>
         child: Center(
             child: Column(
           children: [
-            about,
-            Divider(),
             ...knowledgeComponent,
             Divider(),
             ...interactiveComponent,
@@ -454,12 +455,6 @@ class _InteractivePageState extends State<InteractivePage>
       ),
     );
   }
-
-  Widget _pageSourceAndExternal() => SingleChildScrollView(
-        child: Center(
-          child: Column(children: []),
-        ),
-      );
 
   AppBar _buildPvBar(BuildContext context) {
     int initialIndex = 0;
@@ -521,6 +516,73 @@ class _InteractivePageState extends State<InteractivePage>
   }
 }
 
+class ExternalPage extends StatefulWidget {
+  const ExternalPage({
+    super.key,
+  });
+
+  @override
+  State<ExternalPage> createState() => _ExternalPageState();
+}
+
+class _ExternalPageState extends State<ExternalPage> {
+  bool englishDropdown = false;
+  bool norwegianDropdown = false;
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+        child: Center(
+          child: Column(children: [
+            ExpansionPanelList(
+            expansionCallback: (panelIndex, isExpanded) {
+              switch (panelIndex) {
+                case 0:
+                  setState(() {
+                    norwegianDropdown = !norwegianDropdown;
+                  });
+                  break;
+                case 1:
+                  setState(() {
+                    englishDropdown = !englishDropdown;
+                  });
+                  break;
+              }
+            },
+            children: [
+              ExpansionPanel(
+                  headerBuilder: (context, isExpanded) => ListTile(
+                        title: Text(
+                            AppLocalizations.of(context)!.sources_img_intro),
+                      ),
+                  body: norwegianBody(),
+                  isExpanded: norwegianDropdown),
+              ExpansionPanel(
+                  headerBuilder: (_, __) => ListTile(
+                        title: Text(AppLocalizations.of(context)!
+                            .sources_content_intro),
+                      ),
+                  body: englishBody(),
+                  canTapOnHeader: true,
+                  isExpanded: englishDropdown),
+            ],
+          ),
+          ]),
+        ),
+      );
+
+  Widget englishBody(){
+    return Container();
+  }
+
+  Widget norwegianBody(){
+    return Column(
+      children: [
+      ElevatedButton(child: Text("Click"), onPressed: () => launchUrl(Uri.parse("https://blogg.sintef.no/sintefenergy-nb/solcellepanel-pa-taket-er-det-lonnsomt")))]
+    );
+  }
+
+}
+
 enum EstimationPages { aesthetic, radiation, efficiency }
 
 class Estimations extends StatefulWidget {
@@ -547,6 +609,9 @@ class _EstimationsState extends State<Estimations> {
   SolarType _solarTypeCompare = SolarType.none;
   Panel _activePanelCompare = Panel.none;
   Tile _activeTileCompare = Tile.none;
+
+  List<bool> radiationSelect = [true, false];
+  List<bool> overviewSelect = [true, false, false, false];
 
   bool compare = false;
 
@@ -615,11 +680,50 @@ class _EstimationsState extends State<Estimations> {
   }
 
   Widget configRadiation() {
+
+    List<Widget> conf = radiationSelect[0]? radiationModelConfig() : radiationOverviewConfig();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text(AppLocalizations.of(context)!.radiation_about),
+            
+          ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (int index) {
+          setState(() {
+            // The button that is tapped is set to true, and the others to false.
+            for (int i = 0; i < radiationSelect.length; i++) {
+              radiationSelect[i] = i == index;
+            }
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 80.0,
+        ),
+        isSelected: radiationSelect,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.rad_model),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.rad_overview),
+          ),
+        ],
+      ),
+        ...conf
+        ],
+      ),
+    );
+  }
+
+  List<Widget> radiationModelConfig() {
+    return [
+      Text(AppLocalizations.of(context)!.radiation_about),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -639,10 +743,48 @@ class _EstimationsState extends State<Estimations> {
               Icon(Icons.fiber_manual_record, color: Colors.blue),
               Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
             ],
+          )
+    ];
+  }
+
+  List<Widget> radiationOverviewConfig(){
+    return [
+      ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (int index) {
+          setState(() {
+            // The button that is tapped is set to true, and the others to false.
+            for (int i = 0; i < overviewSelect.length; i++) {
+              overviewSelect[i] = i == index;
+            }
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 80.0,
+        ),
+        isSelected: overviewSelect,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.dir_ne),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.dir_nw),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.dir_se),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.dir_sw),
           ),
         ],
       ),
-    );
+    ];
   }
 
   Widget _buildConfig() {
@@ -668,7 +810,7 @@ class _EstimationsState extends State<Estimations> {
         : OutlinedButton.icon(
             onPressed: () => toggleCompare(),
             icon: Icon(Icons.compare),
-            label: Text("Compare"));
+            label: Text(AppLocalizations.of(context)!.compare));
 
     DropdownButton b = DropdownButton(items: null, onChanged: null);
 
@@ -777,21 +919,45 @@ class _EstimationsState extends State<Estimations> {
 
   Widget productInfo() {
     return SizedBox(
-      height: 400,
+      height: 200,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text('Modal BottomSheet'),
+            specTable(),
             ElevatedButton(
-              child: const Text('Close BottomSheet'),
-              onPressed: () => Navigator.pop(context),
-            ),
+              child: Text(AppLocalizations.of(context)!.specs),
+              onPressed: () async {
+                Uri? u = getActiveUri();
+                if(u == null) return; 
+                if(await canLaunchUrl(u)) launchUrl(u, mode: LaunchMode.externalApplication);
+              },),
           ],
         ),
       ),
     );
+  }
+
+  Widget specTable(){
+    return Container();
+    /*
+    var data = [[Text('test')]];
+    var titles = ['test'];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: EngagementTable(titles: titles, data: data, titleStyled: false,),
+    );*/
+  }
+
+  Uri? getActiveUri(){
+    if(_solarType == SolarType.panel){
+      return _activePanel == Panel.none? null : Uri.parse(_activePanel.url);
+    } else if (_solarType == SolarType.tile){
+      return _activeTile == Tile.none? null : Uri.parse(_activeTile.url);
+
+    }
+    return null;
   }
 
   Widget buildConfigCompare() {
@@ -935,6 +1101,27 @@ class _EstimationsState extends State<Estimations> {
     ];
   }
 
+  Widget buildRadiationPage(){
+    if(radiationSelect[0]) return RadiationPage();
+    
+    List<String> images = ['pNE', 'pNW', 'pSE', 'pSW'];
+    String image;
+
+    if(overviewSelect[0]){
+      image = images[0];
+    } else if(overviewSelect[1]){
+      image = images[1];
+    }else if(overviewSelect[2]){
+      image = images[2];
+    }else if(overviewSelect[3]){
+      image = images[3];
+    } else {
+      return Container(); // should never happen or smth 
+    }
+
+    return ZoomableImage(path:"assets/images/${image}_dot.png");
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = Container();
@@ -969,7 +1156,7 @@ class _EstimationsState extends State<Estimations> {
         }
         break;
       case EstimationPages.radiation:
-        content = RadiationPage();
+        content = buildRadiationPage();
         break;
     }
 

@@ -20,7 +20,7 @@ class AppInit extends StatefulWidget {
 }
 
 class _AppInitState extends State<AppInit> {
-  Locale _locale = Locale('en', 'UK');
+  Locale _locale = Locale('no', 'NO');
 
   void setLocale(Locale value) {
     setState(() {
@@ -33,7 +33,7 @@ class _AppInitState extends State<AppInit> {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'Helios Engagement',
         locale: _locale,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

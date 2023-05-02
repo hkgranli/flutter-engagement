@@ -37,6 +37,7 @@ dependencies:
   model_viewer_plus: ^1.5.0
   fl_chart: ^0.61.0
   video_player: ^2.6.1
+  url_launcher: ^6.1.10
   
 
 
@@ -164,6 +165,17 @@ flutter:
     - assets/models/house_tile_1_1111.glb
     - assets/models/house_tile_2_1111.glb
     - assets/helios_video.mp4
+
+    - assets/images/pNE.png
+    - assets/images/pNW.png
+    - assets/images/pSE.png
+    - assets/images/pSW.png
+
+    - assets/images/pNE_dot.png
+    - assets/images/pNW_dot.png
+    - assets/images/pSE_dot.png
+    - assets/images/pSW_dot.png
+    
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
