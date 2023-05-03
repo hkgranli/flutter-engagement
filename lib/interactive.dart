@@ -577,7 +577,7 @@ class _ExternalPageState extends State<ExternalPage> {
   Widget norwegianBody(){
     return Column(
       children: [
-      ElevatedButton(child: Text("Click"), onPressed: () => launchUrl(Uri.parse("https://blogg.sintef.no/sintefenergy-nb/solcellepanel-pa-taket-er-det-lonnsomt")))]
+      ElevatedButton(child: Text("Click"), onPressed: () => launchUrl(Uri.parse("https://blogg.sintef.no/sintefenergy-nb/solcellepanel-pa-taket-er-det-lonnsomt"), mode: LaunchMode.externalApplication))]
     );
   }
 

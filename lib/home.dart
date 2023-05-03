@@ -124,7 +124,7 @@ class _MyHomePageState extends State<HomePage> {
           ]),
           SizedBox(height: 10,),
           ElevatedButton(
-              onPressed:() => launchUrl(Uri.parse('https://www.ntnu.edu/helios')),
+              onPressed:() => launchUrl(Uri.parse('https://www.ntnu.edu/helios'), mode: LaunchMode.externalApplication),
               child: Text(AppLocalizations.of(context)!.helios_homepage),
             ),
         ],
