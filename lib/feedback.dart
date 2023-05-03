@@ -22,5 +22,9 @@ class FeedbackPage extends StatelessWidget {
     );
   }
 
-  Widget evalButton(BuildContext context) => ElevatedButton(onPressed: () => launchUrl(Uri.parse('https://forms.office.com/e/wjguScpCCa')), child: Text(AppLocalizations.of(context)!.feedb));
+  Widget evalButton(BuildContext context) => ElevatedButton(
+      onPressed: () => launchUrl(
+          Uri.parse('https://forms.office.com/e/wjguScpCCa'),
+          mode: LaunchMode.externalApplication),
+      child: Text(AppLocalizations.of(context)!.feedb));
 }
