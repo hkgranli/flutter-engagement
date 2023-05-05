@@ -238,8 +238,17 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         ),
       );
 
-  Widget exampleOther() => Column(
-        children: [ZoomableImage(path: 'assets/images/rt.jpg')],
+  Widget exampleOther() => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            ZoomableImage(path: 'assets/images/rt.jpg'),
+            SizedBox(
+              height: 10,
+            ),
+            Text(AppLocalizations.of(context)!.ex_rt)
+          ],
+        ),
       );
 
   Widget exampleShow() {

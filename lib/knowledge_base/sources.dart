@@ -41,6 +41,7 @@ class _SourcesPageState extends State<SourcesPage> {
                             AppLocalizations.of(context)!.sources_img_intro),
                       ),
                   body: imageSources(),
+                  canTapOnHeader: true,
                   isExpanded: imageSourcesActive),
               ExpansionPanel(
                   headerBuilder: (_, __) => ListTile(
