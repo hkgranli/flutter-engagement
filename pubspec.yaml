@@ -178,15 +178,10 @@ flutter:
     - assets/models/house_tile_2_1111.glb
     - assets/helios_video.mp4
 
-    - assets/images/pNE.png
-    - assets/images/pNW.png
-    - assets/images/pSE.png
-    - assets/images/pSW.png
-
-    - assets/images/pNE_dot.png
-    - assets/images/pNW_dot.png
-    - assets/images/pSE_dot.png
-    - assets/images/pSW_dot.png
+    - assets/images/rad_sw_clean.jpg
+    - assets/images/rad_sw_sim.jpg
+    - assets/images/rad_ne_clean.jpg
+    - assets/images/rad_ne_sim.jpg
 
     - assets/models/big_rad_color.glb
     

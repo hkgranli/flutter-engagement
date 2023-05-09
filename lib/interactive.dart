@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:engagement/components.dart';
 import 'package:engagement/estimations/efficiency.dart';
 import 'package:engagement/estimations/radiation.dart';
@@ -14,6 +12,7 @@ import 'package:engagement/knowledge_base/sources.dart';
 import 'package:engagement/knowledge_base/sustainability.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_compare_slider/image_compare_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum Pages {
@@ -571,7 +570,7 @@ class _EstimationsState extends State<Estimations> {
   Tile _activeTileCompare = Tile.none;
 
   List<bool> radiationSelect = [true, false, false];
-  List<bool> overviewSelect = [true, false, false, false];
+  List<bool> overviewSelect = [true, false];
 
   List<bool> estimationSelect = [false, false, false];
 
@@ -686,18 +685,17 @@ class _EstimationsState extends State<Estimations> {
     );
   }
 
-  List<Widget> radiationModelConfig() {
-    return [
-      Text(AppLocalizations.of(context)!.radiation_about),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
+  Widget gradient() => Column(
         children: [
-          Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-          Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-        ],
-      ),
-      /*
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+            ],
+          ),
+          /*
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -708,30 +706,34 @@ class _EstimationsState extends State<Estimations> {
           Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
         ],
       ),*/
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-              height: 10,
-              width: MediaQuery.of(context).size.width * 0.7,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                stops: [
-                  0.1,
-                  0.5,
-                  0.9,
-                ],
-                colors: [
-                  Colors.red,
-                  Colors.yellow,
-                  Colors.blue,
-                ],
-              )))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  height: 10,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    stops: [
+                      0.1,
+                      0.5,
+                      0.9,
+                    ],
+                    colors: [
+                      Colors.red,
+                      Colors.yellow,
+                      Colors.blue,
+                    ],
+                  )))
+            ],
+          )
         ],
-      )
-    ];
+      );
+
+  List<Widget> radiationModelConfig() {
+    return [Text(AppLocalizations.of(context)!.radiation_about), gradient()];
   }
 
   List<Widget> radiationOverviewConfig() {
@@ -759,18 +761,11 @@ class _EstimationsState extends State<Estimations> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)!.dir_nw),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)!.dir_se),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
             child: Text(AppLocalizations.of(context)!.dir_sw),
           ),
         ],
       ),
+      gradient()
     ];
   }
 
@@ -1162,22 +1157,26 @@ class _EstimationsState extends State<Estimations> {
   }
 
   Widget _radiationImageOverview() {
-    List<String> images = ['pNE', 'pNW', 'pSE', 'pSW'];
+    List<String> images = ['rad_ne', 'rad_sw'];
     String image;
 
     if (overviewSelect[0]) {
       image = images[0];
     } else if (overviewSelect[1]) {
       image = images[1];
-    } else if (overviewSelect[2]) {
-      image = images[2];
-    } else if (overviewSelect[3]) {
-      image = images[3];
     } else {
       return Container(); // should never happen or smth
     }
 
-    return ZoomableImage(path: "assets/images/${image}_dot.png");
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ImageCompareSlider(
+        itemOne: Image.asset('assets/images/${image}_clean.jpg'),
+        itemTwo: Image.asset('assets/images/${image}_sim.jpg'),
+        itemOneBuilder: (child, context) => IntrinsicHeight(child: child),
+        itemTwoBuilder: (child, context) => IntrinsicHeight(child: child),
+      ),
+    );
   }
 
   Widget buildRadiationPage() {

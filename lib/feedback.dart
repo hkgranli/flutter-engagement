@@ -1,14 +1,7 @@
 import 'package:engagement/components.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:engagement/components.dart';
-import 'package:engagement/interactive.dart';
-import 'package:engagement/main.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({super.key});
