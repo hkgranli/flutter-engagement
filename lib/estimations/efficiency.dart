@@ -12,6 +12,8 @@ class EnergyEstimation extends StatefulWidget {
       required this.solarType,
       required this.activePanel,
       required this.activeTile,
+      required this.roof,
+      required this.fas,
       this.boolSlider = true,
       this.text = true});
 
@@ -24,6 +26,9 @@ class EnergyEstimation extends StatefulWidget {
 
   final bool boolSlider;
   final bool text;
+
+  final bool roof;
+  final bool fas;
 
   @override
   State<EnergyEstimation> createState() => _EnergyEstimationState();
@@ -55,8 +60,8 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
                 children: [
                   Icon(Icons.fiber_manual_record, color: Colors.orange),
                   Text(AppLocalizations.of(context)!.elec_roof),
-                  Icon(Icons.fiber_manual_record, color: Colors.grey),
-                  Text(AppLocalizations.of(context)!.elec_fasca),
+                  //Icon(Icons.fiber_manual_record, color: Colors.grey),
+                  //Text(AppLocalizations.of(context)!.elec_fasca),
                 ],
               ),
               _efficiencyGraph(estProd, total)
@@ -248,7 +253,9 @@ class _EnergyEstimationState extends State<EnergyEstimation> {
         widget.solarType,
         widget.activePanel,
         widget.activeTile,
-        widget.solarSides);
+        widget.solarSides,
+        widget.roof,
+        widget.fas);
     double total = barChartTotal(estProd);
 
     return Expanded(
@@ -337,6 +344,8 @@ class EfficiencyTableComparator extends StatefulWidget {
     required this.solarTypeCompare,
     required this.activePanelCompare,
     required this.activeTileCompare,
+    required this.roof,
+    required this.fas,
   });
 
   final List<int> solarSides;
@@ -347,6 +356,9 @@ class EfficiencyTableComparator extends StatefulWidget {
   final SolarType solarTypeCompare;
   final Panel activePanelCompare;
   final Tile activeTileCompare;
+
+  final bool roof;
+  final bool fas;
 
   @override
   State<EfficiencyTableComparator> createState() =>
@@ -360,7 +372,9 @@ class _EfficiencyTableComparatorState extends State<EfficiencyTableComparator> {
         widget.solarType,
         widget.activePanel,
         widget.activeTile,
-        widget.solarSides);
+        widget.solarSides,
+        widget.roof,
+        widget.fas);
     List<EnergyContext> dataMain =
         EnergyContext.energyContext(barChartTotal(dataRaw), context);
 
@@ -368,7 +382,9 @@ class _EfficiencyTableComparatorState extends State<EfficiencyTableComparator> {
         widget.solarTypeCompare,
         widget.activePanelCompare,
         widget.activeTileCompare,
-        widget.solarSides);
+        widget.solarSides,
+        widget.roof,
+        widget.fas);
     List<EnergyContext> dataCompare =
         EnergyContext.energyContext(barChartTotal(dataRawCompare), context);
 
@@ -448,8 +464,13 @@ class EnergyContext {
     ];
   }
 
-  static List<BarChartGroupData> estimateEnergy(SolarType solarType,
-      Panel activePanel, Tile activeTile, List<int> solarSides) {
+  static List<BarChartGroupData> estimateEnergy(
+      SolarType solarType,
+      Panel activePanel,
+      Tile activeTile,
+      List<int> solarSides,
+      bool roof,
+      bool fas) {
     List<BarChartGroupData> estProd = [];
 
     double panelEff;
@@ -488,19 +509,23 @@ class EnergyContext {
         // total estimated production per side is
         // estimated incident radiation times size of the side
         // lastly _solarSides is 1 if the panel is selected and 0 if it is inactive
-        roofTotal += monthRoof[z] * solarSides[z] * panelEff;
-        fascadeTotal += monthFascade[z] * solarSides[z] * panelEff;
+        roofTotal += monthRoof[z] * solarSides[z] * panelEff * (roof ? 1 : 0);
+        fascadeTotal +=
+            monthFascade[z] * solarSides[z] * panelEff * (fas ? 1 : 0);
       }
 
       BarChartGroupData b =
           BarChartGroupData(x: x, groupVertically: true, barRods: [
         BarChartRodData(
-            toY: roofTotal, fromY: 0, width: 5, color: Colors.orange),
-        BarChartRodData(
+            toY: roofTotal + fascadeTotal,
+            fromY: 0,
+            width: 5,
+            color: Colors.orange),
+        /*BarChartRodData(
             toY: roofTotal + fascadeTotal,
             fromY: roofTotal,
             width: 5,
-            color: Colors.grey),
+            color: Colors.grey),*/
       ]);
 
       estProd.add(b);

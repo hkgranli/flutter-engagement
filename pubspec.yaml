@@ -187,6 +187,8 @@ flutter:
     - assets/images/pNW_dot.png
     - assets/images/pSE_dot.png
     - assets/images/pSW_dot.png
+
+    - assets/models/big_rad_color.glb
     
   #   - images/a_dot_ham.jpeg
 

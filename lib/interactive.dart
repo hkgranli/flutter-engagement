@@ -570,8 +570,10 @@ class _EstimationsState extends State<Estimations> {
   Panel _activePanelCompare = Panel.none;
   Tile _activeTileCompare = Tile.none;
 
-  List<bool> radiationSelect = [true, false];
+  List<bool> radiationSelect = [true, false, false];
   List<bool> overviewSelect = [true, false, false, false];
+
+  List<bool> estimationSelect = [false, false, false];
 
   bool compare = false;
 
@@ -641,7 +643,7 @@ class _EstimationsState extends State<Estimations> {
 
   Widget configRadiation() {
     List<Widget> conf =
-        radiationSelect[0] ? radiationModelConfig() : radiationOverviewConfig();
+        radiationSelect[2] ? radiationOverviewConfig() : radiationModelConfig();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -670,6 +672,10 @@ class _EstimationsState extends State<Estimations> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: Text(AppLocalizations.of(context)!.rad_model_over),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(AppLocalizations.of(context)!.rad_overview),
               ),
             ],
@@ -684,15 +690,14 @@ class _EstimationsState extends State<Estimations> {
     return [
       Text(AppLocalizations.of(context)!.radiation_about),
       Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.fiber_manual_record, color: Colors.red),
           Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-          Icon(Icons.fiber_manual_record, color: Colors.orange),
-          Text("800 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+          Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
         ],
       ),
+      /*
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -701,6 +706,29 @@ class _EstimationsState extends State<Estimations> {
           Text("500 ${AppLocalizations.of(context)!.kwtt}/m^2"),
           Icon(Icons.fiber_manual_record, color: Colors.blue),
           Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+        ],
+      ),*/
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              height: 10,
+              width: MediaQuery.of(context).size.width * 0.7,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                stops: [
+                  0.1,
+                  0.5,
+                  0.9,
+                ],
+                colors: [
+                  Colors.red,
+                  Colors.yellow,
+                  Colors.blue,
+                ],
+              )))
         ],
       )
     ];
@@ -746,10 +774,50 @@ class _EstimationsState extends State<Estimations> {
     ];
   }
 
+  Widget configEff() {
+    return Container();
+  }
+
   Widget _buildConfig() {
     if (widget.page == EstimationPages.radiation) return configRadiation();
     if (widget.page == EstimationPages.efficiency && compare) {
       return buildConfigCompare();
+    }
+
+    Widget extra = Container();
+
+    if (widget.page == EstimationPages.efficiency) {
+      extra = ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (int index) {
+          setState(() {
+            // The button that is tapped is set to true, and the others to false.
+            for (int i = 0; i < estimationSelect.length; i++) {
+              estimationSelect[i] = i == index;
+            }
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 80.0,
+        ),
+        isSelected: estimationSelect,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.est_roof_select),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.est_fas_select),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(AppLocalizations.of(context)!.est_both_select),
+          ),
+        ],
+      );
     }
 
     List<DropdownMenuItem<SolarType>> menuItems = [
@@ -819,7 +887,7 @@ class _EstimationsState extends State<Estimations> {
           value: _activeTile, items: tileItems, onChanged: setSelectedTile);
     }
 
-    return Padding(
+    Widget meme = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
@@ -862,6 +930,37 @@ class _EstimationsState extends State<Estimations> {
         ],
       ),
     );
+
+    if (widget.page == EstimationPages.efficiency) {
+      return Column(
+        children: [
+          extra,
+          ExpansionPanelList(
+            expansionCallback: (panelIndex, isExpanded) => toggleEffConf(),
+            children: [
+              ExpansionPanel(
+                  headerBuilder: (context, isExpanded) => ListTile(
+                        title: Text(
+                          AppLocalizations.of(context)!.config,
+                        ),
+                      ),
+                  body: meme,
+                  isExpanded: effConf,
+                  canTapOnHeader: true),
+            ],
+          ),
+        ],
+      );
+    }
+    return meme;
+  }
+
+  bool effConf = false;
+
+  void toggleEffConf() {
+    setState(() {
+      effConf = !effConf;
+    });
   }
 
   Widget productInfoButton() {
@@ -890,8 +989,9 @@ class _EstimationsState extends State<Estimations> {
               onPressed: () async {
                 Uri? u = getActiveUri();
                 if (u == null) return;
-                if (await canLaunchUrl(u))
+                if (await canLaunchUrl(u)) {
                   launchUrl(u, mode: LaunchMode.externalApplication);
+                }
               },
             ),
           ],
@@ -1061,9 +1161,7 @@ class _EstimationsState extends State<Estimations> {
     ];
   }
 
-  Widget buildRadiationPage() {
-    if (radiationSelect[0]) return RadiationPage();
-
+  Widget _radiationImageOverview() {
     List<String> images = ['pNE', 'pNW', 'pSE', 'pSW'];
     String image;
 
@@ -1082,6 +1180,14 @@ class _EstimationsState extends State<Estimations> {
     return ZoomableImage(path: "assets/images/${image}_dot.png");
   }
 
+  Widget buildRadiationPage() {
+    if (radiationSelect[0]) return RadiationHousePage();
+
+    if (radiationSelect[1]) return RadiationContextPage();
+
+    return _radiationImageOverview();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = Container();
@@ -1098,21 +1204,25 @@ class _EstimationsState extends State<Estimations> {
         if (compare) {
           content = Expanded(
               child: EfficiencyTableComparator(
-                  activePanel: _activePanel,
-                  activePanelCompare: _activePanelCompare,
-                  activeTile: _activeTile,
-                  activeTileCompare: _activeTileCompare,
-                  solarSides: _solarSides,
-                  solarType: _solarType,
-                  solarTypeCompare: _solarTypeCompare,
-                  key: UniqueKey()));
-        } else {
-          content = EnergyEstimation(
             activePanel: _activePanel,
+            activePanelCompare: _activePanelCompare,
             activeTile: _activeTile,
+            activeTileCompare: _activeTileCompare,
             solarSides: _solarSides,
             solarType: _solarType,
-          );
+            solarTypeCompare: _solarTypeCompare,
+            roof: estimationSelect[0] || estimationSelect[2],
+            fas: estimationSelect[1] || estimationSelect[2],
+            key: UniqueKey(),
+          ));
+        } else {
+          content = EnergyEstimation(
+              activePanel: _activePanel,
+              activeTile: _activeTile,
+              solarSides: _solarSides,
+              solarType: _solarType,
+              roof: estimationSelect[0] || estimationSelect[2],
+              fas: estimationSelect[1] || estimationSelect[2]);
         }
         break;
       case EstimationPages.radiation:
