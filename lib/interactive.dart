@@ -691,8 +691,9 @@ class _EstimationsState extends State<Estimations> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text("100 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Text("600 ${AppLocalizations.of(context)!.kwtt}/m^2"),
               Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-              Text("300 ${AppLocalizations.of(context)!.kwtt}/m^2"),
             ],
           ),
           /*
@@ -722,9 +723,9 @@ class _EstimationsState extends State<Estimations> {
                       0.9,
                     ],
                     colors: [
-                      Colors.red,
-                      Colors.yellow,
                       Colors.blue,
+                      Colors.yellow,
+                      Colors.red,
                     ],
                   )))
             ],
@@ -782,36 +783,39 @@ class _EstimationsState extends State<Estimations> {
     Widget extra = Container();
 
     if (widget.page == EstimationPages.efficiency) {
-      extra = ToggleButtons(
-        direction: Axis.horizontal,
-        onPressed: (int index) {
-          setState(() {
-            // The button that is tapped is set to true, and the others to false.
-            for (int i = 0; i < estimationSelect.length; i++) {
-              estimationSelect[i] = i == index;
-            }
-          });
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 80.0,
+      extra = Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ToggleButtons(
+          direction: Axis.horizontal,
+          onPressed: (int index) {
+            setState(() {
+              // The button that is tapped is set to true, and the others to false.
+              for (int i = 0; i < estimationSelect.length; i++) {
+                estimationSelect[i] = i == index;
+              }
+            });
+          },
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          constraints: const BoxConstraints(
+            minHeight: 40.0,
+            minWidth: 80.0,
+          ),
+          isSelected: estimationSelect,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(AppLocalizations.of(context)!.est_roof_select),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(AppLocalizations.of(context)!.est_fas_select),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(AppLocalizations.of(context)!.est_both_select),
+            ),
+          ],
         ),
-        isSelected: estimationSelect,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)!.est_roof_select),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)!.est_fas_select),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)!.est_both_select),
-          ),
-        ],
       );
     }
 
@@ -1214,7 +1218,10 @@ class _EstimationsState extends State<Estimations> {
             fas: estimationSelect[1] || estimationSelect[2],
             key: UniqueKey(),
           ));
-        } else {
+        } else if(!compare && !estHasSelected()){
+          content = Container();
+        } 
+        else {
           content = EnergyEstimation(
               activePanel: _activePanel,
               activeTile: _activeTile,
@@ -1238,4 +1245,9 @@ class _EstimationsState extends State<Estimations> {
       ),
     );
   }
+
+  bool estHasSelected(){
+    return (estimationSelect[0] || estimationSelect[1] || estimationSelect[2]);
+  }
+
 }

@@ -45,7 +45,8 @@ class RadiationContextPage extends StatelessWidget {
     return Expanded(
       child: Center(
         child: ModelViewer(
-          src: 'assets/models/big_rad_color.glb',
+          //src: 'assets/models/big_rad_color.glb',
+          src: 'assets/models/colorized_model.glb',
           alt: "A 3D model of a house",
           ar: false,
           autoRotate: false,
