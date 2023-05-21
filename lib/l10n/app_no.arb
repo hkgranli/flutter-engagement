@@ -57,9 +57,9 @@
   "homeTitle": "Borgerengasjement - Solcelleteknologi på Møllenberg",
   "hours": "Timer",
   "image_pinch_zoom": "Klyp for å forstørre",
-  "information": "Informasjon",
+  "information": "Ressurser",
   "information_context": "Denne delen av applikasjonen er laget for å gi deg kunnskap om solcelleteknologi og medfølgende utfordringer.",
-  "int_show": "Interaktiv Estimering",
+  "int_show": "Solkalkulator",
   "interactive": "Estimeringer",
   "knowledge_base": "Kunnskapsbase",
   "knowledge_short": "Les og lær om solcelleteknologi og potensialet på Møllenberg.",
@@ -89,6 +89,7 @@
   "rad_overview": "Oversiktsbilde",
   "rad_tab": "Solstråler",
   "radiation_about": "Denne modellen viser årlig estimert potensiell solstråling på overflatene til huset.",
+  "radiation_all": "Simuler Hele Området",
   "read": "Informasjon",
   "read_more": "Les mer",
   "reg_content_l1_i1": "A: Svært høy antikvarisk verdi",
@@ -175,7 +176,7 @@
   "technical_info": "Teknisk informasjon",
   "test_conf": "Prøv forskjellige konfigurasjoner på huset i Kirkegata 35",
   "thin_film": "Tynnfilm",
-  "visualization": "Visualisering",
+  "visualization": "Solkalkulator",
   "visualization_short": "Prøv forskjellige solcellekonfigurasjoner og se estimert effektivitet på huset i Kirkegata 35.",
   "west": "Vest"
 }

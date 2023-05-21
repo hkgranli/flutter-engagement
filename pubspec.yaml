@@ -143,6 +143,7 @@ flutter:
     - assets/models/house.glb
     - assets/models/house_colorized.glb
     - assets/models/house_colorized_2.glb
+    - assets/models/house_colorized_3.glb
 
     - assets/models/house_panel_1_1000.glb
     - assets/models/house_panel_1_1100.glb
@@ -174,6 +175,7 @@ flutter:
     - assets/models/house_panel_2_0010.glb
     - assets/models/house_panel_2_0001.glb
     - assets/models/colorized_model.glb
+    - assets/models/colorized_model_kg_only.glb    
 
     - assets/models/house_tile_1_1111.glb
     - assets/models/house_tile_2_1111.glb

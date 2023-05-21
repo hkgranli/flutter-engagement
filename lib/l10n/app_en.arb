@@ -96,9 +96,9 @@
   "homeTitle": "Citizen Engagement - Photovoltaic Systems at Møllenberg",
   "hours": "Hours",
   "image_pinch_zoom": "Pinch to zoom",
-  "information": "Information",
+  "information": "Resources",
   "information_context": "This part of the application is designed to provide information and build your confidence on the topic of solar panels and its challenges.",
-  "int_show": "Interactive Estimations",
+  "int_show": "Solar Calculator",
   "interactive": "Estimations",
   "knowledge_base": "Knowledge Base",
   "knowledge_short": "Read and learn about solar technology and its potential at Møllenberg.",
@@ -128,6 +128,7 @@
   "rad_overview": "Overview",
   "rad_tab": "Radiation",
   "radiation_about": "This model shows yearly estimated radiation on the surfaces of the house.",
+  "radiation_all": "Simulate Entire Area",
   "read": "Information",
   "read_more": "Read More",
   "reg_content_l1_i1": "A: Very high antequarian value",
@@ -214,7 +215,7 @@
   "technical_info": "Technical Information",
   "test_conf": "Test solar configurations on Kirkegata 35",
   "thin_film": "Thin film",
-  "visualization": "Visualization",
+  "visualization": "Solar Calculator",
   "visualization_short": "With Kirkegata 35 as canvas, try different solar configurations and see estimated efficiency.",
   "west": "West"
 }

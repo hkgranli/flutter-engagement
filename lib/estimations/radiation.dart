@@ -14,7 +14,7 @@ class RadiationHousePage extends StatelessWidget {
     return Expanded(
       child: Center(
         child: ModelViewer(
-          src: 'assets/models/house_colorized_2.glb',
+          src: 'assets/models/house_colorized_3.glb',
           alt: "A 3D model of a house",
           ar: false,
           autoRotate: false,
@@ -35,7 +35,10 @@ class RadiationHousePage extends StatelessWidget {
 class RadiationContextPage extends StatelessWidget {
   const RadiationContextPage({
     super.key,
+    required this.colorAll,
   });
+
+  final bool colorAll;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,9 @@ class RadiationContextPage extends StatelessWidget {
       child: Center(
         child: ModelViewer(
           //src: 'assets/models/big_rad_color.glb',
-          src: 'assets/models/colorized_model.glb',
+          src: colorAll
+              ? 'assets/models/colorized_model.glb'
+              : 'assets/models/colorized_model_kg_only.glb',
           alt: "A 3D model of a house",
           ar: false,
           autoRotate: false,

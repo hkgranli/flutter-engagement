@@ -575,6 +575,9 @@ class _EstimationsState extends State<Estimations> {
   List<bool> estimationSelect = [false, false, false];
 
   bool compare = false;
+  bool _dropdownSideSelectorActive = false;
+
+  bool colorAll = false;
 
   void toggleCompare() {
     setState(() {
@@ -597,8 +600,6 @@ class _EstimationsState extends State<Estimations> {
       });
     }
   }
-
-  bool _dropdownSideSelectorActive = false;
 
   void toggleDropdownSideSelector() {
     setState(() {
@@ -640,9 +641,27 @@ class _EstimationsState extends State<Estimations> {
     });
   }
 
+  Widget radiationModelOverviewConfig() {
+    return CheckboxListTile(
+      value: colorAll,
+      title: Text(AppLocalizations.of(context)!.radiation_all),
+      onChanged: (value) {
+        setState(() {
+          colorAll = !colorAll;
+        });
+      },
+    );
+  }
+
   Widget configRadiation() {
-    List<Widget> conf =
-        radiationSelect[2] ? radiationOverviewConfig() : radiationModelConfig();
+    List<Widget> conf;
+    if (radiationSelect[0]) {
+      conf = radiationOverviewConfig();
+    } else if (radiationSelect[1]) {
+      conf = [radiationModelOverviewConfig()];
+    } else {
+      conf = radiationModelConfig();
+    }
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -667,7 +686,7 @@ class _EstimationsState extends State<Estimations> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(AppLocalizations.of(context)!.rad_model),
+                child: Text(AppLocalizations.of(context)!.rad_overview),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -675,11 +694,12 @@ class _EstimationsState extends State<Estimations> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(AppLocalizations.of(context)!.rad_overview),
+                child: Text(AppLocalizations.of(context)!.rad_model),
               ),
             ],
           ),
-          ...conf
+          ...conf,
+          gradient()
         ],
       ),
     );
@@ -691,9 +711,9 @@ class _EstimationsState extends State<Estimations> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("100 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-              Text("600 ${AppLocalizations.of(context)!.kwtt}/m^2"),
-              Text("1000 ${AppLocalizations.of(context)!.kwtt}/m^2"),
+              Text("100 ${AppLocalizations.of(context)!.kwtt}/m²"),
+              Text("600 ${AppLocalizations.of(context)!.kwtt}/m²"),
+              Text("1000 ${AppLocalizations.of(context)!.kwtt}/m²"),
             ],
           ),
           /*
@@ -734,7 +754,7 @@ class _EstimationsState extends State<Estimations> {
       );
 
   List<Widget> radiationModelConfig() {
-    return [Text(AppLocalizations.of(context)!.radiation_about), gradient()];
+    return [Text(AppLocalizations.of(context)!.radiation_about)];
   }
 
   List<Widget> radiationOverviewConfig() {
@@ -766,7 +786,6 @@ class _EstimationsState extends State<Estimations> {
           ),
         ],
       ),
-      gradient()
     ];
   }
 
@@ -1184,9 +1203,9 @@ class _EstimationsState extends State<Estimations> {
   }
 
   Widget buildRadiationPage() {
-    if (radiationSelect[0]) return RadiationHousePage();
+    if (radiationSelect[2]) return RadiationHousePage();
 
-    if (radiationSelect[1]) return RadiationContextPage();
+    if (radiationSelect[1]) return RadiationContextPage(colorAll: colorAll);
 
     return _radiationImageOverview();
   }
@@ -1218,10 +1237,9 @@ class _EstimationsState extends State<Estimations> {
             fas: estimationSelect[1] || estimationSelect[2],
             key: UniqueKey(),
           ));
-        } else if(!compare && !estHasSelected()){
+        } else if (!compare && !estHasSelected()) {
           content = Container();
-        } 
-        else {
+        } else {
           content = EnergyEstimation(
               activePanel: _activePanel,
               activeTile: _activeTile,
@@ -1246,8 +1264,7 @@ class _EstimationsState extends State<Estimations> {
     );
   }
 
-  bool estHasSelected(){
+  bool estHasSelected() {
     return (estimationSelect[0] || estimationSelect[1] || estimationSelect[2]);
   }
-
 }
