@@ -75,7 +75,7 @@ class _MyHomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.asset(
-                'assets/images/ntnu_logo.png',
+                'asssets/images/ntnu_logo.png',
                 width: 250,
               ),
             ),
@@ -122,11 +122,14 @@ class _MyHomePageState extends State<HomePage> {
             Icon(Icons.email),
             Text("Tahmineh Akbarinejad - tahmineh.akbarinejad@ntnu.no")
           ]),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           ElevatedButton(
-              onPressed:() => launchUrl(Uri.parse('https://www.ntnu.edu/helios'), mode: LaunchMode.externalApplication),
-              child: Text(AppLocalizations.of(context)!.helios_homepage),
-            ),
+            onPressed: () => launchUrl(Uri.parse('https://www.ntnu.edu/helios'),
+                mode: LaunchMode.externalApplication),
+            child: Text(AppLocalizations.of(context)!.helios_homepage),
+          ),
         ],
       ),
     );
@@ -170,14 +173,14 @@ class _MyHomePageState extends State<HomePage> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 SizedBox(height: 10),
-                _homePageButton(
-                    appState, Icon(Icons.touch_app), AppLocalizations.of(context)!.int_show, 4),
+                _homePageButton(appState, Icon(Icons.touch_app),
+                    AppLocalizations.of(context)!.int_show, 4),
                 SizedBox(height: 10),
                 Text(
                   AppLocalizations.of(context)!.feedb,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
-                              SizedBox(height: 10),
+                SizedBox(height: 10),
                 _homePageButton(appState, Icon(Icons.feedback),
                     AppLocalizations.of(context)!.feedback, 2),
                 SizedBox(height: 10),
