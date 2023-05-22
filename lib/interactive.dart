@@ -1180,7 +1180,7 @@ class _EstimationsState extends State<Estimations> {
   }
 
   Widget _radiationImageOverview() {
-    List<String> images = ['rad_ne', 'rad_sw'];
+    List<String> images = ['rad_sw', 'rad_ne'];
     String image;
 
     if (overviewSelect[0]) {

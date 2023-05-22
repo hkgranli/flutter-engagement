@@ -21,8 +21,8 @@ class RadiationHousePage extends StatelessWidget {
           cameraControls: true,
           maxCameraOrbit: "auto 90deg auto",
           backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-          exposure: 0.35,
-          shadowIntensity: 0.5,
+          exposure: 0.5,
+          shadowIntensity: 1,
           shadowSoftness: 0,
           key: UniqueKey(), // key ensures the widget is updated
         ),
