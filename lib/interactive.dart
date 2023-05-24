@@ -698,7 +698,9 @@ class _EstimationsState extends State<Estimations> {
               ),
             ],
           ),
+          SizedBox(height: 10,),
           ...conf,
+          SizedBox(height: 10,),
           gradient()
         ],
       ),
@@ -712,7 +714,7 @@ class _EstimationsState extends State<Estimations> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("100 ${AppLocalizations.of(context)!.kwtt}/m²"),
-              Text("600 ${AppLocalizations.of(context)!.kwtt}/m²"),
+              Text("550 ${AppLocalizations.of(context)!.kwtt}/m²"),
               Text("1000 ${AppLocalizations.of(context)!.kwtt}/m²"),
             ],
           ),
@@ -749,7 +751,16 @@ class _EstimationsState extends State<Estimations> {
                     ],
                   )))
             ],
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Low"),
+              Text("Medium"),
+              Text("High"),
+            ],
+          ),
         ],
       );
 

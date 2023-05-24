@@ -25,7 +25,11 @@ class EngagementNavBar extends StatelessWidget {
           ),
           NavigationDestination(
             icon: Icon(Icons.feedback),
-            label: AppLocalizations.of(context)!.feedback,
+            label: "My Opinion",
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.info),
+            label: "More",
           ),
         ],
         selectedIndex: index,
