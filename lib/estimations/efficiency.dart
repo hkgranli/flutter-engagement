@@ -21,8 +21,8 @@ class EnergyEstimation extends StatefulWidget {
 
   final SolarType solarType;
 
-  final Panel activePanel;
-  final Tile activeTile;
+  final SolarPanel activePanel;
+  final SolarTile activeTile;
 
   final bool boolSlider;
   final bool text;
@@ -350,12 +350,12 @@ class EfficiencyTableComparator extends StatefulWidget {
 
   final List<int> solarSides;
   final SolarType solarType;
-  final Panel activePanel;
-  final Tile activeTile;
+  final SolarPanel activePanel;
+  final SolarTile activeTile;
 
   final SolarType solarTypeCompare;
-  final Panel activePanelCompare;
-  final Tile activeTileCompare;
+  final SolarPanel activePanelCompare;
+  final SolarTile activeTileCompare;
 
   final bool roof;
   final bool fas;
@@ -466,8 +466,8 @@ class EnergyContext {
 
   static List<BarChartGroupData> estimateEnergy(
       SolarType solarType,
-      Panel activePanel,
-      Tile activeTile,
+      SolarPanel activePanel,
+      SolarTile activeTile,
       List<int> solarSides,
       bool roof,
       bool fas) {

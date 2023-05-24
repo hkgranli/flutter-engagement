@@ -1,62 +1,81 @@
 import 'package:engagement/feedback.dart';
-import 'package:engagement/home.dart';
-import 'package:engagement/interactive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:engagement/main.dart';
 import 'package:flutter_circle_flags_svg/flutter_circle_flags_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
-class EngagementNavBar extends StatelessWidget {
-  const EngagementNavBar({super.key, required this.index});
+class EngagementNavBar extends StatefulWidget {
+  const EngagementNavBar(
+      {super.key, required this.index, required this.changeParentPage});
 
   final int index;
+  final Function(int) changeParentPage;
+
+  @override
+  State<EngagementNavBar> createState() => _EngagementNavBarState();
+}
+
+class _EngagementNavBarState extends State<EngagementNavBar> {
+  int index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    index = widget.index;
+  }
+
+  void setIndex(int i) {
+    setState(() {
+      index = i;
+    });
+  }
 
   @override
   Widget build(BuildContext context) => NavigationBar(
-        destinations: <NavigationDestination>[
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: AppLocalizations.of(context)!.home,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.school),
-            label: AppLocalizations.of(context)!.information,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.feedback),
-            label: "My Opinion",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.info),
-            label: "More",
-          ),
-        ],
-        selectedIndex: index,
-        onDestinationSelected: (int index) =>
-            changeSelectedPage(context, index),
-      );
+          destinations: <NavigationDestination>[
+            NavigationDestination(
+              icon: Icon(Icons.home),
+              label: AppLocalizations.of(context)!.home,
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.school),
+              label: AppLocalizations.of(context)!.information,
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.feedback),
+              label: AppLocalizations.of(context)!.my_opinion,
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.info),
+              label: AppLocalizations.of(context)!.more,
+            ),
+          ],
+          selectedIndex: index,
+          onDestinationSelected: (int index) {
+            setIndex(index);
+            widget.changeParentPage(index);
+            //changeSelectedPage(context, index);
+          });
 }
 
 void changeSelectedPage(BuildContext context, int index) {
   switch (index) {
     case 0:
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomePage(info: false)));
+      //Navigator.of(context).push( MaterialPageRoute(builder: (context) => const HomePage(info: false)));
       break;
     case 1:
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => InteractivePage(activePage: Pages.home)));
+      //Navigator.of(context).push(MaterialPageRoute(builder: (context) => InteractivePage(activePage: Pages.home)));
       break;
     case 2:
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => FeedbackPage()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => FeedbackPage()));
       break;
     default:
       return;
   }
+
   // ensure we dont navigate to the same page we are at
   //if (ModalRoute.of(context)?.settings.name == path) return;
   //Navigator.pushNamed(context, path);
@@ -89,8 +108,8 @@ void changeSelectedPage(BuildContext context, int index) {
   }*/
 }
 
-AppBar createAppBar(BuildContext context, String title,
-    [IconButton? leadingButton, TabBar? tabs]) {
+SliverAppBar createSliverBar(BuildContext context, bool pinned, bool snap,
+    bool floating, Widget text, Widget background) {
   String langCode;
 
   if (Localizations.localeOf(context).toString() == 'no') {
@@ -110,12 +129,65 @@ AppBar createAppBar(BuildContext context, String title,
     },
   );
 
+  return SliverAppBar.large(
+    pinned: pinned,
+    snap: snap,
+    floating: floating,
+    expandedHeight: 160.0,
+    collapsedHeight: 90,
+    flexibleSpace: FlexibleSpaceBar(
+      title: text,
+      background: background,
+      centerTitle: true,
+    ),
+    actions: [flag],
+  );
+}
+
+AppBar createAppBar(BuildContext context, String title,
+    [IconButton? leadingButton,
+    TabBar? tabs,
+    Color? color,
+    double? elevation = 1]) {
+  String langCode;
+
+  if (Localizations.localeOf(context).toString() == 'no') {
+    langCode = 'gb';
+  } else {
+    langCode = 'no';
+  }
+
+  Widget flag = IconButton(
+    icon: CircleFlag(
+      langCode,
+      size: 25,
+    ),
+    onPressed: () {
+      AppInit.of(context)
+          ?.setLocale(Locale.fromSubtags(languageCode: langCode));
+    },
+  );
+
+  if (color != null) {
+    return AppBar(
+      title: Text(title),
+      leading: leadingButton,
+      automaticallyImplyLeading: false,
+      bottom: tabs,
+      actions: <Widget>[flag],
+      elevation: elevation,
+      backgroundColor: color,
+      key: UniqueKey(),
+    );
+  }
+
   return AppBar(
     title: Text(title),
     leading: leadingButton,
     automaticallyImplyLeading: false,
     bottom: tabs,
     actions: <Widget>[flag],
+    elevation: elevation ?? 1,
     key: UniqueKey(),
   );
 }
@@ -288,4 +360,62 @@ List<List<Widget>> twoDimStringToText(List<List<String>> strings) {
   }
 
   return textList;
+}
+
+/// Stateful widget to fetch and then display video content.
+class VideoApp extends StatefulWidget {
+  const VideoApp({super.key});
+
+  @override
+  State<VideoApp> createState() => _VideoAppState();
+}
+
+class _VideoAppState extends State<VideoApp> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/helios_video.mp4')
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Column(
+        children: [
+          Center(
+            child: _controller.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  )
+                : Container(),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _controller.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              });
+            },
+            child: Icon(
+              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 }

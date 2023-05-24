@@ -30,7 +30,7 @@ enum Pages {
 
 enum SolarType { none, panel, tile }
 
-enum Panel {
+enum SolarPanel {
   none(efficiency: 0, id: -1, name: "None", url: ""),
   prodOne(
       efficiency: 0.211,
@@ -43,7 +43,7 @@ enum Panel {
       name: "RS Pro Poly",
       url: "https://docs.rs-online.com/13c9/0900766b815873b0.pdf");
 
-  const Panel(
+  const SolarPanel(
       {required this.efficiency,
       required this.id,
       required this.name,
@@ -55,7 +55,7 @@ enum Panel {
   final String url;
 }
 
-enum Tile {
+enum SolarTile {
   none(efficiency: 0, id: -1, name: "None", url: ""),
   prodOne(
       efficiency: 0.19,
@@ -70,7 +70,7 @@ enum Tile {
       url:
           "https://www.ergosun.com/_files/ugd/29edcf_7d4fce17429f458fa660ce124e007ff7.pdf");
 
-  const Tile(
+  const SolarTile(
       {required this.efficiency,
       required this.id,
       required this.name,
@@ -83,8 +83,13 @@ enum Tile {
 }
 
 class InteractivePage extends StatefulWidget {
-  InteractivePage({super.key, required this.activePage, this.showcasePage});
+  InteractivePage(
+      {super.key,
+      required this.activePage,
+      this.showcasePage,
+      required this.changePage});
 
+  final Function(Pages) changePage;
   final Pages activePage;
   final EstimationPages? showcasePage;
 
@@ -125,7 +130,7 @@ class _InteractivePageState extends State<InteractivePage>
     super.initState();
     e = widget.showcasePage != null
         ? widget.showcasePage as EstimationPages
-        : EstimationPages.aesthetic;
+        : EstimationPages.radiation;
   }
 
   void setInteractve(EstimationPages ep) {
@@ -135,13 +140,14 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   void setPage(Pages p, [EstimationPages? ep]) {
-    Navigator.push(
+    widget.changePage(p);
+    /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => InteractivePage(
                   activePage: p,
                   showcasePage: ep,
-                )));
+                ))); */
     /*
     setState(() {
       activePage = p;
@@ -152,6 +158,8 @@ class _InteractivePageState extends State<InteractivePage>
 
   @override
   Widget build(BuildContext context) {
+    print("Rebuilb interactive");
+    print(widget.activePage);
     Widget page;
 
     AppBar? appBar;
@@ -214,7 +222,7 @@ class _InteractivePageState extends State<InteractivePage>
     return Scaffold(
       appBar: appBar,
       body: SafeArea(child: page),
-      bottomNavigationBar: EngagementNavBar(index: 1),
+      //bottomNavigationBar: EngagementNavBar(index: 1),
     );
   }
 
@@ -357,6 +365,12 @@ class _InteractivePageState extends State<InteractivePage>
     if (visualization) {
       interactiveList = [
         ListTile(
+          leading: Icon(Icons.sunny),
+          title: Text(AppLocalizations.of(context)!.solar_potential),
+          trailing: Icon(Icons.arrow_right),
+          onTap: () => setPage(Pages.pvView, EstimationPages.radiation),
+        ),
+        ListTile(
           leading: Icon(Icons.roofing),
           title: Text(AppLocalizations.of(context)!.aesthetic),
           trailing: Icon(Icons.arrow_right),
@@ -368,12 +382,6 @@ class _InteractivePageState extends State<InteractivePage>
           trailing: Icon(Icons.arrow_right),
           onTap: () => setPage(Pages.pvView, EstimationPages.efficiency),
         ),
-        ListTile(
-          leading: Icon(Icons.sunny),
-          title: Text(AppLocalizations.of(context)!.solar_potential),
-          trailing: Icon(Icons.arrow_right),
-          onTap: () => setPage(Pages.pvView, EstimationPages.radiation),
-        )
       ];
     }
 
@@ -486,13 +494,13 @@ class _InteractivePageState extends State<InteractivePage>
     int initialIndex = 0;
 
     switch (e) {
-      case EstimationPages.aesthetic:
+      case EstimationPages.radiation:
         initialIndex = 0;
         break;
-      case EstimationPages.efficiency:
+      case EstimationPages.aesthetic:
         initialIndex = 1;
         break;
-      case EstimationPages.radiation:
+      case EstimationPages.efficiency:
         initialIndex = 2;
         break;
     }
@@ -504,14 +512,14 @@ class _InteractivePageState extends State<InteractivePage>
       if (!tabController.indexIsChanging) {
         EstimationPages p;
         switch (tabController.index) {
-          case 1:
-            p = EstimationPages.efficiency;
-            break;
-          case 2:
+          case 0:
             p = EstimationPages.radiation;
             break;
-          default:
+          case 1:
             p = EstimationPages.aesthetic;
+            break;
+          default:
+            p = EstimationPages.efficiency;
             break;
         }
         setInteractve(p);
@@ -528,14 +536,14 @@ class _InteractivePageState extends State<InteractivePage>
         TabBar(
           tabs: [
             Tab(
+                icon: Icon(Icons.sunny),
+                text: AppLocalizations.of(context)!.rad_tab),
+            Tab(
                 icon: Icon(Icons.roofing),
                 text: AppLocalizations.of(context)!.aesthetic),
             Tab(
                 icon: Icon(Icons.calculate),
                 text: AppLocalizations.of(context)!.eff_est),
-            Tab(
-                icon: Icon(Icons.sunny),
-                text: AppLocalizations.of(context)!.rad_tab),
           ],
           controller: tabController,
         ));
@@ -562,12 +570,12 @@ class _EstimationsState extends State<Estimations> {
   // 0 = false; 1 = true
 
   SolarType _solarType = SolarType.none;
-  Panel _activePanel = Panel.none;
-  Tile _activeTile = Tile.none;
+  SolarPanel _activePanel = SolarPanel.none;
+  SolarTile _activeTile = SolarTile.none;
 
   SolarType _solarTypeCompare = SolarType.none;
-  Panel _activePanelCompare = Panel.none;
-  Tile _activeTileCompare = Tile.none;
+  SolarPanel _activePanelCompare = SolarPanel.none;
+  SolarTile _activeTileCompare = SolarTile.none;
 
   List<bool> radiationSelect = [true, false, false];
   List<bool> overviewSelect = [true, false];
@@ -586,7 +594,7 @@ class _EstimationsState extends State<Estimations> {
   }
 
   void setSelectedPanelCompare(dynamic p) {
-    if (p is Panel) {
+    if (p is SolarPanel) {
       setState(() {
         _activePanelCompare = p;
       });
@@ -594,7 +602,7 @@ class _EstimationsState extends State<Estimations> {
   }
 
   void setSelectedTileCompare(dynamic t) {
-    if (t is Tile) {
+    if (t is SolarTile) {
       setState(() {
         _activeTileCompare = t;
       });
@@ -620,7 +628,7 @@ class _EstimationsState extends State<Estimations> {
   }
 
   void setSelectedPanel(dynamic p) {
-    if (p is Panel) {
+    if (p is SolarPanel) {
       setState(() {
         _activePanel = p;
       });
@@ -628,7 +636,7 @@ class _EstimationsState extends State<Estimations> {
   }
 
   void setSelectedTile(dynamic t) {
-    if (t is Tile) {
+    if (t is SolarTile) {
       setState(() {
         _activeTile = t;
       });
@@ -698,9 +706,13 @@ class _EstimationsState extends State<Estimations> {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           ...conf,
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           gradient()
         ],
       ),
@@ -873,42 +885,42 @@ class _EstimationsState extends State<Estimations> {
     Widget questionMark = Container();
 
     if (_solarType == SolarType.panel) {
-      List<DropdownMenuItem<Panel>> panelItems = [
+      List<DropdownMenuItem<SolarPanel>> panelItems = [
         DropdownMenuItem(
-            value: Panel.none,
+            value: SolarPanel.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
         DropdownMenuItem(
-            value: Panel.prodTwo,
+            value: SolarPanel.prodTwo,
             child: Text(
-                "${Panel.prodTwo.name} ${((Panel.prodTwo.efficiency) * 100).toInt()}%")),
+                "${SolarPanel.prodTwo.name} ${((SolarPanel.prodTwo.efficiency) * 100).toInt()}%")),
         DropdownMenuItem(
-            value: Panel.prodOne,
+            value: SolarPanel.prodOne,
             child: Text(
-                "${Panel.prodOne.name} ${((Panel.prodOne.efficiency) * 100).toInt()}%")),
+                "${SolarPanel.prodOne.name} ${((SolarPanel.prodOne.efficiency) * 100).toInt()}%")),
       ];
 
-      if (_activePanel != Panel.none) {
+      if (_activePanel != SolarPanel.none) {
         questionMark = productInfoButton();
       }
 
       b = DropdownButton(
           value: _activePanel, items: panelItems, onChanged: setSelectedPanel);
     } else if (_solarType == SolarType.tile) {
-      List<DropdownMenuItem<Tile>> tileItems = [
+      List<DropdownMenuItem<SolarTile>> tileItems = [
         DropdownMenuItem(
-            value: Tile.none,
+            value: SolarTile.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
         DropdownMenuItem(
-            value: Tile.prodTwo,
+            value: SolarTile.prodTwo,
             child: Text(
-                "${Tile.prodTwo.name} ${((Tile.prodTwo.efficiency) * 100).toInt()}%")),
+                "${SolarTile.prodTwo.name} ${((SolarTile.prodTwo.efficiency) * 100).toInt()}%")),
         DropdownMenuItem(
-            value: Tile.prodOne,
+            value: SolarTile.prodOne,
             child: Text(
-                "${Tile.prodOne.name} ${((Tile.prodOne.efficiency) * 100).toInt()}%")),
+                "${SolarTile.prodOne.name} ${((SolarTile.prodOne.efficiency) * 100).toInt()}%")),
       ];
 
-      if (_activeTile != Tile.none) {
+      if (_activeTile != SolarTile.none) {
         questionMark = productInfoButton();
       }
 
@@ -1042,9 +1054,11 @@ class _EstimationsState extends State<Estimations> {
 
   Uri? getActiveUri() {
     if (_solarType == SolarType.panel) {
-      return _activePanel == Panel.none ? null : Uri.parse(_activePanel.url);
+      return _activePanel == SolarPanel.none
+          ? null
+          : Uri.parse(_activePanel.url);
     } else if (_solarType == SolarType.tile) {
-      return _activeTile == Tile.none ? null : Uri.parse(_activeTile.url);
+      return _activeTile == SolarTile.none ? null : Uri.parse(_activeTile.url);
     }
     return null;
   }
@@ -1066,12 +1080,14 @@ class _EstimationsState extends State<Estimations> {
     DropdownButton d = DropdownButton(items: null, onChanged: null);
 
     if (_solarType == SolarType.panel) {
-      List<DropdownMenuItem<Panel>> productItems = [
+      List<DropdownMenuItem<SolarPanel>> productItems = [
         DropdownMenuItem(
-            value: Panel.none,
+            value: SolarPanel.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Panel.prodTwo, child: Text(Panel.prodTwo.name)),
-        DropdownMenuItem(value: Panel.prodOne, child: Text(Panel.prodOne.name))
+        DropdownMenuItem(
+            value: SolarPanel.prodTwo, child: Text(SolarPanel.prodTwo.name)),
+        DropdownMenuItem(
+            value: SolarPanel.prodOne, child: Text(SolarPanel.prodOne.name))
       ];
 
       b = DropdownButton(
@@ -1079,12 +1095,14 @@ class _EstimationsState extends State<Estimations> {
           items: productItems,
           onChanged: setSelectedPanel);
     } else if (_solarType == SolarType.tile) {
-      List<DropdownMenuItem<Tile>> productItems = [
+      List<DropdownMenuItem<SolarTile>> productItems = [
         DropdownMenuItem(
-            value: Tile.none,
+            value: SolarTile.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Tile.prodTwo, child: Text(Tile.prodTwo.name)),
-        DropdownMenuItem(value: Tile.prodOne, child: Text(Tile.prodOne.name)),
+        DropdownMenuItem(
+            value: SolarTile.prodTwo, child: Text(SolarTile.prodTwo.name)),
+        DropdownMenuItem(
+            value: SolarTile.prodOne, child: Text(SolarTile.prodOne.name)),
       ];
 
       b = DropdownButton(
@@ -1092,24 +1110,28 @@ class _EstimationsState extends State<Estimations> {
     }
 
     if (_solarTypeCompare == SolarType.panel) {
-      List<DropdownMenuItem<Panel>> productItems = [
+      List<DropdownMenuItem<SolarPanel>> productItems = [
         DropdownMenuItem(
-            value: Panel.none,
+            value: SolarPanel.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Panel.prodTwo, child: Text(Panel.prodTwo.name)),
-        DropdownMenuItem(value: Panel.prodOne, child: Text(Panel.prodOne.name)),
+        DropdownMenuItem(
+            value: SolarPanel.prodTwo, child: Text(SolarPanel.prodTwo.name)),
+        DropdownMenuItem(
+            value: SolarPanel.prodOne, child: Text(SolarPanel.prodOne.name)),
       ];
       d = DropdownButton(
           value: _activePanelCompare,
           items: productItems,
           onChanged: setSelectedPanelCompare);
     } else if (_solarTypeCompare == SolarType.tile) {
-      List<DropdownMenuItem<Tile>> productItems = [
+      List<DropdownMenuItem<SolarTile>> productItems = [
         DropdownMenuItem(
-            value: Tile.none,
+            value: SolarTile.none,
             child: Text(AppLocalizations.of(context)!.select_product)),
-        DropdownMenuItem(value: Tile.prodTwo, child: Text(Tile.prodTwo.name)),
-        DropdownMenuItem(value: Tile.prodOne, child: Text(Tile.prodOne.name)),
+        DropdownMenuItem(
+            value: SolarTile.prodTwo, child: Text(SolarTile.prodTwo.name)),
+        DropdownMenuItem(
+            value: SolarTile.prodOne, child: Text(SolarTile.prodOne.name)),
       ];
 
       d = DropdownButton(
