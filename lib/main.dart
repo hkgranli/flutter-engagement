@@ -206,8 +206,7 @@ class _ParentState extends State<Parent> {
               crossAxisCellCount: 2,
               mainAxisCellCount: 0.75,
               child: Textile(
-                text:
-                    "Yes hello welcome to this app this app is maybe the best app. What do we want to type here guys",
+                text: "Build your knowledge of solar technology",
               )),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -226,12 +225,9 @@ class _ParentState extends State<Parent> {
                 onPress: () => navigateInteractive(Pages.regulations)),
           ),
           StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Textile(
-                text:
-                    "Yes hello welcome to this app this app is maybe the best app. What do we want to type here guys",
-              )),
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1.5,
+              child: shortPoints()),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
@@ -239,6 +235,14 @@ class _ParentState extends State<Parent> {
                 index: 2,
                 asset: 'assets/images/solar_tile.png',
                 onPress: () => navigateInteractive(Pages.solarTechnology)),
+          ),
+          StaggeredGridTile.count(
+            crossAxisCellCount: 1,
+            mainAxisCellCount: 1.5,
+            child: ImageTile(
+                index: 3,
+                asset: 'assets/images/3d_model_entire.png',
+                onPress: () => navigateInteractive(Pages.potential)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -258,6 +262,30 @@ class _ParentState extends State<Parent> {
           ),
         ],
       );
+
+  Widget shortPoints() => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+                text: TextSpan(
+                    children: [WidgetSpan(child: Icon(Icons.read_more))])),
+            RichText(
+                text: TextSpan(
+                    children: [WidgetSpan(child: Icon(Icons.gradient_sharp))])),
+            RichText(
+                text: TextSpan(
+                    children: [WidgetSpan(child: Icon(Icons.join_left))])),
+            RichText(
+                text: TextSpan(
+                    children: [WidgetSpan(child: Icon(Icons.tap_and_play))])),
+            RichText(
+                text: TextSpan(
+                    children: [WidgetSpan(child: Icon(Icons.tap_and_play))])),
+          ],
+        ),
+      );
 }
 
 class ImageTile extends StatelessWidget {
@@ -265,20 +293,18 @@ class ImageTile extends StatelessWidget {
     Key? key,
     required this.index,
     this.extent,
-    this.backgroundColor,
     this.bottomSpace,
     required this.onPress,
     required this.asset,
-    this.fit,
+    this.fit = BoxFit.cover,
   }) : super(key: key);
 
   final int index;
   final double? extent;
   final double? bottomSpace;
-  final Color? backgroundColor;
   final Function() onPress;
   final String asset;
-  final BoxFit? fit;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -287,13 +313,16 @@ class ImageTile extends StatelessWidget {
         print("press");
         onPress();
       },
-      child: Container(
-        color: backgroundColor ?? Colors.transparent,
-        height: extent,
-        child: FittedBox(
-          fit: fit ?? BoxFit.cover,
-          child: Image.asset(
-            asset,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: FittedBox(
+            fit: fit,
+            clipBehavior: Clip.hardEdge,
+            child: Image.asset(
+              asset,
+            ),
           ),
         ),
       ),
