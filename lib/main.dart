@@ -245,7 +245,7 @@ class _ParentState extends State<Parent> {
             child: ImageTile(
                 index: 3,
                 asset: 'assets/images/3d_model_entire.png',
-                onPress: () => navigateInteractive(Pages.potential)),
+                onPress: () => navigateInteractive(Pages.pvView)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -364,7 +364,7 @@ class Textile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final child = Card(
-      color: backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
+      color: backgroundColor ?? Theme.of(context).colorScheme.primaryContainer,
       //height: extent,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
