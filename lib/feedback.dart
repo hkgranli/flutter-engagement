@@ -123,7 +123,7 @@ class _FeedbackPageState extends State<FeedbackPage>
     return Scaffold(
       appBar: feedbackBar(),
       body: tabIndex == 0 ? survey() : responses(),
-      /*bottomNavigationBar: Column(
+      bottomNavigationBar: Column(
                 mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
@@ -143,10 +143,9 @@ class _FeedbackPageState extends State<FeedbackPage>
                 },
               ),
             ),
-          ),
-          EngagementNavBar(index: 2),
+          )
         ],
-      ),*/
+      ),
     );
   }
 
