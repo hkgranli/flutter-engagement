@@ -206,7 +206,10 @@ class _ParentState extends State<Parent> {
               crossAxisCellCount: 2,
               mainAxisCellCount: 0.75,
               child: Textile(
-                text: "Build your knowledge of solar technology",
+                text: Center(
+                  child: Text("Build your knowledge of solar technology",
+                      style: Theme.of(context).textTheme.headlineSmall),
+                ),
               )),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -227,7 +230,7 @@ class _ParentState extends State<Parent> {
           StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: 1.5,
-              child: shortPoints()),
+              child: Textile(text: shortPoints())),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
@@ -337,7 +340,7 @@ class ImageTile extends StatelessWidget {
         Expanded(child: child),
         Container(
           height: bottomSpace,
-          color: Colors.green,
+          //color: Colors.green,
         )
       ],
     );
@@ -353,21 +356,19 @@ class Textile extends StatelessWidget {
     this.bottomSpace,
   }) : super(key: key);
 
-  final String text;
+  final Widget text;
   final double? extent;
   final double? bottomSpace;
   final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    final child = Container(
-      color: backgroundColor ?? Theme.of(context).cardColor,
-      height: extent,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Text(text, style: Theme.of(context).textTheme.headlineSmall),
-        ),
+    final child = Card(
+      color: backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
+      //height: extent,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: text,
       ),
     );
 
@@ -376,13 +377,7 @@ class Textile extends StatelessWidget {
     }
 
     return Column(
-      children: [
-        Expanded(child: child),
-        Container(
-          height: bottomSpace,
-          color: Colors.green,
-        )
-      ],
+      children: [Expanded(child: child)],
     );
   }
 }
