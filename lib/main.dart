@@ -207,7 +207,7 @@ class _ParentState extends State<Parent> {
               mainAxisCellCount: 0.75,
               child: Textile(
                 text: Center(
-                  child: Text("Build your knowledge of solar technology",
+                  child: Text("Increase your knowledge of solar technology",
                       style: Theme.of(context).textTheme.headlineSmall),
                 ),
               )),
@@ -229,7 +229,7 @@ class _ParentState extends State<Parent> {
           ),
           StaggeredGridTile.count(
               crossAxisCellCount: 1,
-              mainAxisCellCount: 1.5,
+              mainAxisCellCount: 1.75,
               child: Textile(text: shortPoints())),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -249,7 +249,7 @@ class _ParentState extends State<Parent> {
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
+            mainAxisCellCount: 0.75,
             child: ImageTile(
                 index: 3,
                 asset: 'assets/images/map_overview_june.png',
@@ -266,29 +266,31 @@ class _ParentState extends State<Parent> {
         ],
       );
 
-  Widget shortPoints() => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(
-                text: TextSpan(
-                    children: [WidgetSpan(child: Icon(Icons.read_more))])),
-            RichText(
-                text: TextSpan(
-                    children: [WidgetSpan(child: Icon(Icons.gradient_sharp))])),
-            RichText(
-                text: TextSpan(
-                    children: [WidgetSpan(child: Icon(Icons.join_left))])),
-            RichText(
-                text: TextSpan(
-                    children: [WidgetSpan(child: Icon(Icons.tap_and_play))])),
-            RichText(
-                text: TextSpan(
-                    children: [WidgetSpan(child: Icon(Icons.tap_and_play))])),
-          ],
+  Widget shortPoints() => Expanded(
+    child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /*RichText(
+                  text: TextSpan(
+                      children: [WidgetSpan(child: Icon(Icons.sunny)), TextSpan(text:"Møllenberg has great potential")])),*/
+              Text.rich(
+                  TextSpan(
+                      children: [WidgetSpan(child: Icon(Icons.house)), TextSpan(text:"Møllenberg's heritage poses unique challenges and opportunities")])),
+              Text.rich(
+                  TextSpan(
+                      children: [WidgetSpan(child: Icon(Icons.join_left)), TextSpan(text: "Read and learn about upsides and downsides to solar technology")])),
+              Text.rich(
+                  TextSpan(
+                      children: [WidgetSpan(child: Icon(Icons.tap_and_play)), TextSpan(text: "Interactively learn about the aesthethic impact of Solar Technology")])),
+              Text.rich(
+                  TextSpan(
+                      children: [WidgetSpan(child: Icon(Icons.tap_and_play)), TextSpan(text: "Tap one of the images to get started or navigate using the bottom bar", style: TextStyle(fontStyle: FontStyle.italic))])),
+            ],
+          ),
         ),
-      );
+  );
 }
 
 class ImageTile extends StatelessWidget {
