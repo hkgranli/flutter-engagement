@@ -38,7 +38,9 @@
   "@language": {
     "description": "The current language"
   },
+  "about_a": "About the Application",
   "about_contact": "If you have further questions please contact:",
+  "about_h": "About Helios",
   "about_project_blockp1": "This application is developed as a part of a master thesis at NTNU. The aim of the thesis is to research the effects of digital technology in a citizen engagement process. Citizen engagement is a democratic process where governments or project owners share information related to a project or technologies, with the aim of educating the public and gather feedback with the citizen's unique perspective. This project uses information produced by Helios on solar technology and aims for citizens of Møllenberg.",
   "about_project_blockp2": "Helios is a project ran by NTNU's Faculty of Engineering. The aim of the project is enhancing optimal exploitation of solar energy in Nordic cities through the digitalization of the built environment. The historic area of Møllenberg is a special focus of research. This is because the heritage buildings introduces unique challenges related to sustainable conservation and development of historical areas.",
   "about_project_blockp3": "Historic buildings represent a masterpiece of human creativity and hold a significant value in giving people a sense of identity and continuity. The Møllenberg district mainly consists of two-story wooden houses from the 1880s and 1890s. Due to their cultural heritage, it is difficult to get permission for renovating the houses at Møllenberg - even though it is much needed.",
@@ -125,9 +127,9 @@
   "polycrystalline": "Polycrystalline",
   "pppp": "People Private Public Partnership",
   "project_eval": "Project Evaluation",
-  "rad_model": "3D Model",
-  "rad_model_over": "3D-Overview",
-  "rad_overview": "Overview",
+  "rad_model": "House",
+  "rad_model_over": "Neighbourhood",
+  "rad_overview": "City",
   "rad_tab": "Radiation",
   "radiation_about": "The model shows yearly irradiation on the house's surfaces",
   "radiation_all": "Simulate Entire Area",

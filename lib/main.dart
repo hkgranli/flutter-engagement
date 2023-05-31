@@ -115,7 +115,7 @@ class _ParentState extends State<Parent> {
             context: context,
             builder: (context) => AlertDialog(
               title: Text('Exit App'),
-              content: Text('Do you want to exit an App?'),
+              content: Text('Do you want to exit the app?'),
               actions: [
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(false),
@@ -266,31 +266,48 @@ class _ParentState extends State<Parent> {
         ],
       );
 
-  Widget shortPoints() => Expanded(
-    child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /*RichText(
-                  text: TextSpan(
-                      children: [WidgetSpan(child: Icon(Icons.sunny)), TextSpan(text:"Møllenberg has great potential")])),*/
-              Text.rich(
-                  TextSpan(
-                      children: [WidgetSpan(child: Icon(Icons.house)), TextSpan(text:"Møllenberg's heritage poses unique challenges and opportunities")])),
-              Text.rich(
-                  TextSpan(
-                      children: [WidgetSpan(child: Icon(Icons.join_left)), TextSpan(text: "Read and learn about upsides and downsides to solar technology")])),
-              Text.rich(
-                  TextSpan(
-                      children: [WidgetSpan(child: Icon(Icons.tap_and_play)), TextSpan(text: "Interactively learn about the aesthethic impact of Solar Technology")])),
-              Text.rich(
-                  TextSpan(
-                      children: [WidgetSpan(child: Icon(Icons.tap_and_play)), TextSpan(text: "Tap one of the images to get started or navigate using the bottom bar", style: TextStyle(fontStyle: FontStyle.italic))])),
-            ],
+  Widget shortPoints() => Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /*RichText(
+                      text: TextSpan(
+                          children: [WidgetSpan(child: Icon(Icons.sunny)), TextSpan(text:"Møllenberg has great potential")])),*/
+                  Text.rich(TextSpan(children: [
+                    WidgetSpan(child: Icon(Icons.house)),
+                    TextSpan(
+                        text:
+                            "Møllenberg's heritage poses unique challenges and opportunities")
+                  ])),
+                  Text.rich(TextSpan(children: [
+                    WidgetSpan(child: Icon(Icons.join_left)),
+                    TextSpan(
+                        text:
+                            "Read and learn about upsides and downsides to solar technology")
+                  ])),
+                  Text.rich(TextSpan(children: [
+                    WidgetSpan(child: Icon(Icons.tap_and_play)),
+                    TextSpan(
+                        text:
+                            "Interactively learn about the aesthethic impact of Solar Technology")
+                  ])),
+                  Text.rich(TextSpan(children: [
+                    WidgetSpan(child: Icon(Icons.tap_and_play)),
+                    TextSpan(
+                        text:
+                            "Tap one of the images to get started or navigate using the bottom bar",
+                        style: TextStyle(fontStyle: FontStyle.italic))
+                  ])),
+                ],
+              ),
+            ),
           ),
-        ),
-  );
+        ],
+      );
 }
 
 class ImageTile extends StatelessWidget {
@@ -369,7 +386,7 @@ class Textile extends StatelessWidget {
       color: backgroundColor ?? Theme.of(context).colorScheme.primaryContainer,
       //height: extent,
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: text,
       ),
     );
@@ -379,7 +396,7 @@ class Textile extends StatelessWidget {
     }
 
     return Column(
-      children: [Expanded(child: child)],
+      children: [child],
     );
   }
 }
