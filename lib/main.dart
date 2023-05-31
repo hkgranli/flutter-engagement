@@ -76,12 +76,19 @@ class Parent extends StatefulWidget {
 class _ParentState extends State<Parent> {
   int activePage = 0;
   Pages interactivePageState = Pages.home;
+  EstimationPages estimationPage = EstimationPages.radiation;
 
   List<Widget> activePages = [];
 
   void changePage(int i) {
     setState(() {
       activePage = i;
+    });
+  }
+
+  void changeEst(EstimationPages ep){
+    setState(() {
+      estimationPage = ep;
     });
   }
 
@@ -99,10 +106,11 @@ class _ParentState extends State<Parent> {
     3: GlobalKey(),
   };
 
-  void navigateInteractive(Pages page) {
+  void navigateInteractive(Pages page, [EstimationPages? ep]) {
     setState(() {
       activePage = 1;
       interactivePageState = page;
+      if(ep!=null) estimationPage = ep;
     });
   }
 
@@ -133,7 +141,7 @@ class _ParentState extends State<Parent> {
           false; //if showDialouge had returned null, then return false
     }
 
-    print("Rebuild main");
+    //print("Rebuild main");
     return Scaffold(
       body: WillPopScope(
         onWillPop: showExitPopup,
@@ -159,6 +167,8 @@ class _ParentState extends State<Parent> {
                             activePage: interactivePageState,
                             changePage: (p0) => navigateInteractive(p0),
                             key: GlobalKey(),
+                            changeInteractive: (p0) => changeEst(p0),
+                            showcasePage: estimationPage,
                           ));
                 }),
             Navigator(
@@ -217,7 +227,7 @@ class _ParentState extends State<Parent> {
             child: ImageTile(
                 index: 0,
                 asset: 'assets/images/3d_aes.png',
-                onPress: () => navigateInteractive(Pages.pvView)),
+                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.aesthetic)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -245,7 +255,7 @@ class _ParentState extends State<Parent> {
             child: ImageTile(
                 index: 3,
                 asset: 'assets/images/3d_model_entire.png',
-                onPress: () => navigateInteractive(Pages.pvView)),
+                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.radiation)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,

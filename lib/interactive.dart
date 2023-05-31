@@ -86,12 +86,14 @@ class InteractivePage extends StatefulWidget {
   InteractivePage(
       {super.key,
       required this.activePage,
-      this.showcasePage,
-      required this.changePage});
+      required this.showcasePage,
+      required this.changePage, 
+      required this.changeInteractive});
 
   final Function(Pages) changePage;
+  final Function(EstimationPages) changeInteractive;
   final Pages activePage;
-  final EstimationPages? showcasePage;
+  final EstimationPages showcasePage;
 
   @override
   State<InteractivePage> createState() => _InteractivePageState();
@@ -99,7 +101,6 @@ class InteractivePage extends StatefulWidget {
 
 class _InteractivePageState extends State<InteractivePage>
     with TickerProviderStateMixin {
-  late EstimationPages e;
 
   bool knowledge = false;
   bool visualization = false;
@@ -125,22 +126,19 @@ class _InteractivePageState extends State<InteractivePage>
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    e = widget.showcasePage != null
-        ? widget.showcasePage as EstimationPages
-        : EstimationPages.radiation;
-  }
-
   void setInteractve(EstimationPages ep) {
-    setState(() {
+
+    widget.changeInteractive(ep);
+
+    /*setState(() {
       e = ep;
-    });
+    });*/
   }
 
   void setPage(Pages p, [EstimationPages? ep]) {
     widget.changePage(p);
+
+    if(ep != null) widget.changeInteractive(ep);
     /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -158,8 +156,6 @@ class _InteractivePageState extends State<InteractivePage>
 
   @override
   Widget build(BuildContext context) {
-    print("Rebuilb interactive");
-    print(widget.activePage);
     Widget page;
 
     AppBar? appBar;
@@ -172,7 +168,7 @@ class _InteractivePageState extends State<InteractivePage>
         break;
       case Pages.pvView:
         page = Estimations(
-          page: e,
+          page: widget.showcasePage,
         );
         appBar = _buildPvBar(context);
         break;
@@ -493,7 +489,7 @@ class _InteractivePageState extends State<InteractivePage>
   AppBar _buildPvBar(BuildContext context) {
     int initialIndex = 0;
 
-    switch (e) {
+    switch (widget.showcasePage) {
       case EstimationPages.radiation:
         initialIndex = 0;
         break;
