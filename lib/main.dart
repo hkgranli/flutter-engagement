@@ -216,31 +216,49 @@ class _ParentState extends State<Parent> {
               crossAxisCellCount: 2,
               mainAxisCellCount: 0.75,
               child: Textile(
+                //backgroundColor: Color.fromARGB(255, 252, 207, 92),
+                backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                //backgroundColor: Colors.white,
                 text: Center(
-                  child: Text("Increase your knowledge of solar technology",
-                      style: Theme.of(context).textTheme.headlineSmall),
+                  child: Text("Let's explore the solar potential\n of your neighborhood!",
+                  textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
+                        //fontWeight: FontWeight.italic,
+                        //fontStyle: FontStyle.italic
+
+                      )
+                      //Theme.of(context).textTheme.headlineSmall)
+                  ),
                 ),
+              ), 
+              ),
+              
+          StaggeredGridTile.count(
+            crossAxisCellCount: 1,
+            mainAxisCellCount: 1,
+            child: ImageTile(
+                index: 3,
+                asset: 'assets/images/3d_model_entire.png',
+                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.radiation)),
+          ),
+          StaggeredGridTile.count(
+            crossAxisCellCount: 1,
+            mainAxisCellCount: 1,
+            child: ImageTile(
+                index: 3,
+                asset: 'assets/images/map_overview_june_thumbnail.png',
+                onPress: () => navigateInteractive(Pages.potential)),
+          ),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 0.5,
+              child: Center(
+                child: Textile(
+                  //backgroundColor: Colors.orange,
+                backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                  text: shortPointsChallenges()),
               )),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: ImageTile(
-                index: 0,
-                asset: 'assets/images/3d_aes.png',
-                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.aesthetic)),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: ImageTile(
-                index: 1,
-                asset: 'assets/images/regulations.png',
-                onPress: () => navigateInteractive(Pages.regulations)),
-          ),
-          StaggeredGridTile.count(
-              crossAxisCellCount: 1,
-              mainAxisCellCount: 1.75,
-              child: Textile(text: shortPoints())),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
@@ -251,19 +269,26 @@ class _ParentState extends State<Parent> {
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
-            mainAxisCellCount: 1.5,
+            mainAxisCellCount: 1,
             child: ImageTile(
-                index: 3,
-                asset: 'assets/images/3d_model_entire.png',
-                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.radiation)),
+                index: 1,
+                asset: 'assets/images/regulations.png',
+                onPress: () => navigateInteractive(Pages.regulations)),
           ),
           StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 0.75,
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 0.5,
+              child: Textile(
+                //backgroundColor: Colors.orange,
+                backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                text: shortPointsRegulations())),
+          StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 1,
             child: ImageTile(
-                index: 3,
-                asset: 'assets/images/map_overview_june.png',
-                onPress: () => navigateInteractive(Pages.potential)),
+                index: 0,
+                asset: 'assets/images/3d_aes.png',
+                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.aesthetic)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 2,
@@ -275,43 +300,43 @@ class _ParentState extends State<Parent> {
           ),
         ],
       );
-
-  Widget shortPoints() => Column(
+  Widget shortPointsRegulations() => Column(
         children: [
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /*RichText(
-                      text: TextSpan(
-                          children: [WidgetSpan(child: Icon(Icons.sunny)), TextSpan(text:"Møllenberg has great potential")])),*/
-                  Text.rich(TextSpan(children: [
-                    WidgetSpan(child: Icon(Icons.house)),
-                    TextSpan(
-                        text:
-                            "Møllenberg's heritage poses unique challenges and opportunities")
-                  ])),
-                  Text.rich(TextSpan(children: [
-                    WidgetSpan(child: Icon(Icons.join_left)),
-                    TextSpan(
-                        text:
-                            "Read and learn about upsides and downsides to solar technology")
-                  ])),
-                  Text.rich(TextSpan(children: [
-                    WidgetSpan(child: Icon(Icons.tap_and_play)),
-                    TextSpan(
-                        text:
-                            "Interactively learn about the aesthethic impact of Solar Technology")
-                  ])),
-                  Text.rich(TextSpan(children: [
-                    WidgetSpan(child: Icon(Icons.tap_and_play)),
-                    TextSpan(
-                        text:
-                            "Tap one of the images to get started or navigate using the bottom bar",
-                        style: TextStyle(fontStyle: FontStyle.italic))
-                  ])),
+                  Text("Interactively learn about solar technologies",
+                  textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                      )
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+  Widget shortPointsChallenges() => Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Challenges and opportunities to implement solar systems in heritage areas",
+                  textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                      )
+                  ),
                 ],
               ),
             ),
@@ -394,6 +419,7 @@ class Textile extends StatelessWidget {
   Widget build(BuildContext context) {
     final child = Card(
       color: backgroundColor ?? Theme.of(context).colorScheme.primaryContainer,
+          shadowColor: Colors.transparent,
       //height: extent,
       child: Padding(
         padding: const EdgeInsets.all(5.0),

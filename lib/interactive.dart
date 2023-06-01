@@ -1220,14 +1220,19 @@ class _EstimationsState extends State<Estimations> {
       return Container(); // should never happen or smth
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ImageCompareSlider(
-        itemOne: Image.asset('assets/images/${image}_clean.jpg'),
-        itemTwo: Image.asset('assets/images/${image}_sim.jpg'),
-        itemOneBuilder: (child, context) => IntrinsicHeight(child: child),
-        itemTwoBuilder: (child, context) => IntrinsicHeight(child: child),
-      ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ImageCompareSlider(
+            itemOne: Image.asset('assets/images/${image}_clean.jpg'),
+            itemTwo: Image.asset('assets/images/${image}_sim.jpg'),
+            itemOneBuilder: (child, context) => IntrinsicHeight(child: child),
+            itemTwoBuilder: (child, context) => IntrinsicHeight(child: child),
+          ),
+        ),
+        Text(style: TextStyle(fontStyle: FontStyle.italic),"Focus area within Trondheim (Norway), Møllenberg")
+      ],
     );
   }
 

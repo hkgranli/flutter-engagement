@@ -21,7 +21,7 @@ class _FeedbackPageState extends State<FeedbackPage>
     Question(
         question: "Owner or tenant?",
         answerChoices: {"Owner": null, "Tenant": null}),
-    Question(question: "What is your age?"),
+    Question(question: "What is your age?", answerChoices: {"0-17": null,  "18-29": null,"30-50": null, "51-68":null, "68+": null}),
     Question(
         question:
             "Have you ever considered installing solar panels on your home or property",
