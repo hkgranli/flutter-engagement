@@ -223,19 +223,62 @@ class ZoomableImage extends StatelessWidget {
     String l = label != null
         ? label as String
         : AppLocalizations.of(context)!.image_pinch_zoom;
-    return Column(
-      children: [
-        InteractiveViewer(
-          panEnabled: false,
-          boundaryMargin: EdgeInsets.fromLTRB(0, 200, 0, 200),
-          maxScale: 3,
-          minScale: 1,
-          child: Image.asset(
-            path,
+    return GestureDetector(
+      onTap: () =>
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return DetailScreen(
+          asset: path,
+        );
+      })),
+      child: Column(
+        children: [
+          Hero(
+            tag: path,
+            child: InteractiveViewer(
+              panEnabled: false,
+              boundaryMargin: EdgeInsets.fromLTRB(0, 200, 0, 200),
+              maxScale: 3,
+              minScale: 1,
+              child: Image.asset(
+                path,
+              ),
+            ),
+          ),
+          Text(l, style: Theme.of(context).textTheme.labelSmall)
+        ],
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  const DetailScreen({super.key, required this.asset});
+
+  final String asset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Center(
+          child: Hero(
+            tag: asset,
+            child: InteractiveViewer(
+              maxScale: 3,
+              minScale: 1,
+              child: SizedBox(
+                height: double.infinity,
+                child: Image.asset(
+                  asset,
+                ),
+              ),
+            ),
           ),
         ),
-        Text(l, style: Theme.of(context).textTheme.labelSmall)
-      ],
+      ),
     );
   }
 }
