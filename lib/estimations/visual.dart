@@ -14,8 +14,8 @@ class VisualizationPage extends StatelessWidget {
 
   final SolarType solarType;
 
-  final Panel activePanel;
-  final Tile activeTile;
+  final SolarPanel activePanel;
+  final SolarTile activeTile;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +53,8 @@ class VisualizationPage extends StatelessWidget {
     // guard clauses for invalid config
 
     if (solarType == SolarType.none ||
-        (solarType == SolarType.panel && activePanel == Panel.none) ||
-        (solarType == SolarType.tile && activeTile == Tile.none) ||
+        (solarType == SolarType.panel && activePanel == SolarPanel.none) ||
+        (solarType == SolarType.tile && activeTile == SolarTile.none) ||
         c == "_0000") {
       return "$base$extension";
     }
