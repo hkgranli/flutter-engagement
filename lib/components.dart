@@ -60,54 +60,6 @@ class _EngagementNavBarState extends State<EngagementNavBar> {
           });
 }
 
-void changeSelectedPage(BuildContext context, int index) {
-  switch (index) {
-    case 0:
-      //Navigator.of(context).push( MaterialPageRoute(builder: (context) => const HomePage(info: false)));
-      break;
-    case 1:
-      //Navigator.of(context).push(MaterialPageRoute(builder: (context) => InteractivePage(activePage: Pages.home)));
-      break;
-    case 2:
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => FeedbackPage()));
-      break;
-    default:
-      return;
-  }
-
-  // ensure we dont navigate to the same page we are at
-  //if (ModalRoute.of(context)?.settings.name == path) return;
-  //Navigator.pushNamed(context, path);
-
-  /*
-  Widget page;
-
-  switch (index) {
-    case 0:
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const HomePage(
-                    info: false,
-                  )));
-      break;
-    case 1:
-      page = InteractivePage();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const InteractivePage()));
-      break;
-    case 2:
-      //page = FeedbackPage();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const FeedbackPage()));
-      break;
-    default:
-      print("$index wtf");
-      return;
-  }*/
-}
-
 SliverAppBar createSliverBar(BuildContext context, bool pinned, bool snap,
     bool floating, Widget text, Widget background) {
   String langCode;

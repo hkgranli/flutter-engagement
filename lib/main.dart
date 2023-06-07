@@ -86,7 +86,7 @@ class _ParentState extends State<Parent> {
     });
   }
 
-  void changeEst(EstimationPages ep){
+  void changeEst(EstimationPages ep) {
     setState(() {
       estimationPage = ep;
     });
@@ -110,7 +110,7 @@ class _ParentState extends State<Parent> {
     setState(() {
       activePage = 1;
       interactivePageState = page;
-      if(ep!=null) estimationPage = ep;
+      if (ep != null) estimationPage = ep;
     });
   }
 
@@ -213,34 +213,34 @@ class _ParentState extends State<Parent> {
             ),
           ),*/
           StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 0.75,
-              child: Textile(
-                //backgroundColor: Color.fromARGB(255, 252, 207, 92),
-                backgroundColor: Color.fromARGB(0, 255, 255, 255),
-                //backgroundColor: Colors.white,
-                text: Center(
-                  child: Text("Let's explore the solar potential\n of your neighborhood!",
-                  textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
-                        //fontWeight: FontWeight.italic,
-                        //fontStyle: FontStyle.italic
-
-                      )
-                      //Theme.of(context).textTheme.headlineSmall)
-                  ),
-                ),
-              ), 
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 0.75,
+            child: Textile(
+              //backgroundColor: Color.fromARGB(255, 252, 207, 92),
+              backgroundColor: Color.fromARGB(0, 255, 255, 255),
+              //backgroundColor: Colors.white,
+              text: Center(
+                child: Text(AppLocalizations.of(context)!.home_slogan,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.headlineSmall!.fontSize,
+                      //fontWeight: FontWeight.italic,
+                      //fontStyle: FontStyle.italic
+                    )
+                    //Theme.of(context).textTheme.headlineSmall)
+                    ),
               ),
-              
+            ),
+          ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ImageTile(
                 index: 3,
                 asset: 'assets/images/3d_model_entire.png',
-                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.radiation)),
+                onPress: () => navigateInteractive(
+                    Pages.pvView, EstimationPages.radiation)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -255,9 +255,9 @@ class _ParentState extends State<Parent> {
               mainAxisCellCount: 0.5,
               child: Center(
                 child: Textile(
-                  //backgroundColor: Colors.orange,
-                backgroundColor: Color.fromARGB(0, 255, 255, 255),
-                  text: shortPointsChallenges()),
+                    //backgroundColor: Colors.orange,
+                    backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                    text: shortPointsChallenges()),
               )),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -279,16 +279,17 @@ class _ParentState extends State<Parent> {
               crossAxisCellCount: 2,
               mainAxisCellCount: 0.5,
               child: Textile(
-                //backgroundColor: Colors.orange,
-                backgroundColor: Color.fromARGB(0, 255, 255, 255),
-                text: shortPointsRegulations())),
+                  //backgroundColor: Colors.orange,
+                  backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                  text: shortPointsRegulations())),
           StaggeredGridTile.count(
             crossAxisCellCount: 2,
             mainAxisCellCount: 1,
             child: ImageTile(
                 index: 0,
                 asset: 'assets/images/3d_aes.png',
-                onPress: () => navigateInteractive(Pages.pvView, EstimationPages.aesthetic)),
+                onPress: () => navigateInteractive(
+                    Pages.pvView, EstimationPages.aesthetic)),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 2,
@@ -309,12 +310,12 @@ class _ParentState extends State<Parent> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Interactively learn about solar technologies",
-                  textAlign: TextAlign.center,
+                  Text(AppLocalizations.of(context)!.home_interactive,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                      )
-                  ),
+                        fontSize:
+                            Theme.of(context).textTheme.bodyLarge!.fontSize,
+                      )),
                 ],
               ),
             ),
@@ -331,12 +332,12 @@ class _ParentState extends State<Parent> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Challenges and opportunities to implement solar systems in heritage areas",
-                  textAlign: TextAlign.center,
+                  Text(AppLocalizations.of(context)!.home_challenges,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                      )
-                  ),
+                        fontSize:
+                            Theme.of(context).textTheme.bodyLarge!.fontSize,
+                      )),
                 ],
               ),
             ),
@@ -419,7 +420,7 @@ class Textile extends StatelessWidget {
   Widget build(BuildContext context) {
     final child = Card(
       color: backgroundColor ?? Theme.of(context).colorScheme.primaryContainer,
-          shadowColor: Colors.transparent,
+      shadowColor: Colors.transparent,
       //height: extent,
       child: Padding(
         padding: const EdgeInsets.all(5.0),

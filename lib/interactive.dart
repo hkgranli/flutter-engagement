@@ -87,7 +87,7 @@ class InteractivePage extends StatefulWidget {
       {super.key,
       required this.activePage,
       required this.showcasePage,
-      required this.changePage, 
+      required this.changePage,
       required this.changeInteractive});
 
   final Function(Pages) changePage;
@@ -101,7 +101,6 @@ class InteractivePage extends StatefulWidget {
 
 class _InteractivePageState extends State<InteractivePage>
     with TickerProviderStateMixin {
-
   bool knowledge = false;
   bool visualization = false;
   bool moreInfo = false;
@@ -127,7 +126,6 @@ class _InteractivePageState extends State<InteractivePage>
   }
 
   void setInteractve(EstimationPages ep) {
-
     widget.changeInteractive(ep);
 
     /*setState(() {
@@ -138,7 +136,7 @@ class _InteractivePageState extends State<InteractivePage>
   void setPage(Pages p, [EstimationPages? ep]) {
     widget.changePage(p);
 
-    if(ep != null) widget.changeInteractive(ep);
+    if (ep != null) widget.changeInteractive(ep);
     /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -1231,7 +1229,9 @@ class _EstimationsState extends State<Estimations> {
             itemTwoBuilder: (child, context) => IntrinsicHeight(child: child),
           ),
         ),
-        Text(style: TextStyle(fontStyle: FontStyle.italic),"Focus area within Trondheim (Norway), Møllenberg")
+        Text(
+            style: TextStyle(fontStyle: FontStyle.italic),
+            "Focus area within Trondheim (Norway), Møllenberg")
       ],
     );
   }
@@ -1286,6 +1286,43 @@ class _EstimationsState extends State<Estimations> {
       case EstimationPages.radiation:
         content = buildRadiationPage();
         break;
+    }
+
+    if (widget.page == EstimationPages.aesthetic) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              _buildConfig(),
+              content,
+            ],
+          ),
+        ),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).highlightColor),
+                  child: Text(AppLocalizations.of(context)!.est_fas_select),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) => SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                            ));
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }
 
     return Center(
