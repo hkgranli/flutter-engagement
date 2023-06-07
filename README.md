@@ -1,16 +1,20 @@
-# engagement
+# Helios Solar Engagement
 
-A new Flutter project.
+An application developed for a Master's thesis at NTNU, using assets and knowledge from [Helios](https://www.ntnu.edu/helios).
+The application is built using Flutter, and is supported on Android and iOS.
 
-## Getting Started
+## User Guide
 
-This project is a starting point for a Flutter application.
+A pre-built binary can be downloaded from [Releases]()
 
-A few resources to get you started if this is your first Flutter project:
+### Build From Source
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To build the project, flutter SDK has to be setup, a guide for your platform can be found at: <https://docs.flutter.dev/get-started/install>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Developer Guide
+
+The recommended development flow is using Visual Studio Code with the following extentions:
+
+- [Flutter Extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter)
+- [i18n arb editor](https://marketplace.visualstudio.com/items?itemName=innwin.i18n-arb-editor) (For multi-langauge editing)
+- [How to run and debug flutter using VsCode](https://docs.flutter.dev/tools/vs-code)
