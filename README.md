@@ -5,7 +5,7 @@ The application is built using Flutter, and is supported on Android and iOS.
 
 ## User Guide
 
-A pre-built binary can be downloaded from [Releases]()
+A pre-built binary can be downloaded from [Releases](https://github.com/hkgranli/flutter-engagement/releases/tag/evaluation)
 
 ### Build From Source
 
