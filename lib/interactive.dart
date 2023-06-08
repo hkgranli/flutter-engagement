@@ -1315,6 +1315,14 @@ class _EstimationsState extends State<Estimations> {
                         context: context,
                         builder: (context) => SizedBox(
                               height: MediaQuery.of(context).size.height,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ImageCompareSlider(
+                                    itemOne: Image.asset(
+                                        'assets/images/kirkegata35-default.png'),
+                                    itemTwo: Image.asset(
+                                        'assets/images/kirkegata35-trad-panel.png')),
+                              ),
                             ));
                   },
                 ),

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:engagement/components.dart';
 import 'package:engagement/feedback.dart';
 import 'package:engagement/home.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:outlined_text/outlined_text.dart';
 
 void main() {
   runApp(AppInit());
@@ -68,6 +71,13 @@ class _AppInitState extends State<AppInit> {
 
 class MyAppState extends ChangeNotifier {}
 
+class Reverse {
+  final EstimationPages ep;
+  final int p;
+
+  const Reverse(this.ep, this.p);
+}
+
 class Parent extends StatefulWidget {
   @override
   State<Parent> createState() => _ParentState();
@@ -78,15 +88,32 @@ class _ParentState extends State<Parent> {
   Pages interactivePageState = Pages.home;
   EstimationPages estimationPage = EstimationPages.radiation;
 
+  final queue = Queue<Reverse>();
+
   List<Widget> activePages = [];
 
+  void pushQueue() {
+    queue.add(Reverse(estimationPage, activePage));
+  }
+
+  void popQueue() {
+    Reverse action = queue.removeLast();
+
+    setState(() {
+      activePage = action.p;
+      estimationPage = action.ep;
+    });
+  }
+
   void changePage(int i) {
+    pushQueue();
     setState(() {
       activePage = i;
     });
   }
 
   void changeEst(EstimationPages ep) {
+    pushQueue();
     setState(() {
       estimationPage = ep;
     });
@@ -107,6 +134,7 @@ class _ParentState extends State<Parent> {
   };
 
   void navigateInteractive(Pages page, [EstimationPages? ep]) {
+    pushQueue();
     setState(() {
       activePage = 1;
       interactivePageState = page;
@@ -117,6 +145,12 @@ class _ParentState extends State<Parent> {
   @override
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
+      if (queue.isNotEmpty) {
+        print(queue);
+        popQueue();
+        return false;
+      }
+
       return await showDialog(
             //show confirm dialogue
             //the return value will be from "Yes" or "No" options
@@ -237,10 +271,12 @@ class _ParentState extends State<Parent> {
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ImageTile(
-                index: 3,
-                asset: 'assets/images/3d_model_entire.png',
-                onPress: () => navigateInteractive(
-                    Pages.pvView, EstimationPages.radiation)),
+              index: 3,
+              asset: 'assets/images/3d_model_entire.png',
+              onPress: () =>
+                  navigateInteractive(Pages.pvView, EstimationPages.radiation),
+              label: "3D radiation thing",
+            ),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -263,9 +299,11 @@ class _ParentState extends State<Parent> {
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ImageTile(
-                index: 2,
-                asset: 'assets/images/solar_tile.png',
-                onPress: () => navigateInteractive(Pages.solarTechnology)),
+              index: 2,
+              asset: 'assets/images/solar_tile.png',
+              onPress: () => navigateInteractive(Pages.solarTechnology),
+              label: "Solar tech",
+            ),
           ),
           StaggeredGridTile.count(
             crossAxisCellCount: 1,
@@ -347,15 +385,16 @@ class _ParentState extends State<Parent> {
 }
 
 class ImageTile extends StatelessWidget {
-  const ImageTile({
-    Key? key,
-    required this.index,
-    this.extent,
-    this.bottomSpace,
-    required this.onPress,
-    required this.asset,
-    this.fit = BoxFit.cover,
-  }) : super(key: key);
+  const ImageTile(
+      {Key? key,
+      required this.index,
+      this.extent,
+      this.bottomSpace,
+      required this.onPress,
+      required this.asset,
+      this.fit = BoxFit.cover,
+      this.label = ""})
+      : super(key: key);
 
   final int index;
   final double? extent;
@@ -363,24 +402,29 @@ class ImageTile extends StatelessWidget {
   final Function() onPress;
   final String asset;
   final BoxFit fit;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     final child = InkWell(
       onTap: () {
-        print("press");
         onPress();
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: FittedBox(
-            fit: fit,
+          child: Container(
             clipBehavior: Clip.hardEdge,
-            child: Image.asset(
-              asset,
-            ),
+            decoration: BoxDecoration(
+                image: DecorationImage(fit: fit, image: AssetImage(asset))),
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OutlinedText(
+                  text: Text(label),
+                  strokes: [OutlinedTextStroke(color: Colors.white, width: 2)],
+                )),
           ),
         ),
       ),
