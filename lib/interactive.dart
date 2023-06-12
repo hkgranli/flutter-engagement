@@ -88,10 +88,12 @@ class InteractivePage extends StatefulWidget {
       required this.activePage,
       required this.showcasePage,
       required this.changePage,
-      required this.changeInteractive});
+      required this.changeInteractive,
+      required this.pushNavbar});
 
   final Function(Pages) changePage;
   final Function(EstimationPages) changeInteractive;
+  final Function() pushNavbar;
   final Pages activePage;
   final EstimationPages showcasePage;
 
@@ -171,15 +173,17 @@ class _InteractivePageState extends State<InteractivePage>
         appBar = _buildPvBar(context);
         break;
       case Pages.potential:
-        page = SolarPotential();
+        page = SolarPotential(
+          pushNavbar: widget.pushNavbar,
+        );
         title = AppLocalizations.of(context)!.solar_potential;
         break;
       case Pages.storage:
-        page = PageEnergyStorage();
+        page = PageEnergyStorage(pushNavbar: widget.pushNavbar);
         title = AppLocalizations.of(context)!.energy_storage;
         break;
       case Pages.regulations:
-        page = RegulationsPage();
+        page = RegulationsPage(pushNavbar: widget.pushNavbar);
         title = AppLocalizations.of(context)!.regulations;
         break;
       case Pages.sustainability:
@@ -191,7 +195,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.external_resources;
         break;
       case Pages.ownershipView:
-        page = EconomicModels();
+        page = EconomicModels(pushNavbar: widget.pushNavbar);
         title = AppLocalizations.of(context)!.eco_model;
         break;
       case Pages.sources:
@@ -199,7 +203,7 @@ class _InteractivePageState extends State<InteractivePage>
         title = AppLocalizations.of(context)!.sources;
         break;
       case Pages.solarTechnology:
-        page = SolarTechnology();
+        page = SolarTechnology(pushNavbar: widget.pushNavbar);
         title = AppLocalizations.of(context)!.solar_technology;
         break;
       default:

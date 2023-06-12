@@ -5,7 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum EcoModelSelections { none, community, leasing, pppp }
 
 class EconomicModels extends StatefulWidget {
-  const EconomicModels({super.key});
+  const EconomicModels({super.key, required this.pushNavbar});
+  final Function() pushNavbar;
 
   @override
   State<EconomicModels> createState() => _EconomicModelsState();
@@ -74,7 +75,10 @@ class _EconomicModelsState extends State<EconomicModels> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(children: [
-            ZoomableImage(path: 'assets/images/4p.png'),
+            ZoomableImage(
+              path: 'assets/images/4p.png',
+              pushNavbar: widget.pushNavbar,
+            ),
             Text(AppLocalizations.of(context)!.owner_4p)
           ]),
         ),
@@ -84,7 +88,10 @@ class _EconomicModelsState extends State<EconomicModels> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(children: [
-            ZoomableImage(path: 'assets/images/leasing.png'),
+            ZoomableImage(
+              path: 'assets/images/leasing.png',
+              pushNavbar: widget.pushNavbar,
+            ),
             Text(AppLocalizations.of(context)!.owner_leasing)
           ]),
         ),
@@ -95,7 +102,11 @@ class _EconomicModelsState extends State<EconomicModels> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
-          ZoomableImage(path: 'assets/images/community.png', label: "Label"),
+          ZoomableImage(
+            path: 'assets/images/community.png',
+            label: "Label",
+            pushNavbar: widget.pushNavbar,
+          ),
           SizedBox(
             height: 10,
           ),

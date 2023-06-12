@@ -14,7 +14,7 @@ class RadiationHousePage extends StatelessWidget {
     return Expanded(
       child: Center(
         child: ModelViewer(
-          src: 'assets/models/house_colorized_4.glb',
+          src: 'assets/models/house_colorized_5.glb',
           alt: "A 3D model of a house",
           ar: false,
           autoRotate: false,

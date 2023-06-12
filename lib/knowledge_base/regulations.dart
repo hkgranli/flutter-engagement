@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegulationsPage extends StatefulWidget {
-  const RegulationsPage({super.key});
+  const RegulationsPage({super.key, required this.pushNavbar});
+
+  final Function() pushNavbar;
 
   @override
   State<RegulationsPage> createState() => _RegulationsPageState();
@@ -88,7 +90,10 @@ class _RegulationsPageState extends State<RegulationsPage> {
                   text: AppLocalizations.of(context)!.reg_content_l1_i3,
                   color: Colors.blue),
             ]),
-            ZoomableImage(path: 'assets/images/regulations.png')
+            ZoomableImage(
+              path: 'assets/images/regulations.png',
+              pushNavbar: widget.pushNavbar,
+            )
           ],
         ),
       );
@@ -112,7 +117,10 @@ class _RegulationsPageState extends State<RegulationsPage> {
                 text: AppLocalizations.of(context)!.reg_zone_4,
               ),
             ]),
-            ZoomableImage(path: 'assets/images/zoning_plan.png')
+            ZoomableImage(
+              path: 'assets/images/zoning_plan.png',
+              pushNavbar: widget.pushNavbar,
+            )
           ],
         ),
       );
@@ -122,7 +130,10 @@ class _RegulationsPageState extends State<RegulationsPage> {
         child: Column(
           children: [
             Text(AppLocalizations.of(context)!.reg_guidelines_p1),
-            ZoomableImage(path: 'assets/images/guidelines.png'),
+            ZoomableImage(
+              path: 'assets/images/guidelines.png',
+              pushNavbar: widget.pushNavbar,
+            ),
             Text(AppLocalizations.of(context)!.reg_guidelines_p2),
           ],
         ),

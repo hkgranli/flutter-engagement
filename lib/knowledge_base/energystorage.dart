@@ -5,7 +5,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class PageEnergyStorage extends StatefulWidget {
   const PageEnergyStorage({
     super.key,
+    required this.pushNavbar,
   });
+
+  final Function() pushNavbar;
 
   @override
   State<PageEnergyStorage> createState() => _PageEnergyStorageState();
@@ -152,7 +155,10 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
   Widget thermalBody() => Column(
         children: [
           Text(AppLocalizations.of(context)!.energy_storage_content_thermal_p1),
-          ZoomableImage(path: 'assets/images/tes.png'),
+          ZoomableImage(
+            path: 'assets/images/tes.png',
+            pushNavbar: widget.pushNavbar,
+          ),
         ],
       );
 
@@ -160,7 +166,10 @@ class _PageEnergyStorageState extends State<PageEnergyStorage> {
         children: [
           Text(AppLocalizations.of(context)!
               .energy_storage_content_mechanical_p1),
-          ZoomableImage(path: 'assets/images/pump-store.jpg'),
+          ZoomableImage(
+            path: 'assets/images/pump-store.jpg',
+            pushNavbar: widget.pushNavbar,
+          ),
           SizedBox(
             height: 10,
           ),

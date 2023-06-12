@@ -6,7 +6,10 @@ import 'package:image_compare_slider/image_compare_slider.dart';
 class SolarTechnology extends StatefulWidget {
   const SolarTechnology({
     super.key,
+    required this.pushNavbar,
   });
+
+  final Function() pushNavbar;
 
   @override
   State<SolarTechnology> createState() => _SolarTechnologyState();
@@ -182,7 +185,10 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           SizedBox(
             height: 10,
           ),
-          ZoomableImage(path: 'assets/images/tech_mono.png')
+          ZoomableImage(
+            path: 'assets/images/tech_mono.png',
+            pushNavbar: widget.pushNavbar,
+          )
         ],
       );
 
@@ -192,7 +198,9 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           SizedBox(
             height: 10,
           ),
-          ZoomableImage(path: 'assets/images/tech_poly.png')
+          ZoomableImage(
+              path: 'assets/images/tech_poly.png',
+              pushNavbar: widget.pushNavbar)
         ],
       );
 
@@ -202,7 +210,9 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           SizedBox(
             height: 10,
           ),
-          ZoomableImage(path: 'assets/images/tech_thin.jpg')
+          ZoomableImage(
+              path: 'assets/images/tech_thin.jpg',
+              pushNavbar: widget.pushNavbar)
         ],
       );
 
@@ -211,7 +221,9 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         child: Column(
           children: [
             Text(AppLocalizations.of(context)!.solar_technology_tiles_p1),
-            ZoomableImage(path: 'assets/images/solar_tile.png')
+            ZoomableImage(
+                path: 'assets/images/solar_tile.png',
+                pushNavbar: widget.pushNavbar)
           ],
         ),
       );
@@ -221,7 +233,9 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         child: Column(
           children: [
             Text(AppLocalizations.of(context)!.solar_technology_transparent_p1),
-            ZoomableImage(path: 'assets/images/transparent.png')
+            ZoomableImage(
+                path: 'assets/images/transparent.png',
+                pushNavbar: widget.pushNavbar)
           ],
         ),
       );
@@ -232,7 +246,9 @@ class _SolarTechnologyState extends State<SolarTechnology> {
           children: [
             Text(AppLocalizations.of(context)!.solar_technology_colored_p1),
             Text(AppLocalizations.of(context)!.solar_technology_colored_p2),
-            ZoomableImage(path: 'assets/images/color_pv.png'),
+            ZoomableImage(
+                path: 'assets/images/color_pv.png',
+                pushNavbar: widget.pushNavbar),
             Text(AppLocalizations.of(context)!.solar_technology_colored_p3),
           ],
         ),
@@ -242,7 +258,8 @@ class _SolarTechnologyState extends State<SolarTechnology> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            ZoomableImage(path: 'assets/images/rt.jpg'),
+            ZoomableImage(
+                path: 'assets/images/rt.jpg', pushNavbar: widget.pushNavbar),
             SizedBox(
               height: 10,
             ),

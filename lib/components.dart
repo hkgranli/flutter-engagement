@@ -213,10 +213,12 @@ class UnorderedListItem extends StatelessWidget {
 }
 
 class ZoomableImage extends StatelessWidget {
-  ZoomableImage({super.key, required this.path, this.label});
+  ZoomableImage(
+      {super.key, required this.path, this.label, required this.pushNavbar});
 
   final String path;
   final String? label;
+  final Function() pushNavbar;
 
   @override
   Widget build(BuildContext context) {
@@ -224,12 +226,14 @@ class ZoomableImage extends StatelessWidget {
         ? label as String
         : AppLocalizations.of(context)!.image_pinch_zoom;
     return GestureDetector(
-      onTap: () =>
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return DetailScreen(
-          asset: path,
-        );
-      })),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return DetailScreen(
+            asset: path,
+          );
+        }));
+        pushNavbar();
+      },
       child: Column(
         children: [
           Hero(

@@ -6,7 +6,10 @@ import 'package:image_compare_slider/image_compare_slider.dart';
 class SolarPotential extends StatefulWidget {
   const SolarPotential({
     super.key,
+    required this.pushNavbar,
   });
+
+  final Function() pushNavbar;
 
   @override
   State<SolarPotential> createState() => _SolarPotentialState();
@@ -191,7 +194,10 @@ class _SolarPotentialState extends State<SolarPotential> {
       child: Column(
         children: [
           Text(AppLocalizations.of(context)!.solarpot_pot_bakke),
-          ZoomableImage(path: 'assets/images/bakkegata.png')
+          ZoomableImage(
+            path: 'assets/images/bakkegata.png',
+            pushNavbar: widget.pushNavbar,
+          )
         ],
       ),
     );
@@ -203,7 +209,10 @@ class _SolarPotentialState extends State<SolarPotential> {
       child: Column(
         children: [
           Text(AppLocalizations.of(context)!.solarpot_pot_bispehaugen),
-          ZoomableImage(path: 'assets/images/bispehaugen.png')
+          ZoomableImage(
+            path: 'assets/images/bispehaugen.png',
+            pushNavbar: widget.pushNavbar,
+          )
         ],
       ),
     );
@@ -215,7 +224,10 @@ class _SolarPotentialState extends State<SolarPotential> {
       child: Column(
         children: [
           Text(AppLocalizations.of(context)!.solarpot_pot_rosenborg),
-          ZoomableImage(path: 'assets/images/rosenborg.png')
+          ZoomableImage(
+            path: 'assets/images/rosenborg.png',
+            pushNavbar: widget.pushNavbar,
+          )
         ],
       ),
     );
@@ -227,7 +239,10 @@ class _SolarPotentialState extends State<SolarPotential> {
       child: Column(
         children: [
           Text(AppLocalizations.of(context)!.solarpot_pot_ovre),
-          ZoomableImage(path: 'assets/images/ovre.png')
+          ZoomableImage(
+            path: 'assets/images/ovre.png',
+            pushNavbar: widget.pushNavbar,
+          )
         ],
       ),
     );

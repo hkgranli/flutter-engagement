@@ -87,10 +87,16 @@ class _ParentState extends State<Parent> {
   int activePage = 0;
   Pages interactivePageState = Pages.home;
   EstimationPages estimationPage = EstimationPages.radiation;
-
+  final _navigatorKey = GlobalKey<NavigatorState>();
   final queue = Queue<Reverse>();
 
   List<Widget> activePages = [];
+
+  void changeEst(EstimationPages ep) {
+    setState(() {
+      estimationPage = ep;
+    });
+  }
 
   void pushQueue() {
     queue.add(Reverse(estimationPage, activePage));
@@ -101,29 +107,44 @@ class _ParentState extends State<Parent> {
 
     setState(() {
       activePage = action.p;
-      estimationPage = action.ep;
     });
+    print("pop");
   }
 
   void changePage(int i) {
-    pushQueue();
-    setState(() {
-      activePage = i;
-    });
-  }
-
-  void changeEst(EstimationPages ep) {
-    pushQueue();
-    setState(() {
-      estimationPage = ep;
-    });
-  }
-
-  void changeNavPage(int i) {
+    /*
     if (activePage == i && i == 1) {
       return navigateInteractive(Pages.home);
+    }*/
+
+    String name;
+
+    switch (i) {
+      case (1):
+        name = "/knowledge";
+        break;
+      case (2):
+        name = "/feedback";
+        break;
+      case (3):
+        name = "/about";
+        break;
+      default:
+        name = "/";
+        break;
     }
-    changePage(i);
+
+    pushQueue();
+
+    _navigatorKey.currentState!.pushNamed(name);
+
+    setState(() {
+      activePage = (i >= 0 && i < 4)
+          ? i
+          : activePage; // validate the index is in range 0-3
+    });
+
+    //changePage(i);
   }
 
   Map<int, GlobalKey> navigatorKeys = {
@@ -134,54 +155,69 @@ class _ParentState extends State<Parent> {
   };
 
   void navigateInteractive(Pages page, [EstimationPages? ep]) {
-    pushQueue();
     setState(() {
-      activePage = 1;
       interactivePageState = page;
       if (ep != null) estimationPage = ep;
     });
+    changePage(1);
   }
 
   @override
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
-      if (queue.isNotEmpty) {
-        print(queue);
+      if (_navigatorKey.currentState!.canPop()) {
+        _navigatorKey.currentState!.pop();
         popQueue();
         return false;
       }
-
-      return await showDialog(
-            //show confirm dialogue
-            //the return value will be from "Yes" or "No" options
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Exit App'),
-              content: Text('Do you want to exit the app?'),
-              actions: [
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  //return false when click on "NO"
-                  child: Text('No'),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  //return true when click on "Yes"
-                  child: Text('Yes'),
-                ),
-              ],
-            ),
-          ) ??
-          false; //if showDialouge had returned null, then return false
+      return true;
     }
 
     //print("Rebuild main");
     return Scaffold(
       body: WillPopScope(
-        onWillPop: showExitPopup,
-        child: IndexedStack(
-          index: activePage,
-          children: <Widget>[
+          onWillPop: showExitPopup,
+          child: Navigator(
+            initialRoute: '/',
+            key: _navigatorKey,
+            onGenerateRoute: (RouteSettings settings) {
+              WidgetBuilder builder;
+              // Manage your route names here
+              switch (settings.name) {
+                case '/':
+                  builder = (BuildContext context) => HomePage(
+                        grid: gridTest(),
+                      );
+                  break;
+                case '/knowledge':
+                  builder = (BuildContext context) => InteractivePage(
+                        activePage: interactivePageState,
+                        changePage: (p0) => navigateInteractive(p0),
+                        key: GlobalKey(),
+                        changeInteractive: (p0) => changeEst(p0),
+                        showcasePage: estimationPage,
+                        pushNavbar: pushQueue,
+                      );
+                  break;
+                case '/feedback':
+                  builder = (BuildContext context) => FeedbackPage();
+                  break;
+                case '/about':
+                  builder = (BuildContext context) => MoreInfo();
+                  break;
+                default:
+                  throw Exception('Invalid route: ${settings.name}');
+              }
+              // You can also return a PageRouteBuilder and
+              // define custom transitions between pages
+              return MaterialPageRoute(
+                builder: builder,
+                settings: settings,
+              );
+            },
+          )
+          /*
+           <Widget>[
             Navigator(
                 key: navigatorKeys[0],
                 onGenerateRoute: (RouteSettings settings) {
@@ -220,12 +256,11 @@ class _ParentState extends State<Parent> {
                       settings: settings,
                       builder: (BuildContext context) => MoreInfo());
                 }),
-          ],
-        ),
-      ),
+          ],*/
+          ),
       bottomNavigationBar: EngagementNavBar(
         index: activePage,
-        changeParentPage: changeNavPage,
+        changeParentPage: changePage,
         key: GlobalKey(),
       ),
     );
@@ -275,7 +310,6 @@ class _ParentState extends State<Parent> {
               asset: 'assets/images/3d_model_entire.png',
               onPress: () =>
                   navigateInteractive(Pages.pvView, EstimationPages.radiation),
-              label: "3D radiation thing",
             ),
           ),
           StaggeredGridTile.count(
@@ -302,7 +336,6 @@ class _ParentState extends State<Parent> {
               index: 2,
               asset: 'assets/images/solar_tile.png',
               onPress: () => navigateInteractive(Pages.solarTechnology),
-              label: "Solar tech",
             ),
           ),
           StaggeredGridTile.count(
