@@ -3,6 +3,8 @@
 An application developed for a Master's thesis at NTNU, using assets and knowledge from [Helios](https://www.ntnu.edu/helios).
 The application is built using Flutter, and is supported on Android and iOS.
 
+The newest version application can also be used in a web browser, <https://hkgranli.github.io/#/>, note that this is not designed for desktop-use.
+
 ## User Guide
 
 A pre-built binary can be downloaded from [Releases](https://github.com/hkgranli/flutter-engagement/releases/tag/evaluation)
