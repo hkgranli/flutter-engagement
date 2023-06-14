@@ -83,6 +83,7 @@ SliverAppBar createSliverBar(BuildContext context, bool pinned, bool snap,
 
   return SliverAppBar.large(
     pinned: pinned,
+    automaticallyImplyLeading: false,
     snap: snap,
     floating: floating,
     expandedHeight: 160.0,

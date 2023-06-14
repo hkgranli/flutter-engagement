@@ -1,6 +1,5 @@
 import 'package:engagement/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.grid});
@@ -35,15 +34,5 @@ class _MyHomePageState extends State<HomePage> {
         ])
         //bottomNavigationBar: EngagementNavBar(index: 0),
         );
-  }
-
-  AppBar infoBar(BuildContext context) {
-    return createAppBar(
-        context,
-        AppLocalizations.of(context)!.p_info,
-        IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ));
   }
 }
